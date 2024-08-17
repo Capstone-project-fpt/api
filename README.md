@@ -26,8 +26,7 @@ $ make migrate_database
 ### 5.1 create migration file
 
 ```bash
- (for local env)
-$ migrate create -ext sql -dir db/migrations/ -seq {migration name}
+$ make create_migration MIGRATION_NAME="name migration"
 ```
 
 ### 6. Running the app

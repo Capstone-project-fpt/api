@@ -1,11 +1,19 @@
 package initialize
 
+import (
+	"fmt"
+
+	"github.com/go-ecommerce-backend-api/global"
+)
+
 func Run() {
 	LoadConfig()
 	InitLogger()
-	InitMysql()
+	InitDB()
 	InitRedis()
 	r := InitRouter()
 
-	r.Run()
+	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
+
+	r.Run(serverAddr)
 }

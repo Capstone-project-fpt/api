@@ -2,7 +2,7 @@ package setting
 
 type Config struct {
 	Server ServerSetting `mapstructure:"server"`
-	MySQL  MySQLSetting  `mapstructure:"mysql"`
+	DB     DBSetting     `mapstructure:"db"`
 	Logger LoggerSetting `mapstructure:"logger"`
 	Redis  RedisSetting  `mapstructure:"redis"`
 }
@@ -12,12 +12,14 @@ type ServerSetting struct {
 	Mode string `mapstructure:"mode"`
 }
 
-type MySQLSetting struct {
+type DBSetting struct {
 	Host            string `mapstructure:"host"`
 	Port            int    `mapstructure:"port"`
 	Username        string `mapstructure:"username"`
 	Password        string `mapstructure:"password"`
 	DbName          string `mapstructure:"dbname"`
+	SslMode         string `mapstructure:"sslmode"`
+	Timezone        string `mapstructure:"timezone"`
 	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
 	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
 	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
