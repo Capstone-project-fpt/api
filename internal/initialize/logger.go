@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"github.com/go-ecommerce-backend-api/global"
-	"github.com/go-ecommerce-backend-api/pkg/logger"
+	"github.com/api/global"
+	"github.com/api/pkg/logger"
 )
 
 func InitLogger() {

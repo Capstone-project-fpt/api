@@ -1,12 +1,15 @@
 package initialize
 
 import (
+	"github.com/api/global"
+	// "github.com/api/internal/router"
 	"github.com/gin-gonic/gin"
-	"github.com/go-ecommerce-backend-api/global"
-	"github.com/go-ecommerce-backend-api/internal/router"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	swaggerDocs "github.com/api/docs"
 )
 
-func  InitRouter() *gin.Engine {
+func InitRouter() *gin.Engine {
 	var r *gin.Engine
 
 	if global.Config.Server.Mode == "dev" {
@@ -18,25 +21,29 @@ func  InitRouter() *gin.Engine {
 		r = gin.New()
 	}
 
-	r.Use() // logging
-	r.Use() // cross
-	r.Use() // limit rate
+	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
 
-	managerRouter := router.RouterGroupApp.Manager
-	userRouter := router.RouterGroupApp.User
+	// r.Use() // logging
+	// r.Use() // cross
+	// r.Use() // limit rate
 
-	MainGroup := r.Group("/api/v1")
-	{
-		MainGroup.GET("/health-check")
-	}
-	{
-		userRouter.InitUserRouter(MainGroup)
-		userRouter.InitProductRouter(MainGroup)
-	}
-	{
-		managerRouter.InitAdminRouter(MainGroup)
-		managerRouter.InitUserRouter(MainGroup)
-	}
+	// managerRouter := router.RouterGroupApp.Manager
+	// userRouter := router.RouterGroupApp.User
+
+	// MainGroup := r.Group("/api/v1")
+	// {
+	// 	MainGroup.GET("/health-check")
+	// }
+	// {
+	// 	userRouter.InitUserRouter(MainGroup)
+	// 	userRouter.InitProductRouter(MainGroup)
+	// }
+	// {
+	// 	managerRouter.InitAdminRouter(MainGroup)
+	// 	managerRouter.InitUserRouter(MainGroup)
+	// }
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

@@ -3,9 +3,11 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/go-ecommerce-backend-api/global"
+	"github.com/api/global"
+	_ "github.com/api/docs"
 )
 
+// @title Capstone API
 func Run() {
 	LoadConfig()
 	InitLogger()

@@ -3,7 +3,7 @@ package initialize
 import (
 	"context"
 
-	"github.com/go-ecommerce-backend-api/global"
+	"github.com/api/global"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
@@ -16,7 +16,7 @@ func InitRedis() {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     redisConfig.Addr,
 		Password: redisConfig.Password,
-		DB:       redisConfig.DB,  
+		DB:       redisConfig.DB,
 		PoolSize: redisConfig.PoolSize,
 	})
 

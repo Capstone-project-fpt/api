@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
-	"github.com/go-ecommerce-backend-api/pkg/response"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

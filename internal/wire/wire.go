@@ -1,11 +1,11 @@
-//go:build wireinject 
+//go:build wireinject
 
 package wire
 
 import (
-	"github.com/go-ecommerce-backend-api/internal/controller"
-	"github.com/go-ecommerce-backend-api/internal/repository"
-	"github.com/go-ecommerce-backend-api/internal/service"
+	"github.com/api/internal/controller"
+	"github.com/api/internal/repository"
+	"github.com/api/internal/service"
 	"github.com/google/wire"
 )
 

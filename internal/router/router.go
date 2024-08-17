@@ -1,9 +1,9 @@
 package router
 
 import (
+	"github.com/api/internal/middleware"
+	"github.com/api/internal/wire"
 	"github.com/gin-gonic/gin"
-	"github.com/go-ecommerce-backend-api/internal/middleware"
-	"github.com/go-ecommerce-backend-api/internal/wire"
 )
 
 func NewRouter() *gin.Engine {

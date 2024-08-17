@@ -3,7 +3,7 @@ package service
 import (
 	"net/http"
 
-	"github.com/go-ecommerce-backend-api/internal/repository"
+	"github.com/api/internal/repository"
 )
 
 type IUserService interface {
@@ -24,6 +24,6 @@ func (userService *userService) Register(email string, password string) int {
 	if !userService.userRepository.GetUserByEmail(email) {
 		return http.StatusBadRequest
 	}
-	
+
 	return http.StatusAccepted
 }

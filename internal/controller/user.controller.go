@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"github.com/api/internal/service"
+	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
-	"github.com/go-ecommerce-backend-api/internal/service"
-	"github.com/go-ecommerce-backend-api/pkg/response"
 )
 
 type UserController struct {
@@ -17,6 +17,6 @@ func NewUserController(userService service.IUserService) *UserController {
 }
 
 func (userController *UserController) Register(c *gin.Context) {
-	 result := userController.userService.Register("", "")
-	 response.SuccessResponse(c, result, nil) 
+	result := userController.userService.Register("", "")
+	response.SuccessResponse(c, result, nil)
 }
