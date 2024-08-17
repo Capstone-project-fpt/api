@@ -1,24 +1,35 @@
-server:
-  port: 8002
-  mode: "dev"
-mysql:
-  host: 127.0.0.1
-  port: 3306
-  username: postgres
-  password: postgres
-  dbname: postgres
-  maxIdleConns: 10
-  maxOpenConns: 100
-  connMaxLifetime: 3600
-logger:
-  logLevel: debug
-  fileLogName: "./storages/logs/dev.log"
-  MaxSize:    500
-  MaxBackups: 3
-  MaxAge:     28
-  Compress:   true
-redis:
-  addr: 127.0.0.1:6379
-  password: ""
-  db: 0
-  poolSize: 10 
+version: '3.9'
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    volumes:
+      - db_data:/var/lib/db
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+    restart: always
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
+  redis_data:
