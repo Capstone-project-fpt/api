@@ -2,11 +2,14 @@ package initialize
 
 import (
 	"github.com/api/global"
+	"github.com/api/internal/service"
 	// "github.com/api/internal/router"
-	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	swaggerFiles "github.com/swaggo/files"
+
+	"github.com/hellofresh/health-go/v5"
 	swaggerDocs "github.com/api/docs"
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func InitRouter() *gin.Engine {
@@ -20,6 +23,8 @@ func InitRouter() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
 	}
+
+	healthCheck := service.NewHealthCheckService()
 
 	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
 
@@ -43,7 +48,14 @@ func InitRouter() *gin.Engine {
 	// 	managerRouter.InitUserRouter(MainGroup)
 	// }
 
+	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }
+
+func healthCheckHandle(h *health.Health) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		h.Handler().ServeHTTP(ctx.Writer, ctx.Request)
+	}
+}	

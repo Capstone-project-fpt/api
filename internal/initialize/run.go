@@ -3,8 +3,8 @@ package initialize
 import (
 	"fmt"
 
-	"github.com/api/global"
 	_ "github.com/api/docs"
+	"github.com/api/global"
 )
 
 // @title Capstone API
@@ -17,5 +17,8 @@ func Run() {
 
 	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
 
+	if global.Config.Server.Mode != "release" {
+		fmt.Printf("Swagger API Docs: http://localhost:%v/swagger/index.html\n", global.Config.Server.Port)
+	}
 	r.Run(serverAddr)
 }
