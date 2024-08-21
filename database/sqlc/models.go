@@ -4,6 +4,17 @@
 
 package database
 
+import (
+	"time"
+)
+
+type Major struct {
+	ID        int64
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 type Permission struct {
 	ID   int64
 	Name string
@@ -12,4 +23,27 @@ type Permission struct {
 type Role struct {
 	ID   int64
 	Name string
+}
+
+type RolesPermission struct {
+	ID           int64
+	RoleID       int64
+	PermissionID int64
+}
+
+type Semester struct {
+	ID        int64
+	Name      string
+	StartTime time.Time
+	EndTime   time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+type SubMajor struct {
+	ID        int64
+	Name      string
+	MajorID   int64
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

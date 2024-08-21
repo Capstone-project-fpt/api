@@ -21,3 +21,6 @@ migrate_down:
 
 create_migration:
 	migrate create -ext sql -dir database/migrations -seq $(MIGRATION_NAME)
+
+sqlc:
+	sqlc generate
