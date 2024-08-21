@@ -1,13 +1,14 @@
 package initialize
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
+	database "github.com/api/database/sqlc"
 	"github.com/api/global"
+	_ "github.com/lib/pq"
 	"go.uber.org/zap"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func checkErrorPanic(err error, errStr string) {
@@ -19,23 +20,23 @@ func checkErrorPanic(err error, errStr string) {
 
 func InitDB() {
 	dbConfig := global.Config.DB
-	dsn := "host=%s user=%s password=%s dbname=%s port=%v sslmode=%s TimeZone=%s"
-	var dbConnection = fmt.Sprintf(dsn, dbConfig.Host, dbConfig.Username, dbConfig.Password, dbConfig.DbName, dbConfig.Port, dbConfig.SslMode, dbConfig.Timezone)
-	db, err := gorm.Open(postgres.Open(dbConnection), &gorm.Config{
-		SkipDefaultTransaction: false,
-	})
-
+	dsn := "postgres://%s:%s@%s:%d/%s?sslmode=%s&TimeZone=%s"
+	var dbConnection = fmt.Sprintf(dsn, dbConfig.Username, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.DbName, dbConfig.SslMode, dbConfig.Timezone)
+	db, err := sql.Open("postgres", dbConnection)
 	checkErrorPanic(err, "Init database connection failed")
-	global.Logger.Info("Init database connection success")
-	global.MDb = db
+	SetPool(db)
 
-	SetPool()
+	if err = db.Ping(); err != nil {
+		checkErrorPanic(err, "Failed to ping database")
+	}
+
+	global.Logger.Info("Init database connection success")
+	global.Db = database.New(db)
+
 }
 
-func SetPool() {
+func SetPool(db *sql.DB) {
 	dbConfig := global.Config.DB
-	db, err := global.MDb.DB()
-	checkErrorPanic(err, "Set database pool failed")
 	db.SetConnMaxIdleTime(time.Duration(dbConfig.MaxIdleConns))
 	db.SetMaxOpenConns(dbConfig.MaxOpenConns)
 	db.SetConnMaxLifetime(time.Duration(dbConfig.ConnMaxLifetime))
