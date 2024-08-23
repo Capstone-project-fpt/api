@@ -10,6 +10,8 @@ import (
 
 type Querier interface {
 	GetRole(ctx context.Context, id int64) (Role, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
+	GetUserById(ctx context.Context, id int64) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

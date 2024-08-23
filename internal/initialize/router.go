@@ -2,12 +2,15 @@ package initialize
 
 import (
 	"github.com/api/global"
+	"github.com/api/internal/middleware"
+	"github.com/api/internal/router"
 	"github.com/api/internal/service"
+
 	// "github.com/api/internal/router"
 
-	"github.com/hellofresh/health-go/v5"
 	swaggerDocs "github.com/api/docs"
 	"github.com/gin-gonic/gin"
+	"github.com/hellofresh/health-go/v5"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -28,21 +31,19 @@ func InitRouter() *gin.Engine {
 
 	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
 
-	// r.Use() // logging
-	// r.Use() // cross
-	// r.Use() // limit rate
+	r.Use() // logging
+	r.Use() // cross
+	r.Use() // limit rate
+	r.Use(middleware.ErrorHandleMiddleware())
 
 	// managerRouter := router.RouterGroupApp.Manager
-	// userRouter := router.RouterGroupApp.User
+	userRouter := router.RouterGroupApp.User
 
-	// MainGroup := r.Group("/api/v1")
-	// {
-	// 	MainGroup.GET("/health-check")
-	// }
-	// {
-	// 	userRouter.InitUserRouter(MainGroup)
-	// 	userRouter.InitProductRouter(MainGroup)
-	// }
+	MainGroup := r.Group("/api/v1")
+	{
+		userRouter.InitUserRouter(MainGroup)
+		userRouter.InitProductRouter(MainGroup)
+	}
 	// {
 	// 	managerRouter.InitAdminRouter(MainGroup)
 	// 	managerRouter.InitUserRouter(MainGroup)
@@ -50,7 +51,6 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	return r
 }
 

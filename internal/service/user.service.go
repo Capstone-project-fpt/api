@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	"github.com/api/internal/repository"
+	"github.com/api/pkg/response"
+	"github.com/gin-gonic/gin"
 )
 
 type IUserService interface {
-	Register(email string, password string) int
+	Register(ctx *gin.Context, email string, password string) (interface{}, *response.ResponseErr)
 }
 
 type userService struct {
@@ -20,10 +22,16 @@ func NewUserService(userRepository repository.IUserRepository) IUserService {
 	}
 }
 
-func (userService *userService) Register(email string, password string) int {
-	if !userService.userRepository.GetUserByEmail(email) {
-		return http.StatusBadRequest
+func (us *userService) Register(ctx *gin.Context, email string, password string) (interface{}, *response.ResponseErr) {
+	_, err := us.userRepository.GetUserByEmail(ctx, email)
+
+	if err != nil {
+		return nil, &response.ResponseErr{
+			Code: http.StatusNotFound,
+			Success: false,
+			Error: "Email not found",
+		}
 	}
 
-	return http.StatusAccepted
+	return http.StatusAccepted, nil
 }
