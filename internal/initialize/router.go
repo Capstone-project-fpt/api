@@ -6,8 +6,6 @@ import (
 	"github.com/api/internal/router"
 	"github.com/api/internal/service"
 
-	// "github.com/api/internal/router"
-
 	swaggerDocs "github.com/api/docs"
 	"github.com/gin-gonic/gin"
 	"github.com/hellofresh/health-go/v5"
@@ -30,6 +28,7 @@ func InitRouter() *gin.Engine {
 	healthCheck := service.NewHealthCheckService()
 
 	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Use() // logging
 	r.Use() // cross
@@ -55,7 +54,6 @@ func InitRouter() *gin.Engine {
 	// }
 
 	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return r
 }
 
