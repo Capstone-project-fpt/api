@@ -1,9 +1,15 @@
 server:
+  name: "Capstone Project FPT"
   port: 8080
   mode: "dev"
+jwt:
+  secret: "capstone-project-fpt"
+  refreshSecret: "capstone-project-fpt-refresh"
+  expiration: 86400 # 1 day
+  refreshExpiration: 604800 # 1 week
 db:
   host: localhost
-  port: 5432
+  port: 5433
   username: postgres
   password: postgres
   dbname: postgres

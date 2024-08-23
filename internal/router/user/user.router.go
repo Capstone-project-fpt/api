@@ -7,7 +7,7 @@ import (
 
 type UserRouter struct {}
 
-func (userRouter *UserRouter) InitUserRouter(r *gin.RouterGroup) {
+func (ur *UserRouter) InitUserRouter(r *gin.RouterGroup) {
 	userController := wire.InitializeUserController()
 
 	userRouterPublic := r.Group("/user")

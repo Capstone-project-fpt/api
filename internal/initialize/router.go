@@ -37,10 +37,14 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.I18nMiddleware())
 	r.Use(middleware.ErrorHandleMiddleware())
 
-	// managerRouter := router.RouterGroupApp.Manager
+	publicRouter := router.RouterGroupApp.Public
 	userRouter := router.RouterGroupApp.User
+	// managerRouter := router.RouterGroupApp.Manager
 
 	MainGroup := r.Group("/api/v1")
+	{
+		publicRouter.InitPublicRouter(MainGroup)
+	}
 	{
 		userRouter.InitUserRouter(MainGroup)
 		userRouter.InitProductRouter(MainGroup)
