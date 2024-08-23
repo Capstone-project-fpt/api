@@ -20,3 +20,11 @@ func InitializeUserController() *controller.UserController {
 	userController := controller.NewUserController(iUserService)
 	return userController
 }
+
+func InitializeAuthController() *controller.AuthController {
+	iUserRepository := repository.NewUserRepository()
+	iAuthProcessService := service.NewAuthProcessService()
+	iAuthService := service.NewAuthService(iUserRepository, iAuthProcessService)
+	authController := controller.NewAuthController(iAuthService)
+	return authController
+}

@@ -3,11 +3,9 @@ package initialize
 import (
 	"fmt"
 
-	_ "github.com/api/docs"
 	"github.com/api/global"
 )
 
-// @title Capstone API
 func Run() {
 	LoadConfig()
 	InitLogger()

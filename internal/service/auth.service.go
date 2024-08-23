@@ -1,46 +1,104 @@
 package service
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 
+	database "github.com/api/database/sqlc"
+	"github.com/api/global"
+	"github.com/api/internal/constant"
 	"github.com/api/internal/repository"
-	"github.com/api/pkg/response"
+	"github.com/api/internal/types"
 	"github.com/api/pkg/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
-type IAuthService interface{}
-
-type authService struct{
-	userRepository repository.IUserRepository
+type IAuthService interface {
+	Register(ctx *gin.Context, email, password string) (int, error)
+	Login(ctx *gin.Context, email string, password string) (string, string, int, error)
 }
 
-func NewAuthService(userRepository repository.IUserRepository) IAuthService {
+type authService struct {
+	userRepository repository.IUserRepository
+	authProcessService IAuthProcessService
+}
+
+func NewAuthService(userRepository repository.IUserRepository, authProcessService IAuthProcessService) IAuthService {
 	return &authService{
 		userRepository: userRepository,
+		authProcessService: authProcessService,
 	}
 }
 
-func (as *authService) Login(ctx *gin.Context, email string, password string) (interface{}, *response.ResponseErr) {
+func (as *authService) Register(ctx *gin.Context, email, password string) (int, error) {
+	_, err := as.userRepository.GetUserByEmail(ctx, email)
+
+	if err == nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserAlreadyExists,
+		})
+
+		return http.StatusConflict, errors.New(message)
+	}
+
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	err = as.userRepository.CreateUser(ctx, database.CreateUserParams{
+		Email:    email,
+		Password: sql.NullString{String: string(hashedPassword), Valid: true},
+		Name:     "Admin FPT",
+		UserType: constant.UserType.Admin,
+	})
+
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	return http.StatusCreated, nil
+}
+
+func (as *authService) Login(ctx *gin.Context, email string, password string) (string, string, int, error) {
 	user, err := as.userRepository.GetUserByEmail(ctx, email)
 
 	if err != nil {
-		return nil, &response.ResponseErr{
-			Code: http.StatusNotFound,
-			Success: false,
-			Error: "User not found",
-		}
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+
+		return "", "", http.StatusNotFound, errors.New(message)
 	}
 
 	if !utils.CheckPasswordHash(password, user.Password.String) {
-		return nil, &response.ResponseErr{
-			Code: http.StatusUnauthorized,
-			Success: false,
-			Error: "User not found",
-		}
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+
+		return "", "", http.StatusNotFound, errors.New(message)
 	}
 
-	// validate password
+	userContext := types.NewUserContext(user)
 
-	return user, nil
+	accessToken, refreshToken, err := as.authProcessService.ResolveAccessAndRefreshToken(ctx, &userContext)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return "", "", http.StatusInternalServerError, errors.New(message)
+	}
+
+	return accessToken, refreshToken, http.StatusOK, nil
 }

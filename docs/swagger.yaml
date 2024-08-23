@@ -1,4 +1,81 @@
+basePath: /api/v1
+definitions:
+  auth_dto.InputLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth_dto.OutputLogin:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  response.ResponseDataSuccess:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: boolean
+    type: object
+  response.ResponseErr:
+    properties:
+      code:
+        type: integer
+      error:
+        type: string
+      message:
+        type: boolean
+    type: object
+host: localhost:8080
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: minhbeardev@gmail.com
+  description: Capstone Project FPT API
+  title: Capstone Project FPT API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth_dto.InputLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: Login
+      tags:
+      - Auth
+schemes:
+- http
+- https
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
 swagger: "2.0"

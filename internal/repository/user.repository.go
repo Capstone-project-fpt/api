@@ -7,6 +7,7 @@ import (
 )
 
 type IUserRepository interface {
+	CreateUser(ctx *gin.Context, arg database.CreateUserParams) error
 	GetUserByEmail(ctx *gin.Context, email string) (database.User, error)
 	GetUserById(ctx *gin.Context, id int64) (database.User, error)
 }
@@ -15,6 +16,10 @@ type userRepository struct {}
 
 func NewUserRepository() IUserRepository {
 	return &userRepository{}
+}
+
+func (u *userRepository) CreateUser(ctx *gin.Context, arg database.CreateUserParams) error {
+	return global.Db.CreateUser(ctx, arg)
 }
 
 func (u *userRepository) GetUserByEmail(ctx *gin.Context, email string) (database.User, error) {

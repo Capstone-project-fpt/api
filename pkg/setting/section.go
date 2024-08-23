@@ -2,14 +2,23 @@ package setting
 
 type Config struct {
 	Server ServerSetting `mapstructure:"server"`
+	Jwt    JwtSetting    `mapstructure:"jwt"`
 	DB     DBSetting     `mapstructure:"db"`
 	Logger LoggerSetting `mapstructure:"logger"`
 	Redis  RedisSetting  `mapstructure:"redis"`
 }
 
 type ServerSetting struct {
+	Name string `mapstructure:"name"`
 	Port int    `mapstructure:"port"`
 	Mode string `mapstructure:"mode"`
+}
+
+type JwtSetting struct {
+	Secret            string `mapstructure:"secret"`
+	RefreshSecret     string `mapstructure:"refreshSecret"`
+	Expiration        int    `mapstructure:"expiration"`
+	RefreshExpiration int    `mapstructure:"refreshExpiration"`
 }
 
 type DBSetting struct {

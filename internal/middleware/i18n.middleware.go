@@ -17,7 +17,7 @@ func I18nMiddleware() gin.HandlerFunc {
 
 		localizer := i18n.NewLocalizer(bundle, lang)
 
-		c.Set("localizer", localizer)
+		global.Localizer = localizer
 
 		c.Next()
 	}

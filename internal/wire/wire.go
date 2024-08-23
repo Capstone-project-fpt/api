@@ -18,3 +18,14 @@ func InitializeUserController() *controller.UserController {
 
 	return &controller.UserController{}
 }
+
+func InitializeAuthController() *controller.AuthController {
+	wire.Build(
+		repository.NewUserRepository,
+		service.NewAuthProcessService,
+		service.NewAuthService,
+		controller.NewAuthController,
+	)
+
+	return &controller.AuthController{}
+}
