@@ -24,3 +24,6 @@ create_migration:
 
 sqlc:
 	sqlc generate
+
+swagger:
+	swag init -d ./cmd/server,./internal/controller,./internal/dto,./pkg/response

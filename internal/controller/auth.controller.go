@@ -45,6 +45,16 @@ func (ac *AuthController) Register(ctx *gin.Context) {
 	response.SuccessResponse(ctx, 200, nil)
 }
 
+// @Summary Login
+// @Description Login
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body auth_dto.InputLogin true "data"
+// @Success 200 {object} auth_dto.OutputLogin
+// @Router /login [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) Login(ctx *gin.Context) {
 	var input auth_dto.InputLogin
 	localizer := global.Localizer

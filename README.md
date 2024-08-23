@@ -34,7 +34,13 @@ $ make migrate_down
 $ make create_migration MIGRATION_NAME="NameOfMigration"  
 ```
 
-### 6. Running the app
+### 6. Generate Swagger docs
+
+```bash
+$ make swagger
+```
+
+### 7. Running the app
 
 ```bash
 # development

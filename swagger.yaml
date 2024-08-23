@@ -1,9 +1,0 @@
-basePath: /api/v1
-host: localhost:8080
-info:
-  contact: {}
-  description: Capstone Project FPT API
-  title: Capstone Project FPT API
-  version: "1.0"
-paths: {}
-swagger: "2.0"
