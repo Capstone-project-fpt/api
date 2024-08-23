@@ -28,7 +28,7 @@ func InitRouter() *gin.Engine {
 	healthCheck := service.NewHealthCheckService()
 
 	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
 
 	r.Use() // logging
 	r.Use() // cross
@@ -53,7 +53,8 @@ func InitRouter() *gin.Engine {
 	// 	managerRouter.InitUserRouter(MainGroup)
 	// }
 
-	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	
 	return r
 }
 
