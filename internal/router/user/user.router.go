@@ -1,13 +1,18 @@
 package user
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/api/internal/wire"
+	"github.com/gin-gonic/gin"
+)
 
 type UserRouter struct {}
 
 func (userRouter *UserRouter) InitUserRouter(r *gin.RouterGroup) {
+	userController := wire.InitializeUserController()
+
 	userRouterPublic := r.Group("/user")
 	{
-		userRouterPublic.POST("/register")
+		userRouterPublic.POST("/register", userController.Register)
 		userRouterPublic.POST("/otp")	 
 	}
 

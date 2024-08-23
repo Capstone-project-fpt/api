@@ -18,22 +18,25 @@ $ go mod download
 
 ### 4. Database Migration Guide
 
+Config DB_HOST, DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME and SSL_MODE before run migration
+
 ```bash
- (for local env)
-$ make migrate_database
+// Up
+$ make migrate_up
+
+// Down
+$ make migrate_down
 ```
 
 ### 5.1 create migration file
 
 ```bash
-$ make create_migration MIGRATION_NAME="name migration"
+$ make create_migration MIGRATION_NAME="NameOfMigration"  
 ```
 
 ### 6. Running the app
 
 ```bash
 # development
-$ go run cmd/main.go
+$ make run
 ```
-
-Navigate to your [host](http://localhost:8000) to check the server is online.

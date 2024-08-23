@@ -10,8 +10,8 @@ func (adminRouter *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 		adminPublicRouter.POST("/login")
 	}
 
-	adminPrivateRouter := r.Group("/admin/user")
-	{
-		adminPrivateRouter.POST("/active-user")
-	}
+	// adminPrivateRouter := r.Group("/admin/user")
+	// {
+	// 	adminPrivateRouter.POST("/active-user")
+	// }
 }

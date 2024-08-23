@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/api/internal/service"
 	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
@@ -16,7 +18,13 @@ func NewUserController(userService service.IUserService) *UserController {
 	}
 }
 
-func (userController *UserController) Register(c *gin.Context) {
-	result := userController.userService.Register("", "")
-	response.SuccessResponse(c, result, nil)
+func (userController *UserController) Register(ctx *gin.Context) {
+	_, err := userController.userService.Register(ctx, "email", "password")
+
+	if err != nil {
+		ctx.JSON(err.Code, err)
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusAccepted, nil)
 }
