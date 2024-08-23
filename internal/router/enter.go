@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/api/internal/router/manager"
+	"github.com/api/internal/router/admin"
 	"github.com/api/internal/router/user"
 )
 
