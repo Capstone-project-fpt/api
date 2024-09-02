@@ -51,29 +51,27 @@ func Send(to []string, from string, subject string, htmlTemplate string) error {
 	fmt.Println("smtpConfig: ", smtpConfig)
 
 	auth := smtp.PlainAuth("", smtpConfig.Username, smtpConfig.Password, smtpConfig.Host)
-	err := smtp.SendMail(smtpConfig.Host+":"+smtpConfig.Port, auth, from, to, []byte(message))
-	if err != nil {
-		global.Logger.Error("Send mail error", zap.Error(err))
-		return err
+
+	if global.Config.Server.Mode != "dev" {
+		err := smtp.SendMail(smtpConfig.Host+":"+smtpConfig.Port, auth, from, to, []byte(message))
+		if err != nil {
+			global.Logger.Error("Send mail error", zap.Error(err))
+			return err
+		}
+	} else {
+		fmt.Println("Send email Successful")
 	}
 
 	return nil
 }
 
 func BuildMessage(mail Mail) string {
-	// Start by declaring the MIME version and content type
 	msg := "MIME-version: 1.0;\r\n"
 	msg += "Content-Type: text/html; charset=\"UTF-8\";\r\n"
-	
-	// Add standard email headers
 	msg += fmt.Sprintf("From: %s\r\n", mail.From)
 	msg += fmt.Sprintf("To: %s\r\n", strings.Join(mail.To, ","))
 	msg += fmt.Sprintf("Subject: %s\r\n", mail.Subject)
-	
-	// Separate headers from the body with an extra CRLF
 	msg += "\r\n"
-	
-	// Add the body of the email
 	msg += fmt.Sprintf("%s\r\n", mail.Body)
 
 	return msg
