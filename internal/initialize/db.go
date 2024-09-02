@@ -32,7 +32,7 @@ func InitDB() {
 
 	global.Logger.Info("Init database connection success")
 	global.Db = database.New(db)
-
+	global.RawDb = db
 }
 
 func SetPool(db *sql.DB) {

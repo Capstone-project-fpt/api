@@ -10,6 +10,7 @@ import (
 	"github.com/api/internal/controller"
 	"github.com/api/internal/repository"
 	"github.com/api/internal/service"
+	"github.com/api/internal/service/auth"
 )
 
 // Injectors from wire.go:
@@ -23,8 +24,16 @@ func InitializeUserController() *controller.UserController {
 
 func InitializeAuthController() *controller.AuthController {
 	iUserRepository := repository.NewUserRepository()
-	iAuthProcessService := service.NewAuthProcessService()
-	iAuthService := service.NewAuthService(iUserRepository, iAuthProcessService)
+	iAuthProcessService := auth_service.NewAuthProcessService()
+	iAuthService := auth_service.NewAuthService(iUserRepository, iAuthProcessService)
 	authController := controller.NewAuthController(iAuthService)
 	return authController
+}
+
+func InitializeAdminController() *controller.AdminController {
+	iUserRepository := repository.NewUserRepository()
+	iStudentRepository := repository.NewStudentRepository()
+	iAdminService := service.NewAdminService(iUserRepository, iStudentRepository)
+	adminController := controller.NewAdminController(iAdminService)
+	return adminController
 }

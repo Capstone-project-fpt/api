@@ -83,6 +83,16 @@ type Semester struct {
 	UpdatedAt time.Time
 }
 
+type Student struct {
+	ID              int64
+	Code            string
+	SubMajorID      int64
+	UserID          int64
+	CapstoneGroupID sql.NullInt64
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+}
+
 type SubMajor struct {
 	ID        int64
 	Name      string
@@ -92,16 +102,14 @@ type SubMajor struct {
 }
 
 type User struct {
-	ID              int64
-	Name            string
-	UserType        string
-	Password        sql.NullString
-	Email           string
-	Code            sql.NullString
-	SubMajorID      sql.NullInt64
-	CapstoneGroupID sql.NullInt64
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	ID          int64
+	Name        string
+	UserType    string
+	Password    sql.NullString
+	Email       string
+	PhoneNumber string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type UsersRole struct {

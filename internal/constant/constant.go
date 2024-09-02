@@ -41,3 +41,5 @@ var UserType UserTypeType = UserTypeType{
 	Admin:   "admin",
 	Student: "student",
 }
+
+var DefaultPasswordLength int64 = 8

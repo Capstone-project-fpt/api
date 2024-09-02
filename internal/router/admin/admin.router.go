@@ -1,17 +1,19 @@
-package manager
+package admin
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/api/internal/wire"
+	"github.com/gin-gonic/gin"
+)
 
 type AdminRouter struct {}
 
-func (adminRouter *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
-	adminPublicRouter := r.Group("/admin")
-	{
-		adminPublicRouter.POST("/login")
-	}
+func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
+	adminController := wire.InitializeAdminController()
 
-	// adminPrivateRouter := r.Group("/admin/user")
-	// {
-	// 	adminPrivateRouter.POST("/active-user")
-	// }
+	adminRouter := r.Group("/admin")
+
+	adminStudentRouter := adminRouter.Group("/students")
+	{
+		adminStudentRouter.POST("/create-account", adminController.CreateStudentAccount)
+	}
 }

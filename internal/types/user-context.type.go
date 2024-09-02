@@ -7,7 +7,6 @@ type UserContext struct {
 	Name     string
 	UserType string
 	Email    string
-	Code     *string
 }
 
 // type UserContext struct {
@@ -24,12 +23,6 @@ func NewUserContext(user database.User) UserContext {
 		Name:     user.Name,
 		UserType: user.UserType,
 		Email:    user.Email,
-	}
-
-	if user.Code.Valid {
-		userContext.Code = &user.Code.String
-	} else {
-		userContext.Code = nil
 	}
 
 	return userContext

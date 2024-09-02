@@ -11,18 +11,16 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO users (name, user_type, password, email, code, sub_major_id, capstone_group_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO users (name, user_type, password, email, phone_number)
+VALUES ($1, $2, $3, $4, $5)
 `
 
 type CreateUserParams struct {
-	Name            string
-	UserType        string
-	Password        sql.NullString
-	Email           string
-	Code            sql.NullString
-	SubMajorID      sql.NullInt64
-	CapstoneGroupID sql.NullInt64
+	Name        string
+	UserType    string
+	Password    sql.NullString
+	Email       string
+	PhoneNumber string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
@@ -31,15 +29,40 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.UserType,
 		arg.Password,
 		arg.Email,
-		arg.Code,
-		arg.SubMajorID,
-		arg.CapstoneGroupID,
+		arg.PhoneNumber,
 	)
 	return err
 }
 
+const createUserAndReturnId = `-- name: CreateUserAndReturnId :one
+INSERT INTO users (name, user_type, password, email, phone_number)
+VALUES ($1, $2, $3, $4, $5)
+RETURNING id
+`
+
+type CreateUserAndReturnIdParams struct {
+	Name        string
+	UserType    string
+	Password    sql.NullString
+	Email       string
+	PhoneNumber string
+}
+
+func (q *Queries) CreateUserAndReturnId(ctx context.Context, arg CreateUserAndReturnIdParams) (int64, error) {
+	row := q.db.QueryRowContext(ctx, createUserAndReturnId,
+		arg.Name,
+		arg.UserType,
+		arg.Password,
+		arg.Email,
+		arg.PhoneNumber,
+	)
+	var id int64
+	err := row.Scan(&id)
+	return id, err
+}
+
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, user_type, password, email, code, sub_major_id, capstone_group_id, created_at, updated_at FROM users
+SELECT id, name, user_type, password, email, phone_number, created_at, updated_at FROM users
 WHERE email = $1 LIMIT 1
 `
 
@@ -52,9 +75,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.UserType,
 		&i.Password,
 		&i.Email,
-		&i.Code,
-		&i.SubMajorID,
-		&i.CapstoneGroupID,
+		&i.PhoneNumber,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -62,7 +83,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const getUserById = `-- name: GetUserById :one
-SELECT id, name, user_type, password, email, code, sub_major_id, capstone_group_id, created_at, updated_at FROM users
+SELECT id, name, user_type, password, email, phone_number, created_at, updated_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
@@ -75,9 +96,7 @@ func (q *Queries) GetUserById(ctx context.Context, id int64) (User, error) {
 		&i.UserType,
 		&i.Password,
 		&i.Email,
-		&i.Code,
-		&i.SubMajorID,
-		&i.CapstoneGroupID,
+		&i.PhoneNumber,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

@@ -17,6 +17,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/students/create-account": {
+            "post": {
+                "description": "Admin Create Student Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "CreateStudentAccount",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.InputAdminCreateStudentAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Login",
@@ -59,6 +99,33 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "admin_dto.InputAdminCreateStudentAccount": {
+            "type": "object",
+            "required": [
+                "code",
+                "email",
+                "name",
+                "phone_number",
+                "sub_major_id"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "auth_dto.InputLogin": {
             "type": "object",
             "required": [

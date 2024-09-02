@@ -1,5 +1,24 @@
 basePath: /api/v1
 definitions:
+  admin_dto.InputAdminCreateStudentAccount:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      sub_major_id:
+        type: integer
+    required:
+    - code
+    - email
+    - name
+    - phone_number
+    - sub_major_id
+    type: object
   auth_dto.InputLogin:
     properties:
       email:
@@ -42,6 +61,32 @@ info:
   title: Capstone Project FPT API
   version: "1.0"
 paths:
+  /admin/students/create-account:
+    post:
+      consumes:
+      - application/json
+      description: Admin Create Student Account
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin_dto.InputAdminCreateStudentAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: CreateStudentAccount
+      tags:
+      - Admin
   /login:
     post:
       consumes:

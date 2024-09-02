@@ -1,6 +1,8 @@
 package global
 
 import (
+	"database/sql"
+
 	database "github.com/api/database/sqlc"
 	"github.com/api/pkg/logger"
 	"github.com/api/pkg/setting"
@@ -14,5 +16,6 @@ var (
 	Localizer  *i18n.Localizer
 	Logger     *logger.LoggerZap
 	Db         *database.Queries
+	RawDb 		 *sql.DB
 	RDb        *redis.Client
 )
