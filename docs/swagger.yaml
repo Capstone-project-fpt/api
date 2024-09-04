@@ -36,6 +36,33 @@ definitions:
       refresh_token:
         type: string
     type: object
+  dto.MetaPagination:
+    properties:
+      current_page:
+        type: integer
+      total:
+        type: integer
+    type: object
+  major_dto.OutputGetListMajor:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/major_dto.OutputMajor'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  major_dto.OutputMajor:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
   response.ResponseDataSuccess:
     properties:
       code:
@@ -113,6 +140,36 @@ paths:
       summary: Login
       tags:
       - Auth
+  /majors:
+    get:
+      consumes:
+      - application/json
+      description: Get list major
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/major_dto.OutputGetListMajor'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: GetListMajor
+      tags:
+      - Public
 schemes:
 - http
 - https

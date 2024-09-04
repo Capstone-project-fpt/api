@@ -37,3 +37,10 @@ func InitializeAdminController() *controller.AdminController {
 	adminController := controller.NewAdminController(iAdminService)
 	return adminController
 }
+
+func InitializeMajorController() *controller.MajorController {
+	iMajorRepository := repository.NewMajorRepository()
+	iMajorService := service.NewMajorService(iMajorRepository)
+	majorController := controller.NewMajorController(iMajorService)
+	return majorController
+}

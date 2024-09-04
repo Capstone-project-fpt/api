@@ -41,3 +41,13 @@ func InitializeAdminController() *controller.AdminController {
 
 	return &controller.AdminController{}
 }
+
+func InitializeMajorController() *controller.MajorController {
+	wire.Build(
+		repository.NewMajorRepository,
+		service.NewMajorService,
+		controller.NewMajorController,
+	)
+
+	return &controller.MajorController{}
+}
