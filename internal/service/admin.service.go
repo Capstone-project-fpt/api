@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/api/database/model"
@@ -87,6 +88,24 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 	if err := tx.Create(&student).Error; err != nil {
 		tx.Rollback()
 		return http.StatusInternalServerError, err
+	}
+
+	var role model.Role
+	if err = tx.Model(&model.Role{}).Select("id").First(&role, "name = ?", constant.RoleType.Student).Error; err != nil {
+		tx.Rollback()
+		fmt.Println("Not found role student")
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	if err = tx.Exec("INSERT INTO users_roles (user_id, role_id) VALUES (?, ?)", user.ID, role.ID).Error; err != nil {
+		tx.Rollback()
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
 	}
 
 	if err := tx.Commit().Error; err != nil {

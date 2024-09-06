@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/api/global"
@@ -9,6 +10,7 @@ import (
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/service"
 	"github.com/api/pkg/response"
+	"github.com/api/pkg/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
@@ -35,14 +37,9 @@ func NewAdminController(adminService service.IAdminService) *AdminController {
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 	var input admin_dto.InputAdminCreateStudentAccount
-	localizer := global.Localizer
+	err := validateCreateStudentAccount(ctx, &input)
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidParams,
-		})
-
-		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+	if err != nil {
 		return
 	}
 
@@ -53,5 +50,29 @@ func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 		return
 	}
 
-	response.SuccessResponse(ctx, statusCode, dto.OutputCommon{Message: ""})
+	response.SuccessResponse(ctx, 200, dto.OutputCommon{Message: ""})
+}
+
+func validateCreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) error {
+	localizer := global.Localizer
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return err
+	}
+
+	if !validator.IsValidFptEmail(input.Email) {
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidStudentEmailFPT,
+		})
+
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return errors.New(message)
+	}
+
+	return nil
 }

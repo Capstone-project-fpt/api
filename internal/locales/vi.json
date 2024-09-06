@@ -4,5 +4,6 @@
   "TokenInvalid": "Token không hợp lệ.",
   "InternalServerError": "Máy chủ gặp sự cố.",
   "InvalidParams": "Tham số không hợp lệ.",
-  "UserAlreadyExists": "Người dùng đã tồn tại."
+  "UserAlreadyExists": "Người dùng đã tồn tại.",
+  "InvalidStudentEmailFPT": "Email sinh viên không hợp lệ."
 }
