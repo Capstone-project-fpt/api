@@ -1,6 +1,8 @@
 package types
 
-import database "github.com/api/database/sqlc"
+import (
+	"github.com/api/database/model"
+)
 
 type UserContext struct {
 	ID       int64
@@ -9,15 +11,7 @@ type UserContext struct {
 	Email    string
 }
 
-// type UserContext struct {
-// 	ID       int64   `json:"id"`
-// 	Name     string  `json:"name"`
-// 	UserType string  `json:"user_type"`
-// 	Email    string  `json:"email"`
-// 	Code     *string `json:"code"`
-// }
-
-func NewUserContext(user database.User) UserContext {
+func NewUserContext(user *model.User) UserContext {
 	userContext := UserContext{
 		ID:       user.ID,
 		Name:     user.Name,

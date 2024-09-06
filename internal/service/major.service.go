@@ -1,9 +1,10 @@
 package service
 
 import (
+	"github.com/api/database/model"
+	"github.com/api/global"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/major_dto"
-	"github.com/api/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,29 +12,24 @@ type IMajorService interface {
 	GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error)
 }
 
-type majorService struct {
-	majorRepository repository.IMajorRepository
-}
+type majorService struct{}
 
-func NewMajorService(majorRepository repository.IMajorRepository) IMajorService {
-	return &majorService{
-		majorRepository: majorRepository,
-	}
+func NewMajorService() IMajorService {
+	return &majorService{}
 }
 
 // NOTE: Consider to switch to concurrent call instead sequential
 func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error) {
-	total, err := s.majorRepository.CountAllMajor(ctx)
-
-	if err != nil {
+	var total int64
+	if err := global.Db.Model(&model.Major{}).Count(&total).Error; err != nil {
 		return nil, err
 	}
-	items, err := s.majorRepository.GetListMajor(ctx, repository.GetListMajorParams {
-		Limit: int32(input.Limit),
-		Offset: int32(input.Offset),
-	})
 
-	if err != nil {
+	var items []model.Major
+	if err := global.Db.Model(&model.Major{}).
+		Limit(int(input.Limit)).
+		Offset(int(input.Offset)).
+		Find(&items).Error; err != nil {
 		return nil, err
 	}
 
@@ -42,10 +38,10 @@ func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetLi
 		itemsMajorOutput[i] = major_dto.ToMajorOutput(item)
 	}
 
-	return major_dto.OutputGetListMajor {
-		Meta: dto.MetaPagination {
+	return major_dto.OutputGetListMajor{
+		Meta: dto.MetaPagination{
 			CurrentPage: int(input.Page),
-			Total: int(total),
+			Total:       int(total),
 		},
 		Items: itemsMajorOutput,
 	}, nil

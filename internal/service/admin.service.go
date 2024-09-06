@@ -1,15 +1,13 @@
 package service
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
-	database "github.com/api/database/sqlc"
+	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/admin_dto"
-	"github.com/api/internal/repository"
 	"github.com/api/pkg/mail"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
@@ -21,20 +19,15 @@ type IAdminService interface {
 	CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error)
 }
 
-type adminService struct {
-	userRepository    repository.IUserRepository
-	studentRepository repository.IStudentRepository
-}
+type adminService struct{}
 
-func NewAdminService(userRepository repository.IUserRepository, studentRepository repository.IStudentRepository) IAdminService {
-	return &adminService{
-		userRepository:    userRepository,
-		studentRepository: studentRepository,
-	}
+func NewAdminService() IAdminService {
+	return &adminService{}
 }
 
 func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error) {
-	_, err := as.userRepository.GetUserByEmail(ctx, input.Email)
+	var findUser model.User
+	err := global.Db.Model(model.User{}).Select("id").First(&findUser, "email = ?", input.Email).Error
 
 	if err == nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -54,51 +47,53 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	tx, err := global.RawDb.Begin()
-	if err != nil {
+	tx := global.Db.Begin()
+	if tx.Error != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
-		global.Logger.Error("Failed to begin a transaction, Error: ", zap.Error(err))
-
+		global.Logger.Error("Failed to begin a transaction, Error: ", zap.Error(tx.Error))
 		return http.StatusInternalServerError, errors.New(message)
 	}
-	defer tx.Rollback()
-	qtx := global.Db.WithTx(tx)
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
 
-	id, err := qtx.CreateUserAndReturnId(ctx, database.CreateUserAndReturnIdParams{
+	user := model.User{
 		Name:        input.Name,
-		Password:    sql.NullString{String: string(hashPassword), Valid: true},
+		Password:    hashPassword,
 		Email:       input.Email,
 		UserType:    constant.UserType.Student,
 		PhoneNumber: input.PhoneNumber,
-	})
+	}
 
-	if err != nil {
+	if err := tx.Create(&user).Error; err != nil {
+		tx.Rollback()
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
-
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	err = qtx.CreateStudent(ctx, database.CreateStudentParams{
+	student := model.Student{
 		Code:       input.Code,
 		SubMajorID: input.SubMajorId,
-		UserID:     id,
-	})
-
-	if err != nil {
-		return http.StatusBadRequest, err
+		UserID:     user.ID,
 	}
 
-	err = tx.Commit()
-	if err != nil {
+	if err := tx.Create(&student).Error; err != nil {
+		tx.Rollback()
+		return http.StatusInternalServerError, err
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
-		global.Logger.Error("Failed to commit a transaction, Error: ", zap.Error(err))
-
 		return http.StatusInternalServerError, errors.New(message)
 	}
 

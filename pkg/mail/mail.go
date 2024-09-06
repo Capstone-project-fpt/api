@@ -48,7 +48,6 @@ func Send(to []string, from string, subject string, htmlTemplate string) error {
 	message := BuildMessage(contentMail)
 
 	smtpConfig := global.Config.Smtp
-	fmt.Println("smtpConfig: ", smtpConfig)
 
 	auth := smtp.PlainAuth("", smtpConfig.Username, smtpConfig.Password, smtpConfig.Host)
 
@@ -58,9 +57,8 @@ func Send(to []string, from string, subject string, htmlTemplate string) error {
 			global.Logger.Error("Send mail error", zap.Error(err))
 			return err
 		}
-	} else {
-		fmt.Println("Send email Successful")
 	}
+	fmt.Println("Send email Successful")
 
 	return nil
 }

@@ -3,7 +3,7 @@ package major_dto
 import (
 	"time"
 
-	database "github.com/api/database/sqlc"
+	"github.com/api/database/model"
 	"github.com/api/internal/dto"
 )
 
@@ -25,7 +25,7 @@ type OutputGetListMajor struct {
 	Items []OutputMajor      `json:"items"`
 }
 
-func ToMajorOutput(major database.Major) OutputMajor {
+func ToMajorOutput(major model.Major) OutputMajor {
 	return OutputMajor {
 		ID: int(major.ID),
 		Name: major.Name,

@@ -1,13 +1,12 @@
 package auth_service
 
 import (
-	"database/sql"
 	"errors"
 	"net/http"
 
+	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
-	"github.com/api/internal/repository"
 	"github.com/api/internal/types"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
@@ -20,20 +19,19 @@ type IAuthService interface {
 }
 
 type authService struct {
-	userRepository repository.IUserRepository
 	authProcessService IAuthProcessService
 }
 
-func NewAuthService(userRepository repository.IUserRepository, authProcessService IAuthProcessService) IAuthService {
+func NewAuthService(authProcessService IAuthProcessService) IAuthService {
 	return &authService{
-		userRepository: userRepository,
 		authProcessService: authProcessService,
 	}
 }
 
 // Note: this function it just used to create Admin account in dev, for production, will not support this function
 func (as *authService) Register(ctx *gin.Context, email, password string) (int, error) {
-	_, err := as.userRepository.GetUserByEmail(ctx, email)
+	var user model.User
+	err := global.Db.Model(model.User{}).Select("id").First(&user, "email = ?", email).Error
 
 	if err == nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -52,13 +50,14 @@ func (as *authService) Register(ctx *gin.Context, email, password string) (int, 
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	err = as.userRepository.CreateUser(ctx, repository.CreateUserParams{
-		Email:    email,
-		Password: sql.NullString{String: string(hashedPassword), Valid: true},
-		Name:     "Admin FPT",
-		UserType: constant.UserType.Admin,
+	newUser := model.User{
+		Email:       email,
+		Password:    hashedPassword,
+		Name:        "Admin FPT",
+		UserType:    constant.UserType.Admin,
 		PhoneNumber: "0914121791",
-	})
+	}
+	err = global.Db.Create(&newUser).Error
 
 	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -72,7 +71,8 @@ func (as *authService) Register(ctx *gin.Context, email, password string) (int, 
 }
 
 func (as *authService) Login(ctx *gin.Context, email string, password string) (string, string, int, error) {
-	user, err := as.userRepository.GetUserByEmail(ctx, email)
+	var user model.User
+	err := global.Db.Model(model.User{}).Select("id", "email", "password", "user_type", "name").Find(&user, "email = ?", email).Error
 
 	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -82,7 +82,7 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 		return "", "", http.StatusNotFound, errors.New(message)
 	}
 
-	if !password_util.CheckPasswordHash(password, user.Password.String) {
+	if !password_util.CheckPasswordHash(password, user.Password) {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		})
@@ -90,7 +90,7 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 		return "", "", http.StatusNotFound, errors.New(message)
 	}
 
-	userContext := types.NewUserContext(user)
+	userContext := types.NewUserContext(&user)
 
 	accessToken, refreshToken, err := as.authProcessService.ResolveAccessAndRefreshToken(ctx, &userContext)
 	if err != nil {

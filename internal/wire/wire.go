@@ -4,7 +4,6 @@ package wire
 
 import (
 	"github.com/api/internal/controller"
-	"github.com/api/internal/repository"
 	"github.com/api/internal/service"
 	auth_service "github.com/api/internal/service/auth"
 	"github.com/google/wire"
@@ -12,7 +11,6 @@ import (
 
 func InitializeUserController() *controller.UserController {
 	wire.Build(
-		repository.NewUserRepository,
 		service.NewUserService,
 		controller.NewUserController,
 	)
@@ -22,7 +20,6 @@ func InitializeUserController() *controller.UserController {
 
 func InitializeAuthController() *controller.AuthController {
 	wire.Build(
-		repository.NewUserRepository,
 		auth_service.NewAuthProcessService,
 		auth_service.NewAuthService,
 		controller.NewAuthController,
@@ -33,8 +30,6 @@ func InitializeAuthController() *controller.AuthController {
 
 func InitializeAdminController() *controller.AdminController {
 	wire.Build(
-		repository.NewUserRepository,
-		repository.NewStudentRepository,
 		service.NewAdminService,
 		controller.NewAdminController,
 	)
@@ -44,7 +39,6 @@ func InitializeAdminController() *controller.AdminController {
 
 func InitializeMajorController() *controller.MajorController {
 	wire.Build(
-		repository.NewMajorRepository,
 		service.NewMajorService,
 		controller.NewMajorController,
 	)
