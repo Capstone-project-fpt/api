@@ -1,8 +1,6 @@
 package major_dto
 
 import (
-	"time"
-
 	"github.com/api/database/model"
 	"github.com/api/internal/dto"
 )
@@ -14,10 +12,8 @@ type InputGetListMajor struct {
 }
 
 type OutputMajor struct {
-	ID        int     `json:"id"`
+	ID        int       `json:"id"`
 	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type OutputGetListMajor struct {
@@ -26,10 +22,8 @@ type OutputGetListMajor struct {
 }
 
 func ToMajorOutput(major model.Major) OutputMajor {
-	return OutputMajor {
-		ID: int(major.ID),
-		Name: major.Name,
-		CreatedAt: major.CreatedAt,
-		UpdatedAt: major.UpdatedAt,
+	return OutputMajor{
+		ID:        int(major.ID),
+		Name:      major.Name,
 	}
 }

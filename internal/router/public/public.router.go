@@ -13,6 +13,7 @@ type PublicRouter struct{}
 func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 	authController := wire.InitializeAuthController()
 	majorController := wire.InitializeMajorController()
+	subMajorController := wire.InitializeSubMajorController()
 	publicController := controller.NewPublicController()
 
 	if global.Config.Server.Mode == "dev" {
@@ -28,5 +29,10 @@ func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 	majorGroup := r.Group("/majors")
 	{
 		majorGroup.GET("/", majorController.GetListMajor)
+	}
+
+	subMajorGroup := r.Group("/sub-majors")
+	{
+		subMajorGroup.GET("/", subMajorController.GetListSubMajor)
 	}
 }

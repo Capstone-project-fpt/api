@@ -70,13 +70,9 @@ definitions:
     type: object
   major_dto.OutputMajor:
     properties:
-      created_at:
-        type: string
       id:
         type: integer
       name:
-        type: string
-      updated_at:
         type: string
     type: object
   response.ResponseDataSuccess:
@@ -95,6 +91,24 @@ definitions:
         type: string
       message:
         type: boolean
+    type: object
+  sub_major_dto.OutputGetListMajor:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/sub_major_dto.OutputSubMajor'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  sub_major_dto.OutputSubMajor:
+    properties:
+      id:
+        type: integer
+      major_id:
+        type: integer
+      name:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -235,6 +249,40 @@ paths:
           schema:
             $ref: '#/definitions/response.ResponseErr'
       summary: GetListMajor
+      tags:
+      - Public
+  /sub-majors:
+    get:
+      consumes:
+      - application/json
+      description: Get list sub major
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Major ID
+        in: query
+        name: major_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sub_major_dto.OutputGetListMajor'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: GetListSubMajor
       tags:
       - Public
 schemes:

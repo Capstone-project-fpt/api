@@ -18,7 +18,6 @@ func NewMajorService() IMajorService {
 	return &majorService{}
 }
 
-// NOTE: Consider to switch to concurrent call instead sequential
 func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error) {
 	var total int64
 	if err := global.Db.Model(&model.Major{}).Count(&total).Error; err != nil {
@@ -26,7 +25,7 @@ func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetLi
 	}
 
 	var items []model.Major
-	if err := global.Db.Model(&model.Major{}).
+	if err := global.Db.Omit("CreatedAt", "UpdatedAt").Model(&model.Major{}).
 		Limit(int(input.Limit)).
 		Offset(int(input.Offset)).
 		Find(&items).Error; err != nil {

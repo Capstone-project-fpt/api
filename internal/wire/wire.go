@@ -45,3 +45,12 @@ func InitializeMajorController() *controller.MajorController {
 
 	return &controller.MajorController{}
 }
+
+func InitializeSubMajorController() *controller.SubMajorController {
+	wire.Build(
+		service.NewSubMajorService,
+		controller.NewSubMajorController,
+	)
+
+	return &controller.SubMajorController{}
+}

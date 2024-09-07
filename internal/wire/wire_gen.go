@@ -38,3 +38,9 @@ func InitializeMajorController() *controller.MajorController {
 	majorController := controller.NewMajorController(iMajorService)
 	return majorController
 }
+
+func InitializeSubMajorController() *controller.SubMajorController {
+	iSubMajorService := service.NewSubMajorService()
+	subMajorController := controller.NewSubMajorController(iSubMajorService)
+	return subMajorController
+}
