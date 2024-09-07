@@ -16,4 +16,9 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 	{
 		adminStudentRouter.POST("/create-account", adminController.CreateStudentAccount)
 	}
+
+	adminTeacherRouter := adminRouter.Group("/teachers")
+	{
+		adminTeacherRouter.POST("/create-account", adminController.CreateTeacherAccount)
+	}
 }

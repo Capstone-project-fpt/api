@@ -37,7 +37,7 @@ func NewAdminController(adminService service.IAdminService) *AdminController {
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 	var input admin_dto.InputAdminCreateStudentAccount
-	err := validateCreateStudentAccount(ctx, &input)
+	err := validateCreateAccount(ctx, &input)
 
 	if err != nil {
 		return
@@ -50,10 +50,48 @@ func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 		return
 	}
 
-	response.SuccessResponse(ctx, 200, dto.OutputCommon{Message: ""})
+	localizer := global.Localizer
+	message := localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.CreateStudentAccountSuccess,
+	})
+
+	response.SuccessResponse(ctx, statusCode, dto.OutputCommon{Message: message})
 }
 
-func validateCreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) error {
+// @Summary CreateTeacherAccount
+// @Description Admin Create Teacher Account
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param data body admin_dto.InputAdminCreateTeacherAccount true "data"
+// @Success 200 {object} auth_dto.OutputLogin
+// @Router /admin/teachers/create-account [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+func (ac *AdminController) CreateTeacherAccount(ctx *gin.Context) {
+	var input admin_dto.InputAdminCreateTeacherAccount
+	err := validateCreateAccount(ctx, &input)
+
+	if err != nil {
+		return
+	}
+
+	statusCode, err := ac.adminService.CreateTeacherAccount(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, statusCode, err.Error())
+		return
+	}
+
+	localizer := global.Localizer
+	message := localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.CreateTeacherAccountSuccess,
+	})
+
+	response.SuccessResponse(ctx, statusCode, dto.OutputCommon{Message: message})
+}
+
+func validateCreateAccount(ctx *gin.Context, input admin_dto.AccountWithEmail) error {
 	localizer := global.Localizer
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -65,7 +103,7 @@ func validateCreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminC
 		return err
 	}
 
-	if !validator.IsValidFptEmail(input.Email) {
+	if !validator.IsValidFptEmail(input.GetEmail()) {
 		message := localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidStudentEmailFPT,
 		})

@@ -57,6 +57,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/teachers/create-account": {
+            "post": {
+                "description": "Admin Create Teacher Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "CreateTeacherAccount",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.InputAdminCreateTeacherAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "description": "Login",
@@ -157,6 +197,29 @@ const docTemplate = `{
                 "code": {
                     "type": "string"
                 },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "admin_dto.InputAdminCreateTeacherAccount": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "phone_number",
+                "sub_major_id"
+            ],
+            "properties": {
                 "email": {
                     "type": "string"
                 },

@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/api/database/model"
@@ -18,6 +17,17 @@ import (
 
 type IAdminService interface {
 	CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error)
+	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error)
+}
+
+type InputCreateAccount struct {
+	Name        string
+	Email       string
+	UserType    string
+	PhoneNumber string
+	SubMajorID  int64
+	RoleType    string
+	Code        string
 }
 
 type adminService struct{}
@@ -27,6 +37,29 @@ func NewAdminService() IAdminService {
 }
 
 func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error) {
+	return as.createAccount(InputCreateAccount{
+		Name:        input.Name,
+		Email:       input.Email,
+		UserType:    constant.UserType.Student,
+		PhoneNumber: input.PhoneNumber,
+		SubMajorID:  input.SubMajorID,
+		RoleType:    constant.RoleType.Student,
+		Code:        input.Code,
+	})
+}
+
+func (as *adminService) CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error) {
+	return as.createAccount(InputCreateAccount{
+		Name:        input.Name,
+		Email:       input.Email,
+		UserType:    constant.UserType.Teacher,
+		PhoneNumber: input.PhoneNumber,
+		SubMajorID:  input.SubMajorID,
+		RoleType:    constant.RoleType.Teacher,
+	})
+}
+
+func (as *adminService) createAccount(input InputCreateAccount) (int, error) {
 	var findUser model.User
 	err := global.Db.Model(model.User{}).Select("id").First(&findUser, "email = ?", input.Email).Error
 
@@ -47,7 +80,6 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 
 		return http.StatusInternalServerError, errors.New(message)
 	}
-
 	tx := global.Db.Begin()
 	if tx.Error != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -67,10 +99,9 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 		Name:        input.Name,
 		Password:    hashPassword,
 		Email:       input.Email,
-		UserType:    constant.UserType.Student,
+		UserType:    input.UserType,
 		PhoneNumber: input.PhoneNumber,
 	}
-
 	if err := tx.Create(&user).Error; err != nil {
 		tx.Rollback()
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -79,21 +110,30 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	student := model.Student{
-		Code:       input.Code,
-		SubMajorID: input.SubMajorId,
-		UserID:     user.ID,
+	switch input.UserType {
+	case constant.UserType.Teacher:
+		teacher := model.Teacher{
+			SubMajorID: input.SubMajorID,
+			UserID:     user.ID,
+		}
+		if err := tx.Create(&teacher).Error; err != nil {
+			tx.Rollback()
+			return http.StatusInternalServerError, err
+		}
+	case constant.UserType.Student:
+		student := model.Student{
+			UserID: user.ID,
+			SubMajorID: input.SubMajorID,
+			Code: input.Code,
+		}
+		if err := tx.Create(&student).Error; err != nil {
+			tx.Rollback()
+			return http.StatusInternalServerError, err
+		}
 	}
-
-	if err := tx.Create(&student).Error; err != nil {
-		tx.Rollback()
-		return http.StatusInternalServerError, err
-	}
-
 	var role model.Role
-	if err = tx.Model(&model.Role{}).Select("id").First(&role, "name = ?", constant.RoleType.Student).Error; err != nil {
+	if err = tx.Model(&model.Role{}).Select("id").First(&role, "name = ?", input.RoleType).Error; err != nil {
 		tx.Rollback()
-		fmt.Println("Not found role student")
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})

@@ -5,5 +5,7 @@
   "InternalServerError": "Internal server error.",
   "InvalidParams": "Invalid params.",
   "UserAlreadyExists": "User already exists.",
-  "InvalidStudentEmailFPT": "Invalid student email FPT."
+  "InvalidStudentEmailFPT": "Invalid student email FPT.",
+  "CreateStudentAccountSuccess": "Create student account success.",
+  "CreateTeacherAccountSuccess": "Create teacher account success."
 }

@@ -19,6 +19,22 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
+  admin_dto.InputAdminCreateTeacherAccount:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      sub_major_id:
+        type: integer
+    required:
+    - email
+    - name
+    - phone_number
+    - sub_major_id
+    type: object
   auth_dto.InputLogin:
     properties:
       email:
@@ -112,6 +128,32 @@ paths:
           schema:
             $ref: '#/definitions/response.ResponseErr'
       summary: CreateStudentAccount
+      tags:
+      - Admin
+  /admin/teachers/create-account:
+    post:
+      consumes:
+      - application/json
+      description: Admin Create Teacher Account
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin_dto.InputAdminCreateTeacherAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: CreateTeacherAccount
       tags:
       - Admin
   /login:

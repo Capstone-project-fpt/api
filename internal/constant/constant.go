@@ -5,23 +5,27 @@ const (
 )
 
 type MessageI18n struct {
-	EmailNotFound          string
-	UserNotFound           string
-	TokenInvalid           string
-	InternalServerError    string
-	InvalidParams          string
-	UserAlreadyExists      string
-	InvalidStudentEmailFPT string
+	EmailNotFound               string
+	UserNotFound                string
+	TokenInvalid                string
+	InternalServerError         string
+	InvalidParams               string
+	UserAlreadyExists           string
+	InvalidStudentEmailFPT      string
+	CreateStudentAccountSuccess string
+	CreateTeacherAccountSuccess string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
-	EmailNotFound:          "EmailNotFound",
-	UserNotFound:           "UserNotFound",
-	TokenInvalid:           "TokenInvalid",
-	InternalServerError:    "InternalServerError",
-	InvalidParams:          "InvalidParams",
-	UserAlreadyExists:      "UserAlreadyExists",
-	InvalidStudentEmailFPT: "InvalidStudentEmailFPT",
+	EmailNotFound:               "EmailNotFound",
+	UserNotFound:                "UserNotFound",
+	TokenInvalid:                "TokenInvalid",
+	InternalServerError:         "InternalServerError",
+	InvalidParams:               "InvalidParams",
+	UserAlreadyExists:           "UserAlreadyExists",
+	InvalidStudentEmailFPT:      "InvalidStudentEmailFPT",
+	CreateStudentAccountSuccess: "CreateStudentAccountSuccess",
+	CreateTeacherAccountSuccess: "CreateTeacherAccountSuccess",
 }
 
 type RedisKeyType struct {
@@ -37,11 +41,13 @@ var RedisKey RedisKeyType = RedisKeyType{
 type UserTypeType struct {
 	Admin   string
 	Student string
+	Teacher string
 }
 
 var UserType UserTypeType = UserTypeType{
 	Admin:   "admin",
 	Student: "student",
+	Teacher: "teacher",
 }
 
 var DefaultPasswordLength int64 = 8
@@ -49,9 +55,11 @@ var DefaultPasswordLength int64 = 8
 type RoleTypeType struct {
 	Admin   string
 	Student string
+	Teacher string
 }
 
 var RoleType RoleTypeType = RoleTypeType{
 	Admin:   "admin",
 	Student: "student",
+	Teacher: "teacher",
 }
