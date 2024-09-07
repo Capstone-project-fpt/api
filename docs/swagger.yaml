@@ -77,6 +77,15 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  major_dto.OutputGetMajorSwagger:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/major_dto.OutputMajor'
+      message:
+        type: boolean
+    type: object
   major_dto.OutputMajor:
     properties:
       id:
@@ -109,6 +118,15 @@ definitions:
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  sub_major_dto.OutputGetSubMajorSwagger:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/sub_major_dto.OutputSubMajor'
+      message:
+        type: boolean
     type: object
   sub_major_dto.OutputSubMajor:
     properties:
@@ -322,6 +340,31 @@ paths:
       summary: GetListMajor
       tags:
       - Public
+  /majors/{id}:
+    get:
+      description: Get Major
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/major_dto.OutputGetMajorSwagger'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetMajor
+      tags:
+      - Public
   /sub-majors:
     get:
       consumes:
@@ -356,11 +399,36 @@ paths:
       summary: GetListSubMajor
       tags:
       - Public
-  /users:
+  /sub-majors/{id}:
+    get:
+      description: Get Sub Major
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sub_major_dto.OutputGetSubMajorSwagger'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSubMajor
+      tags:
+      - Public
+  /users/{id}:
     get:
       description: Get User
       parameters:
-      - description: ID
+      - description: id
         in: query
         name: id
         required: true

@@ -10,6 +10,7 @@ import (
 
 type IMajorService interface {
 	GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error)
+	GetMajor(ctx *gin.Context, id int) (interface{}, error)
 }
 
 type majorService struct{}
@@ -44,4 +45,15 @@ func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetLi
 		},
 		Items: itemsMajorOutput,
 	}, nil
+}
+
+func (s *majorService) GetMajor(ctx *gin.Context, id int) (interface{}, error) {
+	var major model.Major
+	if err := global.Db.Where("id = ?", id).First(&major).Error; err != nil {
+		return nil, err
+	}
+
+	majorOutput := major_dto.ToMajorOutput(major)
+
+	return majorOutput, nil
 }

@@ -226,6 +226,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/majors/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Major",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Public"
+                ],
+                "summary": "GetMajor",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/major_dto.OutputGetMajorSwagger"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/sub-majors": {
             "get": {
                 "description": "Get list sub major",
@@ -277,25 +317,25 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/sub-majors/{id}": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get User",
+                "description": "Get Sub Major",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Public"
                 ],
-                "summary": "GetUser",
+                "summary": "GetSubMajor",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "ID",
+                        "description": "id",
                         "name": "id",
                         "in": "query",
                         "required": true
@@ -305,7 +345,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                            "$ref": "#/definitions/sub_major_dto.OutputGetSubMajorSwagger"
                         }
                     },
                     "400": {
@@ -332,6 +372,46 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "GetMe",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetUser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -465,6 +545,20 @@ const docTemplate = `{
                 }
             }
         },
+        "major_dto.OutputGetMajorSwagger": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/major_dto.OutputMajor"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
         "major_dto.OutputMajor": {
             "type": "object",
             "properties": {
@@ -513,6 +607,20 @@ const docTemplate = `{
                 },
                 "meta": {
                     "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "sub_major_dto.OutputGetSubMajorSwagger": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/sub_major_dto.OutputSubMajor"
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

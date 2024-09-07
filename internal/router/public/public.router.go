@@ -22,17 +22,19 @@ func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 	r.POST("/login", authController.Login)
 	r.GET(
 		"/hello-world",
-		 middleware.AuthMiddleware(), 
-		 publicController.HelloWorld,
+		middleware.AuthMiddleware(),
+		publicController.HelloWorld,
 	)
 
 	majorGroup := r.Group("/majors")
 	{
 		majorGroup.GET("/", majorController.GetListMajor)
+		majorGroup.GET("/:id", majorController.GetMajor)
 	}
 
 	subMajorGroup := r.Group("/sub-majors")
 	{
 		subMajorGroup.GET("/", subMajorController.GetListSubMajor)
+		subMajorGroup.GET("/:id", subMajorController.GetSubMajor)
 	}
 }

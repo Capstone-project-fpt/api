@@ -28,7 +28,7 @@ func NewUserController(userService service.IUserService) *UserController {
 // @Tags User
 // @Produce json
 // @Param id query int true "id"
-// @Router /users [get]
+// @Router /users/{id} [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} user_dto.OutputGetUserSwagger
 // @Security ApiKeyAuth

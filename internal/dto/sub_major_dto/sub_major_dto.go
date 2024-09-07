@@ -12,6 +12,10 @@ type InputGetListSubMajor struct {
 	MajorID int `form:"major_id"`
 }
 
+type InputGetSubMajor struct {
+	ID int `form:"id" binding:"required" example:"1"`
+}
+
 type OutputSubMajor struct {
 	ID      int    `json:"id"`
 	Name    string `json:"name"`
@@ -29,4 +33,11 @@ func ToSubMajorOutput(subMajor model.SubMajor) OutputSubMajor {
 		Name:    subMajor.Name,
 		MajorID: int(subMajor.MajorID),
 	}
+}
+
+// This is used for swagger
+type OutputGetSubMajorSwagger struct {
+	Code    int            `json:"code"`
+	Success bool           `json:"message"`
+	Data    OutputSubMajor `json:"data"`
 }

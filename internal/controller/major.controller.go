@@ -55,3 +55,31 @@ func (mc *MajorController) GetListMajor(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusOK, result)
 }
+
+// @Summary GetMajor
+// @Description Get Major
+// @Tags Public
+// @Produce json
+// @Param id query int true "id"
+// @Router /majors/{id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} major_dto.OutputGetMajorSwagger
+// @Security ApiKeyAuth
+func (mc *MajorController) GetMajor(ctx *gin.Context) {
+	var input major_dto.InputGetMajor
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+	}
+
+	major, err := mc.majorService.GetMajor(ctx, input.ID)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.MajorNotFound,
+		}))
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, major)
+}

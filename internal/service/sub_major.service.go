@@ -10,6 +10,7 @@ import (
 
 type ISubMajorService interface {
 	GetListSubMajor(ctx *gin.Context, input sub_major_dto.InputGetListSubMajor) (interface{}, error)
+	GetSubMajor(ctx *gin.Context, id int) (interface{}, error)
 }
 
 type subMajorService struct{}
@@ -52,4 +53,15 @@ func (s *subMajorService) GetListSubMajor(ctx *gin.Context, input sub_major_dto.
 		},
 		Items: itemsSubMajorOutput,
 	}, nil
+}
+
+func (s *subMajorService) GetSubMajor(ctx *gin.Context, id int) (interface{}, error) {
+	var subMajor model.SubMajor
+	if err := global.Db.Model(&model.SubMajor{}).Where("id = ?", id).First(&subMajor).Error; err != nil {
+		return nil, err
+	}
+
+	subMajorOutput := sub_major_dto.ToSubMajorOutput(subMajor)
+
+	return subMajorOutput, nil
 }

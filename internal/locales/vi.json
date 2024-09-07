@@ -8,5 +8,7 @@
   "InvalidStudentEmailFPT": "Email sinh viên không hợp lệ.",
   "CreateStudentAccountSuccess": "Tạo tài khoản sinh viên thành công.",
   "CreateTeacherAccountSuccess": "Tạo tài khoản giảo viên thành công.",
-  "PermissionDenied": "Bạn không có đủ quyển để thực hiện."
+  "PermissionDenied": "Bạn không có đủ quyển để thực hiện.",
+  "MajorNotFound": "Không tìm thấy khối ngành.",
+  "SubMajorNotFound": "Không tìm thấy chuyên ngành."
 }

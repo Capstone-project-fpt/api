@@ -15,6 +15,8 @@ type MessageI18n struct {
 	CreateStudentAccountSuccess string
 	CreateTeacherAccountSuccess string
 	PermissionDenied            string
+	MajorNotFound               string
+	SubMajorNotFound            string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -28,6 +30,8 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CreateStudentAccountSuccess: "CreateStudentAccountSuccess",
 	CreateTeacherAccountSuccess: "CreateTeacherAccountSuccess",
 	PermissionDenied:            "PermissionDenied",
+	MajorNotFound:               "MajorNotFound",
+	SubMajorNotFound:            "SubMajorNotFound",
 }
 
 type RedisKeyType struct {

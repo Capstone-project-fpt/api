@@ -34,7 +34,7 @@ func NewSubMajorController(subMajorService service.ISubMajorService) *SubMajorCo
 // @Router /sub-majors [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} sub_major_dto.OutputGetListMajor
-func (mc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
+func (smc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
 	var input sub_major_dto.InputGetListSubMajor
 	localizer := global.Localizer
 	if err := ctx.ShouldBindQuery(&input); err != nil {
@@ -47,7 +47,7 @@ func (mc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
 	}
 
 	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
-	result, err := mc.subMajorService.GetListSubMajor(ctx, input)
+	result, err := smc.subMajorService.GetListSubMajor(ctx, input)
 
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -55,4 +55,32 @@ func (mc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
 	}
 
 	response.SuccessResponse(ctx, http.StatusOK, result)
+}
+
+// @Summary GetSubMajor
+// @Description Get Sub Major
+// @Tags Public
+// @Produce json
+// @Param id query int true "id"
+// @Router /sub-majors/{id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} sub_major_dto.OutputGetSubMajorSwagger
+// @Security ApiKeyAuth
+func (smc *SubMajorController) GetSubMajor(ctx *gin.Context) {
+	var input sub_major_dto.InputGetSubMajor
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+	}
+
+	subMajor, err := smc.subMajorService.GetSubMajor(ctx, input.ID)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.SubMajorNotFound,
+		}))
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, subMajor)
 }

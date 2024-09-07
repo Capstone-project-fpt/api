@@ -8,5 +8,7 @@
   "InvalidStudentEmailFPT": "Invalid student email FPT.",
   "CreateStudentAccountSuccess": "Create student account success.",
   "CreateTeacherAccountSuccess": "Create teacher account success.",
-  "PermissionDenied": "Permission denied."
+  "PermissionDenied": "Permission denied.",
+  "MajorNotFound": "Major not found.",
+  "SubMajorNotFound": "Sub major not found."
 }
