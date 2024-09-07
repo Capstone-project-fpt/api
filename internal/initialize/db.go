@@ -24,10 +24,15 @@ func InitDB() {
 	dbConfig := global.Config.DB
 	dsn := "host=%s user=%s password=%s dbname=%s port=%v sslmode=%s TimeZone=%s"
 	var dbConnection = fmt.Sprintf(dsn, dbConfig.Host, dbConfig.Username, dbConfig.Password, dbConfig.DbName, dbConfig.Port, dbConfig.SslMode, dbConfig.Timezone)
-	db, err := gorm.Open(postgres.Open(dbConnection), &gorm.Config{
+	var gormConfig gorm.Config = gorm.Config{
 		SkipDefaultTransaction: false,
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+		PrepareStmt:            true,
+	}
+	if global.Config.Server.Mode == "dev" {
+		gormConfig.Logger = logger.Default.LogMode(logger.Info)
+	}
+
+	db, err := gorm.Open(postgres.Open(dbConnection), &gormConfig)
 	checkErrorPanic(err, "Init database connection failed")
 
 	rawDb, err := db.DB()
