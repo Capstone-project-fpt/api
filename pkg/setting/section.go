@@ -6,6 +6,7 @@ type Config struct {
 	DB     DBSetting     `mapstructure:"db"`
 	Logger LoggerSetting `mapstructure:"logger"`
 	Redis  RedisSetting  `mapstructure:"redis"`
+	Smtp   SmtpSetting   `mapstructure:"smtp"`
 }
 
 type ServerSetting struct {
@@ -48,4 +49,12 @@ type RedisSetting struct {
 	Password string `mapstructure:"password"`
 	DB       int    `mapstructure:"db"`
 	PoolSize int    `mapstructure:"poolSize"`
+}
+
+type SmtpSetting struct {
+	Host     string `mapstructure:"host"`
+	Port     string `mapstructure:"port"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	Sender   string `mapstructure:"sender"`
 }

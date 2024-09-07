@@ -6,17 +6,18 @@ import (
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/auth_dto"
-	"github.com/api/internal/service"
+	auth_service "github.com/api/internal/service/auth"
+
 	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 type AuthController struct {
-	authService service.IAuthService
+	authService auth_service.IAuthService
 }
 
-func NewAuthController(authService service.IAuthService) *AuthController {
+func NewAuthController(authService auth_service.IAuthService) *AuthController {
 	return &AuthController{
 		authService: authService,
 	}

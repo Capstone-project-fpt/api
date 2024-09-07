@@ -1,8 +1,11 @@
 {
-  "EmailNotFound":"Không tìm thấy email.",
+  "EmailNotFound": "Không tìm thấy email.",
   "UserNotFound": "Không tìm thấy người dùng.",
   "TokenInvalid": "Token không hợp lệ.",
   "InternalServerError": "Máy chủ gặp sự cố.",
   "InvalidParams": "Tham số không hợp lệ.",
-  "UserAlreadyExists": "Người dùng đã tồn tại."
+  "UserAlreadyExists": "Người dùng đã tồn tại.",
+  "InvalidStudentEmailFPT": "Email sinh viên không hợp lệ.",
+  "CreateStudentAccountSuccess": "Tạo tài khoản sinh viên thành công.",
+  "CreateTeacherAccountSuccess": "Tạo tài khoản giảo viên thành công."
 }

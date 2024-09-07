@@ -1,5 +1,5 @@
-package manager
+package admin
 
-type ManagerRouterGroup struct {
+type AdminRouterGroup struct {
 	AdminRouter
 }

@@ -19,4 +19,4 @@ FOREIGN KEY (permission_id)
 REFERENCES "permissions"(id)
 ON DELETE CASCADE;
 
-CREATE INDEX "idx_role_id_permission_id"" ON "roles_permissions" (role_id, permission_id)
+CREATE INDEX "idx_role_id_permission_id" ON "roles_permissions" (role_id, permission_id)

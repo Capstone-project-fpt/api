@@ -1,22 +1,45 @@
 package middleware
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 
+	"github.com/api/global"
+	"github.com/api/internal/constant"
+	"github.com/api/internal/types"
 	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
+	return func(ctx *gin.Context) {
+		authorization := ctx.GetHeader("Authorization")
+		token := strings.Split(authorization, "Bearer ")[1]
+		redis := global.RDb
+		key := token
+		localizer := global.Localizer
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.TokenInvalid,
+		})
 
-		if token != "valid-token" {
-			response.ErrorResponse(c, http.StatusUnauthorized, "")
-			c.Abort()
+		val, err := redis.Get(ctx, key).Result()
+		if err != nil {
+			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
+			ctx.Abort()
 			return
 		}
 
-		c.Next()
+		var userContext types.UserContext
+		if err = json.Unmarshal([]byte(val), &userContext); err != nil {
+			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
+			ctx.Abort()
+			return
+		}
+
+		ctx.Set("UserContext", &userContext)
+
+		ctx.Next()
 	}
 }

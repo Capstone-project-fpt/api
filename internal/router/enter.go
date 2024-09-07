@@ -7,9 +7,9 @@ import (
 )
 
 type RouterGroup struct {
-	Public  public.PublicRouterGroup
-	User    user.UserRouterGroup
-	Manager manager.ManagerRouterGroup
+	Public public.PublicRouterGroup
+	User   user.UserRouterGroup
+	Admin  admin.AdminRouterGroup
 }
 
 var RouterGroupApp = new(RouterGroup)

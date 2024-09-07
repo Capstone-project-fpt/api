@@ -18,6 +18,6 @@ ADD CONSTRAINT fk_capstone_group_semesters
 FOREIGN KEY (semester_id) REFERENCES semesters(id)
 ON DELETE CASCADE;
 
-CREATE INDEX "idx_major_id" ON "capstone_groups" (major_id);
-CREATE INDEX "idx_semester_id" ON "capstone_groups" (semester_id);
+CREATE INDEX "idx_capstone_groups_major_id" ON "capstone_groups" (major_id);
+CREATE INDEX "idx_capstone_groups_semester_id" ON "capstone_groups" (semester_id);
 
