@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	Config     setting.Config
-	I18nBundle *i18n.Bundle
-	Localizer  *i18n.Localizer
-	Logger     *logger.LoggerZap
-	Db         *gorm.DB
-	RDb        *redis.Client
+	Config                 setting.Config
+	I18nBundle             *i18n.Bundle
+	Localizer              *i18n.Localizer
+	Logger                 *logger.LoggerZap
+	Db                     *gorm.DB
+	RDb                    *redis.Client
 )

@@ -14,8 +14,8 @@ import (
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		authorization := c.GetHeader("Authorization")
+	return func(ctx *gin.Context) {
+		authorization := ctx.GetHeader("Authorization")
 		token := strings.Split(authorization, "Bearer ")[1]
 		redis := global.RDb
 		key := token
@@ -24,23 +24,22 @@ func AuthMiddleware() gin.HandlerFunc {
 			MessageID: constant.MessageI18nId.TokenInvalid,
 		})
 
-		val, err := redis.Get(c, key).Result()
+		val, err := redis.Get(ctx, key).Result()
 		if err != nil {
-			
-			response.ErrorResponse(c, http.StatusUnauthorized, message)
-			c.Abort()
+			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
+			ctx.Abort()
 			return
 		}
 
 		var userContext types.UserContext
-		err = json.Unmarshal([]byte(val), &userContext)
-
-		if err != nil {
-			response.ErrorResponse(c, http.StatusUnauthorized, message)
-			c.Abort()
+		if err = json.Unmarshal([]byte(val), &userContext); err != nil {
+			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
+			ctx.Abort()
 			return
-		}		
+		}
 
-		c.Next()
+		ctx.Set("UserContext", &userContext)
+
+		ctx.Next()
 	}
 }
