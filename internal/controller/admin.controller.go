@@ -34,6 +34,7 @@ func NewAdminController(adminService service.IAdminService) *AdminController {
 // @Router /admin/students/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
 func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 	var input admin_dto.InputAdminCreateStudentAccount
 	err := validateCreateAccount(ctx, &input)
@@ -66,6 +67,7 @@ func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 // @Router /admin/teachers/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
 func (ac *AdminController) CreateTeacherAccount(ctx *gin.Context) {
 	var input admin_dto.InputAdminCreateTeacherAccount
 	err := validateCreateAccount(ctx, &input)

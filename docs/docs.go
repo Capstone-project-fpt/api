@@ -19,6 +19,11 @@ const docTemplate = `{
     "paths": {
         "/admin/students/create-account": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Admin Create Student Account",
                 "consumes": [
                     "application/json"
@@ -59,6 +64,11 @@ const docTemplate = `{
         },
         "/admin/teachers/create-account": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Admin Create Teacher Account",
                 "consumes": [
                     "application/json"

@@ -19,7 +19,11 @@ func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 		r.POST("/register", authController.Register)
 	}
 	r.POST("/login", authController.Login)
-	r.GET("/hello-world", middleware.AuthMiddleware(), publicController.HelloWorld)
+	r.GET(
+		"/hello-world",
+		 middleware.AuthMiddleware(), 
+		 publicController.HelloWorld,
+	)
 
 	majorGroup := r.Group("/majors")
 	{

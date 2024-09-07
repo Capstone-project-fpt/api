@@ -14,6 +14,7 @@ type MessageI18n struct {
 	InvalidStudentEmailFPT      string
 	CreateStudentAccountSuccess string
 	CreateTeacherAccountSuccess string
+	PermissionDenied            string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -26,6 +27,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	InvalidStudentEmailFPT:      "InvalidStudentEmailFPT",
 	CreateStudentAccountSuccess: "CreateStudentAccountSuccess",
 	CreateTeacherAccountSuccess: "CreateTeacherAccountSuccess",
+	PermissionDenied:            "PermissionDenied",
 }
 
 type RedisKeyType struct {
@@ -62,4 +64,14 @@ var RoleType RoleTypeType = RoleTypeType{
 	Admin:   "admin",
 	Student: "student",
 	Teacher: "teacher",
+}
+
+type PermissionTypeType struct {
+	ManageAccount string
+	ViewAccount   string
+}
+
+var PermissionType PermissionTypeType = PermissionTypeType{
+	ManageAccount: "ManageAccount",
+	ViewAccount:   "ViewAccount",
 }

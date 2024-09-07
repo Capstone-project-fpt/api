@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/api/pkg/response"
 	context_util "github.com/api/pkg/utils/context"
 	"github.com/gin-gonic/gin"
@@ -29,7 +27,6 @@ func (p *PublicController) HelloWorld(ctx *gin.Context) {
 	if userContext == nil {
 		return
 	}
-	fmt.Println(">>>>>>>>>>>>>>>>>.", userContext)
 
 	response.SuccessResponse(ctx, 200, "Hello World")
 }

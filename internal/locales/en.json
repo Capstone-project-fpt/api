@@ -7,5 +7,6 @@
   "UserAlreadyExists": "User already exists.",
   "InvalidStudentEmailFPT": "Invalid student email FPT.",
   "CreateStudentAccountSuccess": "Create student account success.",
-  "CreateTeacherAccountSuccess": "Create teacher account success."
+  "CreateTeacherAccountSuccess": "Create teacher account success.",
+  "PermissionDenied": "Permission denied."
 }

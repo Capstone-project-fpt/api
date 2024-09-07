@@ -127,6 +127,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
       summary: CreateStudentAccount
       tags:
       - Admin
@@ -153,6 +155,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
       summary: CreateTeacherAccount
       tags:
       - Admin
