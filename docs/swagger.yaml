@@ -119,6 +119,68 @@ definitions:
       name:
         type: string
     type: object
+  user_dto.ExtraInfo:
+    properties:
+      admin:
+        $ref: '#/definitions/user_dto.OutputAdminInfo'
+      student:
+        $ref: '#/definitions/user_dto.OutputStudentInfo'
+      teacher:
+        $ref: '#/definitions/user_dto.OutputTeacherInfo'
+    type: object
+  user_dto.OutputAdminInfo:
+    type: object
+  user_dto.OutputGetUser:
+    properties:
+      common_info:
+        $ref: '#/definitions/user_dto.OutputUser'
+      extra_info:
+        $ref: '#/definitions/user_dto.ExtraInfo'
+    type: object
+  user_dto.OutputGetUserSwagger:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/user_dto.OutputGetUser'
+      message:
+        type: boolean
+    type: object
+  user_dto.OutputStudentInfo:
+    properties:
+      capstone_group_id:
+        type: integer
+      code:
+        type: string
+      created_at:
+        type: string
+      student_id:
+        type: integer
+      sub_major_id:
+        type: integer
+    type: object
+  user_dto.OutputTeacherInfo:
+    properties:
+      created_at:
+        type: string
+      sub_major_id:
+        type: integer
+      teacher_id:
+        type: integer
+    type: object
+  user_dto.OutputUser:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      user_type:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -294,6 +356,50 @@ paths:
       summary: GetListSubMajor
       tags:
       - Public
+  /users:
+    get:
+      description: Get User
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.OutputGetUserSwagger'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetUser
+      tags:
+      - User
+  /users/me:
+    get:
+      description: Get Me
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.OutputGetUserSwagger'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetMe
+      tags:
+      - User
 schemes:
 - http
 - https

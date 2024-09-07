@@ -8,7 +8,7 @@ import (
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/admin_dto"
-	"github.com/api/internal/service"
+	admin_service "github.com/api/internal/service/admin"
 	"github.com/api/pkg/response"
 	"github.com/api/pkg/validator"
 	"github.com/gin-gonic/gin"
@@ -16,10 +16,10 @@ import (
 )
 
 type AdminController struct {
-	adminService service.IAdminService
+	adminService admin_service.IAdminService
 }
 
-func NewAdminController(adminService service.IAdminService) *AdminController {
+func NewAdminController(adminService admin_service.IAdminService) *AdminController {
 	return &AdminController{
 		adminService: adminService,
 	}

@@ -276,6 +276,77 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetUser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Me",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetMe",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -455,6 +526,102 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_dto.ExtraInfo": {
+            "type": "object",
+            "properties": {
+                "admin": {
+                    "$ref": "#/definitions/user_dto.OutputAdminInfo"
+                },
+                "student": {
+                    "$ref": "#/definitions/user_dto.OutputStudentInfo"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/user_dto.OutputTeacherInfo"
+                }
+            }
+        },
+        "user_dto.OutputAdminInfo": {
+            "type": "object"
+        },
+        "user_dto.OutputGetUser": {
+            "type": "object",
+            "properties": {
+                "common_info": {
+                    "$ref": "#/definitions/user_dto.OutputUser"
+                },
+                "extra_info": {
+                    "$ref": "#/definitions/user_dto.ExtraInfo"
+                }
+            }
+        },
+        "user_dto.OutputGetUserSwagger": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user_dto.OutputGetUser"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "user_dto.OutputStudentInfo": {
+            "type": "object",
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "student_id": {
+                    "type": "integer"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user_dto.OutputTeacherInfo": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user_dto.OutputUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "user_type": {
                     "type": "string"
                 }
             }

@@ -9,6 +9,7 @@ package wire
 import (
 	"github.com/api/internal/controller"
 	"github.com/api/internal/service"
+	service2 "github.com/api/internal/service/admin"
 	"github.com/api/internal/service/auth"
 )
 
@@ -28,7 +29,7 @@ func InitializeAuthController() *controller.AuthController {
 }
 
 func InitializeAdminController() *controller.AdminController {
-	iAdminService := service.NewAdminService()
+	iAdminService := service2.NewAdminService()
 	adminController := controller.NewAdminController(iAdminService)
 	return adminController
 }
