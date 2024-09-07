@@ -31,7 +31,6 @@ func NewAdminController(adminService service.IAdminService) *AdminController {
 // @Accept json
 // @Produce json
 // @Param data body admin_dto.InputAdminCreateStudentAccount true "data"
-// @Success 200 {object} auth_dto.OutputLogin
 // @Router /admin/students/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
@@ -64,7 +63,6 @@ func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body admin_dto.InputAdminCreateTeacherAccount true "data"
-// @Success 200 {object} auth_dto.OutputLogin
 // @Router /admin/teachers/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess

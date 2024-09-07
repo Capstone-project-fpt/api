@@ -156,6 +156,27 @@ paths:
       summary: CreateTeacherAccount
       tags:
       - Admin
+  /hello-world:
+    get:
+      consumes:
+      - application/json
+      description: Hello World
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: HelloWorldController
+      tags:
+      - Public
   /login:
     post:
       consumes:

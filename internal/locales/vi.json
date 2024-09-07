@@ -1,5 +1,5 @@
 {
-  "EmailNotFound":"Không tìm thấy email.",
+  "EmailNotFound": "Không tìm thấy email.",
   "UserNotFound": "Không tìm thấy người dùng.",
   "TokenInvalid": "Token không hợp lệ.",
   "InternalServerError": "Máy chủ gặp sự cố.",
