@@ -9,3 +9,10 @@ type OutputLogin struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
+
+// This used for swagger
+type OutputLoginSwagger struct {
+	Code    int         `json:"code"`
+	Success bool        `json:"message"`
+	Data    OutputLogin `json:"data"`
+}

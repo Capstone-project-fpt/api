@@ -52,10 +52,9 @@ func (ac *AuthController) Register(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body auth_dto.InputLogin true "data"
-// @Success 200 {object} auth_dto.OutputLogin
 // @Router /login [post]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} response.ResponseDataSuccess
+// @Success 200 {object} auth_dto.OutputLoginSwagger
 func (ac *AuthController) Login(ctx *gin.Context) {
 	var input auth_dto.InputLogin
 	localizer := global.Localizer

@@ -169,7 +169,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                            "$ref": "#/definitions/auth_dto.OutputLoginSwagger"
                         }
                     },
                     "400": {
@@ -352,6 +352,20 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "auth_dto.OutputLoginSwagger": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/auth_dto.OutputLogin"
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

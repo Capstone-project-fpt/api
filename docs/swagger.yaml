@@ -52,6 +52,15 @@ definitions:
       refresh_token:
         type: string
     type: object
+  auth_dto.OutputLoginSwagger:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/auth_dto.OutputLogin'
+      message:
+        type: boolean
+    type: object
   dto.MetaPagination:
     properties:
       current_page:
@@ -213,7 +222,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.ResponseDataSuccess'
+            $ref: '#/definitions/auth_dto.OutputLoginSwagger'
         "400":
           description: Bad Request
           schema:
