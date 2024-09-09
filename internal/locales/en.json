@@ -10,5 +10,6 @@
   "CreateTeacherAccountSuccess": "Create teacher account success.",
   "PermissionDenied": "Permission denied.",
   "MajorNotFound": "Major not found.",
-  "SubMajorNotFound": "Sub major not found."
+  "SubMajorNotFound": "Sub major not found.",
+  "AlreadySendResetPasswordLink": "Already send reset password link."
 }

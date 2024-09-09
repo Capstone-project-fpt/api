@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	newAccountTemplate = "new-account.html"
+	newAccountTemplate    = "new-account.html"
+	resetPasswordTemplate = "reset-password.html"
 )
 
 type Mail struct {
@@ -28,6 +29,11 @@ type MailNewAccountTemplateData struct {
 	Password string
 }
 
+type MailResetPasswordTemplateData struct {
+	Name      string
+	ResetLink string
+}
+
 func SendNewAccountEmail(to string, dataTemplate MailNewAccountTemplateData) error {
 	htmlBody, err := getEmailTemplate(newAccountTemplate, dataTemplate)
 	if err != nil {
@@ -35,6 +41,19 @@ func SendNewAccountEmail(to string, dataTemplate MailNewAccountTemplateData) err
 	}
 
 	return Send([]string{to}, global.Config.Smtp.Sender, "New account", htmlBody)
+}
+
+func SendResetPasswordEmail(to string, dataTemplate MailResetPasswordTemplateData) error {
+	htmlBody, err := getEmailTemplate(resetPasswordTemplate, dataTemplate)
+	if err != nil {
+		return err
+	}
+
+	if global.Config.Server.Mode == "dev" {
+		fmt.Println("Data reset password", dataTemplate)
+	}
+
+	return Send([]string{to}, global.Config.Smtp.Sender, "Reset password", htmlBody)
 }
 
 func Send(to []string, from string, subject string, htmlTemplate string) error {

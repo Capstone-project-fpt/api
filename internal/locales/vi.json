@@ -10,5 +10,6 @@
   "CreateTeacherAccountSuccess": "Tạo tài khoản giảo viên thành công.",
   "PermissionDenied": "Bạn không có đủ quyển để thực hiện.",
   "MajorNotFound": "Không tìm thấy khối ngành.",
-  "SubMajorNotFound": "Không tìm thấy chuyên ngành."
+  "SubMajorNotFound": "Không tìm thấy chuyên ngành.",
+  "AlreadySendResetPasswordLink": "Người dùng đã yêu cầu thay đổi mật khẩu."
 }

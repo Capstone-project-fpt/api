@@ -1,9 +1,7 @@
 package password_util
 
 import (
-	"math/rand"
-	"time"
-
+	string_util "github.com/api/pkg/utils/string"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,13 +16,5 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func GenerateRandomPassword(length int64) string {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	seed := rand.NewSource(time.Now().UnixNano())
-	random := rand.New(seed)
-
-	result := make([]byte, length)
-	for i := range result {
-		result[i] = charset[random.Intn(len(charset))]
-	}
-	return string(result)
+	return string_util.GenerateRandomString(int(length))
 }

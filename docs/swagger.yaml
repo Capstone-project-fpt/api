@@ -35,6 +35,13 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
+  auth_dto.InputForgotPassword:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
   auth_dto.InputLogin:
     properties:
       email:
@@ -44,6 +51,19 @@ definitions:
     required:
     - email
     - password
+    type: object
+  auth_dto.InputResetPassword:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+    required:
+    - email
+    - password
+    - token
     type: object
   auth_dto.OutputLogin:
     properties:
@@ -263,6 +283,32 @@ paths:
       summary: CreateTeacherAccount
       tags:
       - Admin
+  /forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Forgot Password
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth_dto.InputForgotPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: ForgotPassword
+      tags:
+      - Auth
   /hello-world:
     get:
       consumes:
@@ -365,6 +411,32 @@ paths:
       summary: GetMajor
       tags:
       - Public
+  /reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset Password
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth_dto.InputResetPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: ResetPassword
+      tags:
+      - Auth
   /sub-majors:
     get:
       consumes:

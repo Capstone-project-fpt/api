@@ -10,9 +10,10 @@ type Config struct {
 }
 
 type ServerSetting struct {
-	Name string `mapstructure:"name"`
-	Port int    `mapstructure:"port"`
-	Mode string `mapstructure:"mode"`
+	Name   string `mapstructure:"name"`
+	Port   int    `mapstructure:"port"`
+	Mode   string `mapstructure:"mode"`
+	WebURL string `mapstructure:"webURL"`
 }
 
 type JwtSetting struct {

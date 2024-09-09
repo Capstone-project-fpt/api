@@ -82,3 +82,61 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, statusCode, outputLogin)
 }
+
+// @Summary ForgotPassword
+// @Description Forgot Password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body auth_dto.InputForgotPassword true "data"
+// @Router /forgot-password [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
+	var input auth_dto.InputForgotPassword
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	if err := ac.authService.ForgotPassword(ctx, input.Email); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, "")
+}
+
+// @Summary ResetPassword
+// @Description Reset Password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body auth_dto.InputResetPassword true "data"
+// @Router /reset-password [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+func (ac *AuthController) ResetPassword(ctx *gin.Context) {
+	var input auth_dto.InputResetPassword
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	statusCode, err := ac.authService.ResetPassword(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, statusCode, "")
+}

@@ -13,10 +13,10 @@ import (
 )
 
 type IAuthProcessService interface {
-	ResolveAccessAndRefreshToken (ctx *gin.Context, userContext *types.UserContext) (string, string, error)
+	ResolveAccessAndRefreshToken(ctx *gin.Context, userContext *types.UserContext) (string, string, error)
 }
 
-type authProcessService struct {}
+type authProcessService struct{}
 
 func NewAuthProcessService() IAuthProcessService {
 	return &authProcessService{}
@@ -76,16 +76,11 @@ func generateToken(tokenChan chan string, errChan chan error, tokenFunc func() (
 func storeTokensInRedis(ctx *gin.Context, accessToken, refreshToken string, userContext *types.UserContext) error {
 	jwtConfig := global.Config.Jwt
 
-	userContextJson, err := json.Marshal(userContext)
-	if err != nil {
-		return err
-	}
-
 	timestamp := time.Now().Unix()
 	errChan := make(chan error)
 
-	go storeTokenInRedis(ctx, errChan, accessToken, userContextJson, constant.RedisKey.ActiveAccessToken, timestamp, jwtConfig.Expiration)
-	go storeTokenInRedis(ctx, errChan, refreshToken, userContextJson, constant.RedisKey.ActiveRefreshToken, timestamp, jwtConfig.RefreshExpiration)
+	go storeTokenInRedis(ctx, errChan, accessToken, userContext, constant.RedisKey.ActiveAccessToken, timestamp, jwtConfig.Expiration)
+	go storeTokenInRedis(ctx, errChan, refreshToken, userContext, constant.RedisKey.ActiveRefreshToken, timestamp, jwtConfig.RefreshExpiration)
 
 	for i := 0; i < 2; i++ {
 		if err := <-errChan; err != nil {
@@ -96,16 +91,20 @@ func storeTokensInRedis(ctx *gin.Context, accessToken, refreshToken string, user
 	return nil
 }
 
-func storeTokenInRedis(ctx *gin.Context, errChan chan error, token string, userContextJson []byte, keyPrefix string, timestamp int64, expiration int) {
+func storeTokenInRedis(ctx *gin.Context, errChan chan error, token string, userContext *types.UserContext, keyPrefix string, timestamp int64, expiration int) {
 	redis := global.RDb
+	userContextJson, err := json.Marshal(userContext)
+	if err != nil {
+		errChan <- err
+	}
 
-	_, err := redis.Set(ctx, token, userContextJson, time.Duration(expiration)*time.Second).Result()
+	_, err = redis.Set(ctx, token, userContextJson, time.Duration(expiration)*time.Second).Result()
 	if err != nil {
 		errChan <- err
 		return
 	}
 
-	activeTokenKey := fmt.Sprintf("%s_%d_%d", keyPrefix, timestamp, timestamp)
+	activeTokenKey := fmt.Sprintf("%s_%s_%d", keyPrefix, userContext.Email, timestamp)
 	_, err = redis.Set(ctx, activeTokenKey, token, time.Duration(expiration)*time.Second).Result()
 	if err != nil {
 		errChan <- err

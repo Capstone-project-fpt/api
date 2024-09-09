@@ -5,6 +5,16 @@ type InputLogin struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type InputForgotPassword struct {
+	Email string `json:"email" binding:"required"`
+}
+
+type InputResetPassword struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Token    string `json:"token" binding:"required"`
+}
+
 type OutputLogin struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`

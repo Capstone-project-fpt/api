@@ -2,20 +2,32 @@ package auth_service
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
+	"github.com/api/internal/dto/auth_dto"
 	"github.com/api/internal/types"
+	"github.com/api/pkg/mail"
 	password_util "github.com/api/pkg/utils/password"
+	string_util "github.com/api/pkg/utils/string"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"go.uber.org/zap"
+)
+
+const (
+	resetPasswordTokenKey = "reset_password_%s"
 )
 
 type IAuthService interface {
 	Register(ctx *gin.Context, email, password string) (int, error)
 	Login(ctx *gin.Context, email string, password string) (string, string, int, error)
+	ForgotPassword(ctx *gin.Context, email string) error
+	ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error)
 }
 
 type authService struct {
@@ -102,4 +114,154 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 	}
 
 	return accessToken, refreshToken, http.StatusOK, nil
+}
+
+func (as * authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error) {
+	var user model.User
+	if err := global.Db.Model(model.User{}).Select("id").Where("email = ?", input.Email).First(&user).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+
+		return http.StatusBadRequest, errors.New(message)
+	}
+
+	redis := global.RDb
+	key := fmt.Sprintf(resetPasswordTokenKey, input.Email)
+	
+	if _, err := redis.Get(ctx, key).Result(); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.TokenInvalid,
+		})
+
+		return http.StatusBadRequest, errors.New(message)
+	}
+
+	if err := redis.Del(ctx, key).Err(); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	hashPassword, err := password_util.HashPassword(input.Password)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return http.StatusInternalServerError, errors.New(message)
+	}
+	
+	if err = global.Db.Model(model.User{}).Where("id = ?", user.ID).Update("password", hashPassword).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	return http.StatusOK, nil
+}
+
+func (as *authService) ForgotPassword(ctx *gin.Context, email string) error {
+	isAlreadySend := as.checkAlreadySendResetPasswordLink(ctx, email)
+
+	if isAlreadySend {
+		// NOTE: Can return error if already send link to user
+		return nil
+	}
+
+	redis := global.RDb
+	var user model.User
+	if err := global.Db.Model(model.User{}).Select("id", "email", "name").Where("email = ?", email).First(&user).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+
+		return errors.New(message)
+	}
+
+	token := string_util.GenerateRandomString(int(constant.DefaultResetPasswordTokenLength))
+
+	key := fmt.Sprintf(resetPasswordTokenKey, user.Email)
+	redis.Set(ctx, key, token, time.Duration(constant.DefaultResetPasswordTokenExpiration)*time.Second)
+
+	data := mail.MailResetPasswordTemplateData{
+		Name:      user.Name,
+		ResetLink: fmt.Sprintf("%s/reset-password?token=%s", global.Config.Server.WebURL, token),
+	}
+
+	err := mail.SendResetPasswordEmail(user.Email, data)
+
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		global.Logger.Error("Failed to send email, Error: ", zap.Error(err))
+
+		return errors.New(message)
+	}
+
+	err = as.clearTokenSessions(ctx, email)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		global.Logger.Error("Failed to send email, Error: ", zap.Error(err))
+
+		return errors.New(message)
+	}
+
+	return nil
+}
+
+func (as *authService) checkAlreadySendResetPasswordLink(ctx *gin.Context, email string) bool {
+	redis := global.RDb
+	key := fmt.Sprintf(resetPasswordTokenKey, email)
+	_, err := redis.Get(ctx, key).Result()
+
+	return err == nil
+}
+
+func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error {
+	redis := global.RDb
+	var tokenKeys []string
+	accessTokenIter := redis.Scan(ctx, 0, fmt.Sprintf("%s_%s*", constant.RedisKey.ActiveAccessToken, email), 0).Iterator()
+	for accessTokenIter.Next(ctx) {
+		tokenKeys = append(tokenKeys, accessTokenIter.Val())
+	}
+	if err := accessTokenIter.Err(); err != nil {
+		return err
+	}
+
+	refreshTokenIter := redis.Scan(ctx, 0, fmt.Sprintf("%s_%s*", constant.RedisKey.ActiveRefreshToken, email), 0).Iterator()
+	for refreshTokenIter.Next(ctx) {
+		tokenKeys = append(tokenKeys, refreshTokenIter.Val())
+	}
+	if err := refreshTokenIter.Err(); err != nil {
+		return err
+	}
+
+	var tokens []string
+
+	for _, tokenKey := range tokenKeys {
+		val, err := redis.Get(ctx, tokenKey).Result()
+		if err != nil {
+			return err
+		}
+		tokens = append(tokens, val)
+	}
+
+	var keys []string
+	keys = append(keys, tokenKeys...)
+	keys = append(keys, tokens...)
+
+	err := redis.Del(ctx, keys...).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -2,6 +2,7 @@ server:
   name: "Capstone Project FPT"
   port: 8080
   mode: "dev"
+  webURL: "http://localhost:8080" # Web URL
 jwt:
   secret: "capstone-project-fpt"
   refreshSecret: "capstone-project-fpt-refresh"
