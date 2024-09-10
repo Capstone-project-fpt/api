@@ -2,7 +2,7 @@ server:
   name: "Capstone Project FPT"
   port: 8080
   mode: "dev"
-  webURL: "http://localhost:8080" # Web URL
+  webURL: "http://localhost:3000"
 jwt:
   secret: "capstone-project-fpt"
   refreshSecret: "capstone-project-fpt-refresh"
@@ -30,7 +30,7 @@ redis:
   addr: localhost:6380
   password: ""
   db: 0
-  poolSize: 10 
+  poolSize: 10
 smtp:
   host: "smtp.gmail.com"
   port: 587
