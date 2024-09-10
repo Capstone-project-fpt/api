@@ -6,7 +6,10 @@ import (
 	"github.com/api/internal/router"
 	"github.com/api/internal/service"
 
+	"time"
+
 	swaggerDocs "github.com/api/docs"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hellofresh/health-go/v5"
 	swaggerFiles "github.com/swaggo/files"
@@ -30,9 +33,16 @@ func InitRouter() *gin.Engine {
 	swaggerDocs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/health-check", healthCheckHandle(healthCheck.HealthCheck()))
 
-	r.Use() // logging
-	r.Use() // cross
-	r.Use() // limit rate
+	// Configure CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{global.Config.Server.WebURL}, // TODO: Use config variable
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	r.Use(middleware.I18nMiddleware())
 	r.Use(middleware.ErrorHandleMiddleware())
 
@@ -52,7 +62,7 @@ func InitRouter() *gin.Engine {
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	
+
 	return r
 }
 
@@ -60,4 +70,4 @@ func healthCheckHandle(h *health.Health) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		h.Handler().ServeHTTP(ctx.Writer, ctx.Request)
 	}
-}	
+}
