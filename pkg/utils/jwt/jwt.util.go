@@ -14,6 +14,11 @@ type JwtInput struct {
 	UserId int64
 }
 
+type ResetPassJwtInput struct {
+	UserId int64
+	Email  string
+}
+
 var jwtConfig = global.Config.Jwt
 
 func GenerateAccessToken(payload JwtInput) (string, error) {
@@ -51,6 +56,23 @@ func GenerateRefreshToken(payload JwtInput) (string, error) {
 	return token, nil
 }
 
+func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
+	secretKey := []byte(jwtConfig.Secret)
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": payload,
+		"iss": global.Config.Server.Name,
+		"iat": time.Now().Unix(),
+		"exp": time.Now().Add(time.Duration(constant.DefaultResetPasswordTokenExpiration)).Unix(),
+	})
+
+	token, err := claims.SignedString(secretKey)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
 func VerifyToken(tokenString string) (int, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return jwtConfig.Secret, nil
@@ -67,7 +89,6 @@ func VerifyToken(tokenString string) (int, error) {
 
 		return 0, errors.New(message)
 	}
-
 
 	claims := token.Claims.(jwt.MapClaims)
 

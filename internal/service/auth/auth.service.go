@@ -12,8 +12,8 @@ import (
 	"github.com/api/internal/dto/auth_dto"
 	"github.com/api/internal/types"
 	"github.com/api/pkg/mail"
+	jwt_util "github.com/api/pkg/utils/jwt"
 	password_util "github.com/api/pkg/utils/password"
-	string_util "github.com/api/pkg/utils/string"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"go.uber.org/zap"
@@ -116,7 +116,7 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 	return accessToken, refreshToken, http.StatusOK, nil
 }
 
-func (as * authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error) {
+func (as *authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error) {
 	var user model.User
 	if err := global.Db.Model(model.User{}).Select("id").Where("email = ?", input.Email).First(&user).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -128,7 +128,7 @@ func (as * authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputRes
 
 	redis := global.RDb
 	key := fmt.Sprintf(resetPasswordTokenKey, input.Email)
-	
+
 	if _, err := redis.Get(ctx, key).Result(); err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.TokenInvalid,
@@ -153,7 +153,7 @@ func (as * authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputRes
 
 		return http.StatusInternalServerError, errors.New(message)
 	}
-	
+
 	if err = global.Db.Model(model.User{}).Where("id = ?", user.ID).Update("password", hashPassword).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
@@ -183,14 +183,14 @@ func (as *authService) ForgotPassword(ctx *gin.Context, email string) error {
 		return errors.New(message)
 	}
 
-	token := string_util.GenerateRandomString(int(constant.DefaultResetPasswordTokenLength))
+	token, _ := jwt_util.GenerateResetPasswordToken(jwt_util.ResetPassJwtInput{Email: user.Email, UserId: user.ID})
 
 	key := fmt.Sprintf(resetPasswordTokenKey, user.Email)
 	redis.Set(ctx, key, token, time.Duration(constant.DefaultResetPasswordTokenExpiration)*time.Second)
 
 	data := mail.MailResetPasswordTemplateData{
 		Name:      user.Name,
-		ResetLink: fmt.Sprintf("%s/reset-password?token=%s", global.Config.Server.WebURL, token),
+		ResetLink: fmt.Sprintf("%s/auth/reset-password?token=%s", global.Config.Server.WebURL, token),
 	}
 
 	err := mail.SendResetPasswordEmail(user.Email, data)
