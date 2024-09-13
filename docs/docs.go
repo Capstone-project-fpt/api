@@ -589,14 +589,10 @@ const docTemplate = `{
         "auth_dto.InputResetPassword": {
             "type": "object",
             "required": [
-                "email",
                 "password",
                 "token"
             ],
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },
