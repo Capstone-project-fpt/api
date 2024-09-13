@@ -183,7 +183,16 @@ func (as *authService) ForgotPassword(ctx *gin.Context, email string) error {
 		return errors.New(message)
 	}
 
-	token, _ := jwt_util.GenerateResetPasswordToken(jwt_util.ResetPassJwtInput{Email: user.Email, UserId: user.ID})
+	token, genTokenError := jwt_util.GenerateResetPasswordToken(jwt_util.ResetPassJwtInput{Email: user.Email, UserId: user.ID})
+
+	if genTokenError != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		global.Logger.Error("Failed to generate reset password token, Error: ", zap.Error(genTokenError))
+
+		return errors.New(message)
+	}
 
 	key := fmt.Sprintf(resetPasswordTokenKey, user.Email)
 	redis.Set(ctx, key, token, time.Duration(constant.DefaultResetPasswordTokenExpiration)*time.Second)
