@@ -117,8 +117,18 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 }
 
 func (as *authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error) {
+	payload, err := jwt_util.VerifyTokenResetPassword(input.Token)
+
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+
+		return http.StatusBadRequest, errors.New(message)
+	}
+
 	var user model.User
-	if err := global.Db.Model(model.User{}).Select("id").Where("email = ?", input.Email).First(&user).Error; err != nil {
+	if err := global.Db.Model(model.User{}).Select("id").Where("email = ?", payload.Email).First(&user).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		})
@@ -127,7 +137,7 @@ func (as *authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputRese
 	}
 
 	redis := global.RDb
-	key := fmt.Sprintf(resetPasswordTokenKey, input.Email)
+	key := fmt.Sprintf(resetPasswordTokenKey, payload.Email)
 
 	if _, err := redis.Get(ctx, key).Result(); err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -183,13 +193,13 @@ func (as *authService) ForgotPassword(ctx *gin.Context, email string) error {
 		return errors.New(message)
 	}
 
-	token, genTokenError := jwt_util.GenerateResetPasswordToken(jwt_util.ResetPassJwtInput{Email: user.Email, UserId: user.ID})
+	token, err := jwt_util.GenerateResetPasswordToken(jwt_util.ResetPassJwtInput{Email: user.Email, UserId: user.ID})
 
-	if genTokenError != nil {
+	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
-		global.Logger.Error("Failed to generate reset password token, Error: ", zap.Error(genTokenError))
+		global.Logger.Error("Failed to generate reset password token, Error: ", zap.Error(err))
 
 		return errors.New(message)
 	}
@@ -202,7 +212,7 @@ func (as *authService) ForgotPassword(ctx *gin.Context, email string) error {
 		ResetLink: fmt.Sprintf("%s/auth/reset-password?token=%s", global.Config.Server.WebURL, token),
 	}
 
-	err := mail.SendResetPasswordEmail(user.Email, data)
+	err = mail.SendResetPasswordEmail(user.Email, data)
 
 	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -267,9 +277,11 @@ func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error 
 	keys = append(keys, tokenKeys...)
 	keys = append(keys, tokens...)
 
-	err := redis.Del(ctx, keys...).Err()
-	if err != nil {
-		return err
+	if len(keys) > 0 {
+		err := redis.Del(ctx, keys...).Err()
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

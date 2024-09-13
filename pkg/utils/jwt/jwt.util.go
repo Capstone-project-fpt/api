@@ -62,7 +62,7 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 		"sub": payload,
 		"iss": global.Config.Server.Name,
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Duration(constant.DefaultResetPasswordTokenExpiration)).Unix(),
+		"exp": time.Now().Add(time.Duration(constant.DefaultResetPasswordTokenExpiration) * time.Second).Unix(),
 	})
 
 	token, err := claims.SignedString(secretKey)
@@ -73,24 +73,26 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 	return token, nil
 }
 
-func VerifyToken(tokenString string) (int, error) {
+func VerifyTokenResetPassword(tokenString string) (*ResetPassJwtInput, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return jwtConfig.Secret, nil
+		return []byte(jwtConfig.Secret), nil
 	})
 
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-
+	
 	if !token.Valid {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.TokenInvalid,
 		})
-
-		return 0, errors.New(message)
+		
+		return nil, errors.New(message)
 	}
-
+	
 	claims := token.Claims.(jwt.MapClaims)
+	var payload ResetPassJwtInput
+	payload.Email = claims["sub"].(map[string]interface{})["Email"].(string)
 
-	return claims["sub"].(int), nil
+	return &payload, nil
 }

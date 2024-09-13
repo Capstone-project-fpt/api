@@ -54,14 +54,11 @@ definitions:
     type: object
   auth_dto.InputResetPassword:
     properties:
-      email:
-        type: string
       password:
         type: string
       token:
         type: string
     required:
-    - email
     - password
     - token
     type: object
