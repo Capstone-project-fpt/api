@@ -1,8 +1,9 @@
 server:
-  name: "Capstone Project FPT"
+  name: "FPT Capstone Management"
   port: 8080
   mode: "dev"
-  webURL: "http://localhost:3000"
+  webURL: "http://localhost:5500" # Web URL
+  serverURL: "http://127.0.0.1:8080"
 jwt:
   secret: "capstone-project-fpt"
   refreshSecret: "capstone-project-fpt-refresh"
@@ -37,3 +38,6 @@ smtp:
   username: ""
   password: ""
   sender: ""
+google:
+  clientId: ""
+  clientSecret: ""
