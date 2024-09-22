@@ -20,6 +20,8 @@ func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 		r.POST("/register", authController.Register)
 	}
 	r.POST("/login", authController.Login)
+	r.GET("/login/:provider", authController.LoginGoogleHandle)
+	r.GET("/auth/:provider/callback", authController.LoginGoogleCallbackHandle)
 	r.POST("/forgot-password", authController.ForgotPassword)
 	r.POST("/reset-password", authController.ResetPassword)
 	r.GET(

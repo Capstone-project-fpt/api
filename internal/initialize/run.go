@@ -11,6 +11,7 @@ func Run() {
 	InitLogger()
 	InitDB()
 	InitRedis()
+	InitGoth()
 	InitI18n()
 	r := InitRouter()
 
@@ -20,5 +21,5 @@ func Run() {
 		fmt.Printf("Swagger API Docs: http://localhost:%v/swagger/index.html\n", global.Config.Server.Port)
 	}
 
-	r.Run(serverAddr)
+	r.Run("127.0.0.1" + serverAddr)
 }

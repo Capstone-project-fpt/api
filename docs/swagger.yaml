@@ -353,6 +353,23 @@ paths:
       summary: Login
       tags:
       - Auth
+  /login/google:
+    post:
+      description: Login With Google
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: Login With Google
+      tags:
+      - Auth
   /majors:
     get:
       consumes:

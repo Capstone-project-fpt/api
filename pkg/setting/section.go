@@ -1,19 +1,21 @@
 package setting
 
 type Config struct {
-	Server ServerSetting `mapstructure:"server"`
-	Jwt    JwtSetting    `mapstructure:"jwt"`
-	DB     DBSetting     `mapstructure:"db"`
-	Logger LoggerSetting `mapstructure:"logger"`
-	Redis  RedisSetting  `mapstructure:"redis"`
-	Smtp   SmtpSetting   `mapstructure:"smtp"`
+	Server        ServerSetting `mapstructure:"server"`
+	Jwt           JwtSetting    `mapstructure:"jwt"`
+	DB            DBSetting     `mapstructure:"db"`
+	Logger        LoggerSetting `mapstructure:"logger"`
+	Redis         RedisSetting  `mapstructure:"redis"`
+	Smtp          SmtpSetting   `mapstructure:"smtp"`
+	GoogleSetting GoogleSetting `mapstructure:"google"`
 }
 
 type ServerSetting struct {
-	Name   string `mapstructure:"name"`
-	Port   int    `mapstructure:"port"`
-	Mode   string `mapstructure:"mode"`
-	WebURL string `mapstructure:"webURL"`
+	Name      string `mapstructure:"name"`
+	Port      int    `mapstructure:"port"`
+	Mode      string `mapstructure:"mode"`
+	WebURL    string `mapstructure:"webURL"`
+	ServerURL string `mapstructure:"serverURL"`
 }
 
 type JwtSetting struct {
@@ -58,4 +60,9 @@ type SmtpSetting struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	Sender   string `mapstructure:"sender"`
+}
+
+type GoogleSetting struct {
+	ClientID     string `mapstructure:"clientId"`
+	ClientSecret string `mapstructure:"clientSecret"`
 }
