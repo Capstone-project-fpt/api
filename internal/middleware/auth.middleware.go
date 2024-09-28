@@ -16,7 +16,16 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorization := ctx.GetHeader("Authorization")
-		token := strings.Split(authorization, "Bearer ")[1]
+		splitAuthorization := strings.Split(authorization, "Bearer ")
+		if len(splitAuthorization) != 2 {
+			response.ErrorResponse(ctx, http.StatusUnauthorized, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.TokenInvalid,
+			}))
+			ctx.Abort()
+			return
+		}
+
+		token := splitAuthorization[1]
 		redis := global.RDb
 		key := token
 		localizer := global.Localizer
