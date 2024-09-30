@@ -11,5 +11,10 @@
   "PermissionDenied": "Permission denied.",
   "MajorNotFound": "Major not found.",
   "SubMajorNotFound": "Sub major not found.",
-  "AlreadySendResetPasswordLink": "Already send reset password link."
+  "AlreadySendResetPasswordLink": "Already send reset password link.",
+  "ImportAndCreateListStudentAccountSuccess": "Import and create list student account success.",
+  "InvalidFile": "Invalid file.",
+  "NotAllowEmptyDataInFile": "Not allow empty data in file.",
+  "OtherSessionImportStudentInProcess": "Other session import students in process.",
+  "OtherSessionImportTeacherInProcess": "Other session import teachers in process."
 }

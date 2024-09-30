@@ -13,9 +13,9 @@ type ResponseDataSuccess struct {
 }
 
 type ResponseErr struct {
-	Code    int    `json:"code"`
-	Success bool   `json:"message"`
-	Error   string `json:"error"`
+	Code    int         `json:"code"`
+	Success bool        `json:"message"`
+	Error   interface{} `json:"error"`
 }
 
 func SuccessResponse(c *gin.Context, code int, data interface{}) {
@@ -26,7 +26,7 @@ func SuccessResponse(c *gin.Context, code int, data interface{}) {
 	})
 }
 
-func ErrorResponse(c *gin.Context, code int, message string) {
+func ErrorResponse(c *gin.Context, code int, message interface{}) {
 	c.JSON(code, ResponseErr{
 		Code:    code,
 		Success: false,

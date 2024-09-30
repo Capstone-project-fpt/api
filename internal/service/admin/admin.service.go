@@ -2,12 +2,14 @@ package service
 
 import (
 	"errors"
+	"mime/multipart"
 	"net/http"
 
 	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/admin_dto"
+	"github.com/api/internal/dto/import_dto"
 	"github.com/api/pkg/mail"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
@@ -18,6 +20,8 @@ import (
 type IAdminService interface {
 	CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error)
 	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error)
+	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
+	UploadFileTeacherData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
 }
 
 type InputCreateAccount struct {
@@ -122,9 +126,9 @@ func (as *adminService) createAccount(input InputCreateAccount) (int, error) {
 		}
 	case constant.UserType.Student:
 		student := model.Student{
-			UserID: user.ID,
+			UserID:     user.ID,
 			SubMajorID: input.SubMajorID,
-			Code: input.Code,
+			Code:       input.Code,
 		}
 		if err := tx.Create(&student).Error; err != nil {
 			tx.Rollback()
