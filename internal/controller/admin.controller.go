@@ -27,6 +27,16 @@ func NewAdminController(adminService admin_service.IAdminService) *AdminControll
 	}
 }
 
+// @Summary UploadFileStudentData
+// @Description Admin upload Excel file to create student accounts
+// @Tags Admin
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Excel file"
+// @Router /admin/students/import-data [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
 func (ac *AdminController) UploadFileStudentData(ctx *gin.Context) {
 	file, err := ctx.FormFile("file")
 	if err != nil {
@@ -54,6 +64,16 @@ func (ac *AdminController) UploadFileStudentData(ctx *gin.Context) {
 	response.SuccessResponse(ctx, statusCode, importOutput)
 }
 
+// @Summary UploadFileTeacherData
+// @Description Admin upload Excel file to create teacher accounts
+// @Tags Admin
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Excel file"
+// @Router /admin/teachers/import-data [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
 func (ac *AdminController) UploadFileTeacherData(ctx *gin.Context) {
 	file, err := ctx.FormFile("file")
 	if err != nil {

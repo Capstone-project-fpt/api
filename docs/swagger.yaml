@@ -122,8 +122,7 @@ definitions:
     properties:
       code:
         type: integer
-      error:
-        type: string
+      error: {}
       message:
         type: boolean
     type: object
@@ -252,6 +251,33 @@ paths:
       summary: CreateStudentAccount
       tags:
       - Admin
+  /admin/students/import-data:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Admin upload Excel file to create student accounts
+      parameters:
+      - description: Excel file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UploadFileStudentData
+      tags:
+      - Admin
   /admin/teachers/create-account:
     post:
       consumes:
@@ -278,6 +304,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: CreateTeacherAccount
+      tags:
+      - Admin
+  /admin/teachers/import-data:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Admin upload Excel file to create teacher accounts
+      parameters:
+      - description: Excel file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UploadFileTeacherData
       tags:
       - Admin
   /forgot-password:

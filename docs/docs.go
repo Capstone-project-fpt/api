@@ -62,6 +62,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/students/import-data": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin upload Excel file to create student accounts",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "UploadFileStudentData",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Excel file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/teachers/create-account": {
             "post": {
                 "security": [
@@ -89,6 +132,49 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/admin_dto.InputAdminCreateTeacherAccount"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/teachers/import-data": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin upload Excel file to create teacher accounts",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "UploadFileTeacherData",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Excel file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -720,9 +806,7 @@ const docTemplate = `{
                 "code": {
                     "type": "integer"
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "message": {
                     "type": "boolean"
                 }
