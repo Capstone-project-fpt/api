@@ -41,3 +41,6 @@ smtp:
 google:
   clientId: ""
   clientSecret: ""
+asynq:
+  delayInSeconds: 0
+  maxConcurrentWorkers: 10

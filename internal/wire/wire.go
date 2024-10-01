@@ -8,6 +8,7 @@ import (
 	auth_service "github.com/api/internal/service/auth"
 	admin_service "github.com/api/internal/service/admin"
 	"github.com/google/wire"
+	"github.com/api/internal/queue"
 )
 
 func InitializeUserController() *controller.UserController {
@@ -31,6 +32,7 @@ func InitializeAuthController() *controller.AuthController {
 
 func InitializeAdminController() *controller.AdminController {
 	wire.Build(
+		queue.NewEmailNewAccountsPublisher,
 		admin_service.NewAdminService,
 		controller.NewAdminController,
 	)

@@ -8,6 +8,7 @@ package wire
 
 import (
 	"github.com/api/internal/controller"
+	"github.com/api/internal/queue"
 	"github.com/api/internal/service"
 	service2 "github.com/api/internal/service/admin"
 	"github.com/api/internal/service/auth"
@@ -29,7 +30,8 @@ func InitializeAuthController() *controller.AuthController {
 }
 
 func InitializeAdminController() *controller.AdminController {
-	iAdminService := service2.NewAdminService()
+	iBasePublisher := queue.NewEmailNewAccountsPublisher()
+	iAdminService := service2.NewAdminService(iBasePublisher)
 	adminController := controller.NewAdminController(iAdminService)
 	return adminController
 }

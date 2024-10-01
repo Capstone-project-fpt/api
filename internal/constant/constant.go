@@ -1,9 +1,12 @@
 package constant
 
 const (
-	Localizer                    = "localizer"
-	TotalColumnStudentImportData = 5
-	TotalColumnTeacherImportData = 4
+	Localizer                                 = "localizer"
+	TotalColumnStudentImportData              = 5
+	TotalColumnTeacherImportData              = 4
+	DefaultPasswordLength               int64 = 8
+	DefaultResetPasswordTokenLength     int64 = 8
+	DefaultResetPasswordTokenExpiration int64 = 3600 // 1 hour
 )
 
 type MessageI18n struct {
@@ -70,10 +73,6 @@ var UserType UserTypeType = UserTypeType{
 	Teacher: "teacher",
 }
 
-var DefaultPasswordLength int64 = 8
-var DefaultResetPasswordTokenLength int64 = 8
-var DefaultResetPasswordTokenExpiration int64 = 3600 // 1 hour
-
 type roleTypeType struct {
 	Admin   string
 	Student string
@@ -134,4 +133,12 @@ var TeacherDataImportMapping TeacherDataImportMappingType = TeacherDataImportMap
 	Email:       1,
 	PhoneNumber: 2,
 	SubMajorID:  3,
+}
+
+type systemQueueTaskType struct {
+	SendEmailCreateAccounts string
+}
+
+var SystemQueueTask systemQueueTaskType = systemQueueTaskType{
+	SendEmailCreateAccounts: "SystemTask:SendEmailCreateAccounts",
 }

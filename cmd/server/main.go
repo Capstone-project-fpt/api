@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/api/global"
 	"github.com/api/internal/initialize"
 )
 
@@ -18,4 +19,7 @@ import (
 // @name Authorization
 func main() {
 	initialize.Run()
+
+	// Defer closing redis queue client
+	defer global.AsyncQClient.Close()
 }

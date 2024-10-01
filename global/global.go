@@ -3,6 +3,7 @@ package global
 import (
 	"github.com/api/pkg/logger"
 	"github.com/api/pkg/setting"
+	"github.com/hibiken/asynq"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
@@ -15,4 +16,5 @@ var (
 	Logger                 *logger.LoggerZap
 	Db                     *gorm.DB
 	RDb                    *redis.Client
+	AsyncQClient           *asynq.Client
 )
