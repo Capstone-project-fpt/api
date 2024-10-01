@@ -26,7 +26,7 @@ type EmailNewAccountsPublisher struct {
 
 func NewEmailNewAccountsPublisher() IBasePublisher[EmailNewAccountsMessage] {
 	return &EmailNewAccountsPublisher{
-		client: global.AsyncQClient,
+		client: global.AsyncqClient,
 	}
 }
 
@@ -43,7 +43,7 @@ func (e *EmailNewAccountsPublisher) SendMessage(newAccounts EmailNewAccountsMess
 		asynq.ProcessIn(time.Duration(delay)*time.Second),
 	)
 
-	info, err := global.AsyncQClient.Enqueue(task)
+	info, err := global.AsyncqClient.Enqueue(task)
 
 	if err != nil {
 		global.Logger.Error("Failed to send email task: ", zap.Error(err))

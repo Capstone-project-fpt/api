@@ -10,5 +10,5 @@ func InitAsynq() {
 		Addr: global.Config.Redis.Addr,
 	})
 
-	global.AsyncQClient = client
+	global.AsyncqClient = client
 }

@@ -21,5 +21,5 @@ func main() {
 	initialize.Run()
 
 	// Defer closing redis queue client
-	defer global.AsyncQClient.Close()
+	defer global.AsyncqClient.Close()
 }

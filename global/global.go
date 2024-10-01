@@ -16,5 +16,5 @@ var (
 	Logger                 *logger.LoggerZap
 	Db                     *gorm.DB
 	RDb                    *redis.Client
-	AsyncQClient           *asynq.Client
+	AsyncqClient           *asynq.Client
 )
