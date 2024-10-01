@@ -24,16 +24,32 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 			),
 			adminController.CreateStudentAccount,
 		)
+
+		adminStudentRouter.POST(
+			"/import-data",
+			middleware.PermissionMiddleware(
+				constant.PermissionType.ManageAccount,
+			),
+			adminController.UploadFileStudentData,
+		)
 	}
 
 	adminTeacherRouter := adminRouter.Group("/teachers")
 	{
 		adminTeacherRouter.POST(
-			"/create-account", 
+			"/create-account",
 			middleware.PermissionMiddleware(
 				constant.PermissionType.ManageAccount,
 			),
 			adminController.CreateTeacherAccount,
+		)
+
+		adminTeacherRouter.POST(
+			"/import-data",
+			middleware.PermissionMiddleware(
+				constant.PermissionType.ManageAccount,
+			),
+			adminController.UploadFileTeacherData,
 		)
 	}
 }
