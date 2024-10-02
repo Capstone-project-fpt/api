@@ -9,6 +9,7 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/global"
+	"github.com/api/internal/queue"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/import_dto"
 	file_util "github.com/api/pkg/utils/file"
@@ -47,6 +48,12 @@ type UserTeacherInfo struct {
 	Row     int
 	User    UserInfo
 	Teacher TeacherInfo
+}
+
+type NewAccount struct {
+	Name     string
+	Email    string
+	Password string
 }
 
 func (as *adminService) UploadFileTeacherData(ctx *gin.Context, fileUpload *multipart.FileHeader) (int, *import_dto.ImportOutput) {
@@ -632,7 +639,22 @@ func (as *adminService) transactionCreateTeacherAccount(ctx *gin.Context, userTe
 		return http.StatusInternalServerError, resultImport
 	}
 
-	// TODO: Handle send email
+	var newAccounts []queue.NewAccountMessage
+	for _, userTeacherInfo := range userTeacherInfos {
+		newAccounts = append(newAccounts, queue.NewAccountMessage{
+			Name:     userTeacherInfo.User.Name,
+			Email:    userTeacherInfo.User.Email,
+			Password: userTeacherInfo.User.Password,
+		})
+	}
+
+	if err := as.sendEmailNewAccountsCreated(ctx, newAccounts); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		resultImport.Exception = message
+		return http.StatusInternalServerError, resultImport
+	}
 
 	return http.StatusOK, resultImport
 }
@@ -732,7 +754,37 @@ func (as *adminService) transactionCreateStudentAccount(ctx *gin.Context, userSt
 		return http.StatusInternalServerError, resultImport
 	}
 
-	// TODO: Handle send email
+	var newAccounts []queue.NewAccountMessage
+	for _, userStudentInfo := range userStudentInfos {
+		newAccounts = append(newAccounts, queue.NewAccountMessage{
+			Name:     userStudentInfo.User.Name,
+			Email:    userStudentInfo.User.Email,
+			Password: userStudentInfo.User.Password,
+		})
+	}
+
+	if err := as.sendEmailNewAccountsCreated(ctx, newAccounts); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		resultImport.Exception = message
+		return http.StatusInternalServerError, resultImport
+	}
 
 	return http.StatusOK, resultImport
+}
+
+func (as *adminService) sendEmailNewAccountsCreated(ctx *gin.Context, newAccounts []queue.NewAccountMessage) error {
+	err := as.emailNewAccountsPublisher.SendMessage(
+		queue.EmailNewAccountsMessage{
+			NewAccounts: newAccounts,
+		},
+		global.Config.AsynqSetting.DelayInSeconds,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

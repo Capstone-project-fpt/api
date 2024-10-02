@@ -8,6 +8,7 @@ type Config struct {
 	Redis         RedisSetting  `mapstructure:"redis"`
 	Smtp          SmtpSetting   `mapstructure:"smtp"`
 	GoogleSetting GoogleSetting `mapstructure:"google"`
+	AsynqSetting  AsynqSetting  `mapstructure:"asynq"`
 }
 
 type ServerSetting struct {
@@ -65,4 +66,9 @@ type SmtpSetting struct {
 type GoogleSetting struct {
 	ClientID     string `mapstructure:"clientId"`
 	ClientSecret string `mapstructure:"clientSecret"`
+}
+
+type AsynqSetting struct {
+	DelayInSeconds       int `mapstructure:"delayInSeconds"`
+	MaxConcurrentWorkers int `mapstructure:"maxConcurrentWorkers"`
 }

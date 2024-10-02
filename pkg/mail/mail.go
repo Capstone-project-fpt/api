@@ -40,6 +40,10 @@ func SendNewAccountEmail(to string, dataTemplate MailNewAccountTemplateData) err
 		return err
 	}
 
+	if global.Config.Server.Mode == "dev" {
+		fmt.Println("Data new account", dataTemplate)
+	}
+
 	return Send([]string{to}, global.Config.Smtp.Sender, "New account", htmlBody)
 }
 
@@ -77,6 +81,7 @@ func Send(to []string, from string, subject string, htmlTemplate string) error {
 			return err
 		}
 	}
+
 	fmt.Println("Send email Successful")
 
 	return nil

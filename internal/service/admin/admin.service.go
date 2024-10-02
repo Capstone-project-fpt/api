@@ -7,10 +7,10 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/global"
+	"github.com/api/internal/queue"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/dto/import_dto"
-	"github.com/api/pkg/mail"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -34,14 +34,20 @@ type InputCreateAccount struct {
 	Code        string
 }
 
-type adminService struct{}
+type adminService struct {
+	emailNewAccountsPublisher queue.IBasePublisher[queue.EmailNewAccountsMessage]
+}
 
-func NewAdminService() IAdminService {
-	return &adminService{}
+func NewAdminService(
+	emailNewAccountsPublisher queue.IBasePublisher[queue.EmailNewAccountsMessage],
+) IAdminService {
+	return &adminService{
+		emailNewAccountsPublisher,
+	}
 }
 
 func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error) {
-	return as.createAccount(InputCreateAccount{
+	return as.createAccount(ctx, InputCreateAccount{
 		Name:        input.Name,
 		Email:       input.Email,
 		UserType:    constant.UserType.Student,
@@ -53,7 +59,7 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 }
 
 func (as *adminService) CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error) {
-	return as.createAccount(InputCreateAccount{
+	return as.createAccount(ctx, InputCreateAccount{
 		Name:        input.Name,
 		Email:       input.Email,
 		UserType:    constant.UserType.Teacher,
@@ -63,7 +69,7 @@ func (as *adminService) CreateTeacherAccount(ctx *gin.Context, input *admin_dto.
 	})
 }
 
-func (as *adminService) createAccount(input InputCreateAccount) (int, error) {
+func (as *adminService) createAccount(ctx *gin.Context, input InputCreateAccount) (int, error) {
 	var findUser model.User
 	err := global.Db.Model(model.User{}).Select("id").First(&findUser, "email = ?", input.Email).Error
 
@@ -160,14 +166,14 @@ func (as *adminService) createAccount(input InputCreateAccount) (int, error) {
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	data := mail.MailNewAccountTemplateData{
-		Name:     input.Name,
+	var newAccounts []queue.NewAccountMessage
+	newAccounts = append(newAccounts, queue.NewAccountMessage{
 		Email:    input.Email,
+		Name:     input.Name,
 		Password: password,
-	}
+	})
 
-	err = mail.SendNewAccountEmail(input.Email, data)
-	if err != nil {
+	if err := as.sendEmailNewAccountsCreated(ctx, newAccounts); err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
