@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/api/global"
 	"github.com/api/internal/constant"
@@ -32,9 +33,9 @@ func NewMajorController(majorService service.IMajorService) *MajorController {
 // @Param page query int true "Page"
 // @Router /majors [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} major_dto.OutputGetListMajor
+// @Success 200 {object} major_dto.GetListMajorOutput
 func (mc *MajorController) GetListMajor(ctx *gin.Context) {
-	var input major_dto.InputGetListMajor
+	var input major_dto.GetListMajorInput
 	localizer := global.Localizer
 	if err := ctx.ShouldBindQuery(&input); err != nil {
 		message := localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -60,20 +61,20 @@ func (mc *MajorController) GetListMajor(ctx *gin.Context) {
 // @Description Get Major
 // @Tags Public
 // @Produce json
-// @Param id query int true "id"
+// @Param id path int true "id"
 // @Router /majors/{id} [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} major_dto.OutputGetMajorSwagger
+// @Success 200 {object} major_dto.GetMajorSwaggerOutput
 // @Security ApiKeyAuth
 func (mc *MajorController) GetMajor(ctx *gin.Context) {
-	var input major_dto.InputGetMajor
-	if err := ctx.ShouldBindQuery(&input); err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidParams,
-		}))
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
 	}
 
-	major, err := mc.majorService.GetMajor(ctx, input.ID)
+	major, err := mc.majorService.GetMajor(ctx, id)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusNotFound, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.MajorNotFound,

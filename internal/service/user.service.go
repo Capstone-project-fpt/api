@@ -12,7 +12,7 @@ import (
 )
 
 type IUserService interface {
-	GetUser(ctx *gin.Context, userID int) (*user_dto.OutputGetUser, error)
+	GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOutput, error)
 }
 
 type userService struct {
@@ -22,7 +22,7 @@ func NewUserService() IUserService {
 	return &userService{}
 }
 
-func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.OutputGetUser, error) {
+func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOutput, error) {
 	messageUserNotfound := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		MessageID: constant.MessageI18nId.UserNotFound,
 	})
@@ -31,7 +31,7 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.OutputGet
 		return nil, errors.New(messageUserNotfound)
 	}
 
-	var commonUserInfo user_dto.OutputUser = user_dto.OutputUser{
+	var commonUserInfo user_dto.UserOutput = user_dto.UserOutput{
 		ID:          int(user.ID),
 		Name:        user.Name,
 		Email:       user.Email,
@@ -47,7 +47,7 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.OutputGet
 			return nil, errors.New(messageUserNotfound)
 		}
 
-		extraInfo.Student = &user_dto.OutputStudentInfo{
+		extraInfo.Student = &user_dto.StudentInfoOutput{
 			StudentID:       int(student.ID),
 			Code:            student.Code,
 			SubMajorId:      int(student.SubMajorID),
@@ -60,14 +60,14 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.OutputGet
 			return nil, errors.New(messageUserNotfound)
 		}
 
-		extraInfo.Teacher = &user_dto.OutputTeacherInfo{
+		extraInfo.Teacher = &user_dto.TeacherInfoOutput{
 			TeacherID:  int(teacher.ID),
 			SubMajorID: int(teacher.SubMajorID),
 			CreatedAt:  teacher.CreatedAt,
 		}
 	}
 
-	return &user_dto.OutputGetUser{
+	return &user_dto.GetUserOutput{
 		CommonInfo: &commonUserInfo,
 		ExtraInfo:  &extraInfo,
 	}, nil

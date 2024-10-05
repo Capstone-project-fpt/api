@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/api/global"
 	"github.com/api/internal/constant"
@@ -33,9 +34,9 @@ func NewSubMajorController(subMajorService service.ISubMajorService) *SubMajorCo
 // @Param major_id query int false "Major ID"
 // @Router /sub-majors [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} sub_major_dto.OutputGetListMajor
+// @Success 200 {object} sub_major_dto.GetListSubMajorOutput
 func (smc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
-	var input sub_major_dto.InputGetListSubMajor
+	var input sub_major_dto.GetListSubMajorInput
 	localizer := global.Localizer
 	if err := ctx.ShouldBindQuery(&input); err != nil {
 		message := localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -61,20 +62,20 @@ func (smc *SubMajorController) GetListSubMajor(ctx *gin.Context) {
 // @Description Get Sub Major
 // @Tags Public
 // @Produce json
-// @Param id query int true "id"
+// @Param id path int true "id"
 // @Router /sub-majors/{id} [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} sub_major_dto.OutputGetSubMajorSwagger
+// @Success 200 {object} sub_major_dto.GetSubMajorSwaggerOutput
 // @Security ApiKeyAuth
 func (smc *SubMajorController) GetSubMajor(ctx *gin.Context) {
-	var input sub_major_dto.InputGetSubMajor
-	if err := ctx.ShouldBindQuery(&input); err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidParams,
-		}))
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
 	}
 
-	subMajor, err := smc.subMajorService.GetSubMajor(ctx, input.ID)
+	subMajor, err := smc.subMajorService.GetSubMajor(ctx, id)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusNotFound, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SubMajorNotFound,

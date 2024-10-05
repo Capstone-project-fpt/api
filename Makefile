@@ -1,20 +1,20 @@
 # name app
 APP_NAME = server
 # DB Local
-# DB_HOST = localhost
-# DB_PORT = 5433
-# DB_NAME = postgres
-# DB_PASSWORD = postgres
-# DB_USERNAME = postgres
-# SSL_MODE = disable
+DB_HOST = localhost
+DB_PORT = 5433
+DB_NAME = postgres
+DB_PASSWORD = postgres
+DB_USERNAME = postgres
+SSL_MODE = disable
 
 # DB Dev
-DB_HOST = aws-0-ap-southeast-1.pooler.supabase.com
-DB_PORT = 6543
-DB_NAME = postgres
-DB_PASSWORD = postgres123!
-DB_USERNAME = postgres.igpctwhkfhikvrlgmkuu
-SSL_MODE = disable
+# DB_HOST = aws-0-ap-southeast-1.pooler.supabase.com
+# DB_PORT = 6543
+# DB_NAME = postgres
+# DB_PASSWORD = postgres123!
+# DB_USERNAME = postgres.igpctwhkfhikvrlgmkuu
+# SSL_MODE = disable
 
 run:
 	go run ./cmd/${APP_NAME}/

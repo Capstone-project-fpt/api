@@ -106,13 +106,13 @@ func (ac *AdminController) UploadFileTeacherData(ctx *gin.Context) {
 // @Tags Admin
 // @Accept json
 // @Produce json
-// @Param data body admin_dto.InputAdminCreateStudentAccount true "data"
+// @Param data body admin_dto.AdminCreateStudentAccountInput true "data"
 // @Router /admin/students/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
 func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
-	var input admin_dto.InputAdminCreateStudentAccount
+	var input admin_dto.AdminCreateStudentAccountInput
 	err := validateCreateAccount(ctx, &input)
 
 	if err != nil {
@@ -139,13 +139,13 @@ func (ac *AdminController) CreateStudentAccount(ctx *gin.Context) {
 // @Tags Admin
 // @Accept json
 // @Produce json
-// @Param data body admin_dto.InputAdminCreateTeacherAccount true "data"
+// @Param data body admin_dto.AdminCreateTeacherAccountInput true "data"
 // @Router /admin/teachers/create-account [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
 func (ac *AdminController) CreateTeacherAccount(ctx *gin.Context) {
-	var input admin_dto.InputAdminCreateTeacherAccount
+	var input admin_dto.AdminCreateTeacherAccountInput
 	err := validateCreateAccount(ctx, &input)
 
 	if err != nil {

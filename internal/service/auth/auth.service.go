@@ -29,7 +29,7 @@ type IAuthService interface {
 	LoginGoogleHandle(ctx *gin.Context)
 	LoginGoogleCallbackHandle(ctx *gin.Context) (string, error)
 	ForgotPassword(ctx *gin.Context, email string) error
-	ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error)
+	ResetPassword(ctx *gin.Context, input *auth_dto.ResetPasswordInput) (int, error)
 }
 
 type authService struct {
@@ -118,7 +118,7 @@ func (as *authService) Login(ctx *gin.Context, email string, password string) (s
 	return accessToken, refreshToken, http.StatusOK, nil
 }
 
-func (as *authService) ResetPassword(ctx *gin.Context, input *auth_dto.InputResetPassword) (int, error) {
+func (as *authService) ResetPassword(ctx *gin.Context, input *auth_dto.ResetPasswordInput) (int, error) {
 	payload, err := jwt_util.VerifyTokenResetPassword(input.Token)
 
 	if err != nil {

@@ -57,3 +57,12 @@ func InitializeSubMajorController() *controller.SubMajorController {
 
 	return &controller.SubMajorController{}
 }
+
+func InitializeTopicReferenceController() *controller.TopicReferenceController {
+	wire.Build(
+		service.NewTopicReferenceService,
+		controller.NewTopicReferenceController,
+	)
+
+	return &controller.TopicReferenceController{}
+}

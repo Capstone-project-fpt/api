@@ -24,7 +24,7 @@ func NewAuthController(authService auth_service.IAuthService) *AuthController {
 }
 
 func (ac *AuthController) Register(ctx *gin.Context) {
-	var input auth_dto.InputLogin
+	var input auth_dto.LoginInput
 	localizer := global.Localizer
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -51,12 +51,12 @@ func (ac *AuthController) Register(ctx *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param data body auth_dto.InputLogin true "data"
+// @Param data body auth_dto.LoginInput true "data"
 // @Router /login [post]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} auth_dto.OutputLoginSwagger
+// @Success 200 {object} auth_dto.LoginSwaggerOutput
 func (ac *AuthController) Login(ctx *gin.Context) {
-	var input auth_dto.InputLogin
+	var input auth_dto.LoginInput
 	localizer := global.Localizer
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -75,7 +75,7 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 		return
 	}
 
-	outputLogin := auth_dto.OutputLogin{
+	outputLogin := auth_dto.LoginOutput{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}
@@ -118,12 +118,12 @@ func (ac *AuthController) LoginGoogleCallbackHandle(ctx *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param data body auth_dto.InputForgotPassword true "data"
+// @Param data body auth_dto.ForgotPasswordInput true "data"
 // @Router /forgot-password [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
-	var input auth_dto.InputForgotPassword
+	var input auth_dto.ForgotPasswordInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidParams,
@@ -146,12 +146,12 @@ func (ac *AuthController) ForgotPassword(ctx *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param data body auth_dto.InputResetPassword true "data"
+// @Param data body auth_dto.ResetPasswordInput true "data"
 // @Router /reset-password [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) ResetPassword(ctx *gin.Context) {
-	var input auth_dto.InputResetPassword
+	var input auth_dto.ResetPasswordInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidParams,

@@ -2,11 +2,7 @@ package user_dto
 
 import "time"
 
-type InputGetUser struct {
-	ID int `form:"id" binding:"required" example:"1"`
-}
-
-type OutputUser struct {
+type UserOutput struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Email       string `json:"email"`
@@ -14,7 +10,7 @@ type OutputUser struct {
 	UserType    string `json:"user_type"`
 }
 
-type OutputStudentInfo struct {
+type StudentInfoOutput struct {
 	StudentID       int       `json:"student_id"`
 	Code            string    `json:"code"`
 	SubMajorId      int       `json:"sub_major_id"`
@@ -22,28 +18,28 @@ type OutputStudentInfo struct {
 	CreatedAt       time.Time `json:"created_at"`
 }
 
-type OutputTeacherInfo struct {
+type TeacherInfoOutput struct {
 	TeacherID  int       `json:"teacher_id"`
 	SubMajorID int       `json:"sub_major_id"`
 	CreatedAt  time.Time `json:"created_at"`
 }
 
-type OutputAdminInfo struct{}
+type AdminInfoOutput struct{}
 
 type ExtraInfo struct {
-	Student *OutputStudentInfo `json:"student,omitempty"`
-	Teacher *OutputTeacherInfo `json:"teacher,omitempty"`
-	Admin   *OutputAdminInfo   `json:"admin,omitempty"`
+	Student *StudentInfoOutput `json:"student,omitempty"`
+	Teacher *TeacherInfoOutput `json:"teacher,omitempty"`
+	Admin   *AdminInfoOutput   `json:"admin,omitempty"`
 }
 
-type OutputGetUser struct {
-	CommonInfo *OutputUser `json:"common_info"`
+type GetUserOutput struct {
+	CommonInfo *UserOutput `json:"common_info"`
 	ExtraInfo  *ExtraInfo  `json:"extra_info"`
 }
 
 // This used for swagger
-type OutputGetUserSwagger struct {
+type GetUserSwaggerOutput struct {
 	Code    int            `json:"code"`
 	Success bool           `json:"message"`
-	Data    *OutputGetUser `json:"data"`
+	Data    *GetUserOutput `json:"data"`
 }

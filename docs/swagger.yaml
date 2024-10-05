@@ -1,6 +1,6 @@
 basePath: /api/v1
 definitions:
-  admin_dto.InputAdminCreateStudentAccount:
+  admin_dto.AdminCreateStudentAccountInput:
     properties:
       code:
         type: string
@@ -19,7 +19,7 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
-  admin_dto.InputAdminCreateTeacherAccount:
+  admin_dto.AdminCreateTeacherAccountInput:
     properties:
       email:
         type: string
@@ -35,14 +35,14 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
-  auth_dto.InputForgotPassword:
+  auth_dto.ForgotPasswordInput:
     properties:
       email:
         type: string
     required:
     - email
     type: object
-  auth_dto.InputLogin:
+  auth_dto.LoginInput:
     properties:
       email:
         type: string
@@ -52,7 +52,23 @@ definitions:
     - email
     - password
     type: object
-  auth_dto.InputResetPassword:
+  auth_dto.LoginOutput:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  auth_dto.LoginSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/auth_dto.LoginOutput'
+      message:
+        type: boolean
+    type: object
+  auth_dto.ResetPasswordInput:
     properties:
       password:
         type: string
@@ -62,22 +78,6 @@ definitions:
     - password
     - token
     type: object
-  auth_dto.OutputLogin:
-    properties:
-      access_token:
-        type: string
-      refresh_token:
-        type: string
-    type: object
-  auth_dto.OutputLoginSwagger:
-    properties:
-      code:
-        type: integer
-      data:
-        $ref: '#/definitions/auth_dto.OutputLogin'
-      message:
-        type: boolean
-    type: object
   dto.MetaPagination:
     properties:
       current_page:
@@ -85,25 +85,25 @@ definitions:
       total:
         type: integer
     type: object
-  major_dto.OutputGetListMajor:
+  major_dto.GetListMajorOutput:
     properties:
       items:
         items:
-          $ref: '#/definitions/major_dto.OutputMajor'
+          $ref: '#/definitions/major_dto.MajorOutput'
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
-  major_dto.OutputGetMajorSwagger:
+  major_dto.GetMajorSwaggerOutput:
     properties:
       code:
         type: integer
       data:
-        $ref: '#/definitions/major_dto.OutputMajor'
+        $ref: '#/definitions/major_dto.MajorOutput'
       message:
         type: boolean
     type: object
-  major_dto.OutputMajor:
+  major_dto.MajorOutput:
     properties:
       id:
         type: integer
@@ -126,25 +126,25 @@ definitions:
       message:
         type: boolean
     type: object
-  sub_major_dto.OutputGetListMajor:
+  sub_major_dto.GetListSubMajorOutput:
     properties:
       items:
         items:
-          $ref: '#/definitions/sub_major_dto.OutputSubMajor'
+          $ref: '#/definitions/sub_major_dto.SubMajorOutput'
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
-  sub_major_dto.OutputGetSubMajorSwagger:
+  sub_major_dto.GetSubMajorSwaggerOutput:
     properties:
       code:
         type: integer
       data:
-        $ref: '#/definitions/sub_major_dto.OutputSubMajor'
+        $ref: '#/definitions/sub_major_dto.SubMajorOutput'
       message:
         type: boolean
     type: object
-  sub_major_dto.OutputSubMajor:
+  sub_major_dto.SubMajorOutput:
     properties:
       id:
         type: integer
@@ -153,34 +153,70 @@ definitions:
       name:
         type: string
     type: object
+  topic_reference_dto.AdminCreateTopicReferenceInput:
+    properties:
+      name:
+        type: string
+      path:
+        type: string
+      teacher_id:
+        type: integer
+    required:
+    - name
+    - path
+    - teacher_id
+    type: object
+  topic_reference_dto.TeacherCreateTopicReferenceInput:
+    properties:
+      name:
+        type: string
+      path:
+        type: string
+    required:
+    - name
+    - path
+    type: object
+  topic_reference_dto.TeacherUpdateTopicReferenceInput:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      path:
+        type: string
+    required:
+    - id
+    - name
+    - path
+    type: object
+  user_dto.AdminInfoOutput:
+    type: object
   user_dto.ExtraInfo:
     properties:
       admin:
-        $ref: '#/definitions/user_dto.OutputAdminInfo'
+        $ref: '#/definitions/user_dto.AdminInfoOutput'
       student:
-        $ref: '#/definitions/user_dto.OutputStudentInfo'
+        $ref: '#/definitions/user_dto.StudentInfoOutput'
       teacher:
-        $ref: '#/definitions/user_dto.OutputTeacherInfo'
+        $ref: '#/definitions/user_dto.TeacherInfoOutput'
     type: object
-  user_dto.OutputAdminInfo:
-    type: object
-  user_dto.OutputGetUser:
+  user_dto.GetUserOutput:
     properties:
       common_info:
-        $ref: '#/definitions/user_dto.OutputUser'
+        $ref: '#/definitions/user_dto.UserOutput'
       extra_info:
         $ref: '#/definitions/user_dto.ExtraInfo'
     type: object
-  user_dto.OutputGetUserSwagger:
+  user_dto.GetUserSwaggerOutput:
     properties:
       code:
         type: integer
       data:
-        $ref: '#/definitions/user_dto.OutputGetUser'
+        $ref: '#/definitions/user_dto.GetUserOutput'
       message:
         type: boolean
     type: object
-  user_dto.OutputStudentInfo:
+  user_dto.StudentInfoOutput:
     properties:
       capstone_group_id:
         type: integer
@@ -193,7 +229,7 @@ definitions:
       sub_major_id:
         type: integer
     type: object
-  user_dto.OutputTeacherInfo:
+  user_dto.TeacherInfoOutput:
     properties:
       created_at:
         type: string
@@ -202,7 +238,7 @@ definitions:
       teacher_id:
         type: integer
     type: object
-  user_dto.OutputUser:
+  user_dto.UserOutput:
     properties:
       email:
         type: string
@@ -234,7 +270,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/admin_dto.InputAdminCreateStudentAccount'
+          $ref: '#/definitions/admin_dto.AdminCreateStudentAccountInput'
       produces:
       - application/json
       responses:
@@ -289,7 +325,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/admin_dto.InputAdminCreateTeacherAccount'
+          $ref: '#/definitions/admin_dto.AdminCreateTeacherAccountInput'
       produces:
       - application/json
       responses:
@@ -344,7 +380,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/auth_dto.InputForgotPassword'
+          $ref: '#/definitions/auth_dto.ForgotPasswordInput'
       produces:
       - application/json
       responses:
@@ -391,14 +427,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/auth_dto.InputLogin'
+          $ref: '#/definitions/auth_dto.LoginInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth_dto.OutputLoginSwagger'
+            $ref: '#/definitions/auth_dto.LoginSwaggerOutput'
         "400":
           description: Bad Request
           schema:
@@ -445,7 +481,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/major_dto.OutputGetListMajor'
+            $ref: '#/definitions/major_dto.GetListMajorOutput'
         "400":
           description: Bad Request
           schema:
@@ -458,7 +494,7 @@ paths:
       description: Get Major
       parameters:
       - description: id
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -468,7 +504,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/major_dto.OutputGetMajorSwagger'
+            $ref: '#/definitions/major_dto.GetMajorSwaggerOutput'
         "400":
           description: Bad Request
           schema:
@@ -489,7 +525,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/auth_dto.InputResetPassword'
+          $ref: '#/definitions/auth_dto.ResetPasswordInput'
       produces:
       - application/json
       responses:
@@ -530,7 +566,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/sub_major_dto.OutputGetListMajor'
+            $ref: '#/definitions/sub_major_dto.GetListSubMajorOutput'
         "400":
           description: Bad Request
           schema:
@@ -543,7 +579,7 @@ paths:
       description: Get Sub Major
       parameters:
       - description: id
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -553,7 +589,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/sub_major_dto.OutputGetSubMajorSwagger'
+            $ref: '#/definitions/sub_major_dto.GetSubMajorSwaggerOutput'
         "400":
           description: Bad Request
           schema:
@@ -563,12 +599,97 @@ paths:
       summary: GetSubMajor
       tags:
       - Public
-  /users/{id}:
-    get:
-      description: Get User
+  /topic-references/admins:
+    post:
+      consumes:
+      - application/json
+      description: Admin create topic reference
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/topic_reference_dto.AdminCreateTopicReferenceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminCreateTopicReference
+      tags:
+      - topic reference
+  /topic-references/teachers:
+    post:
+      consumes:
+      - application/json
+      description: Teacher create topic reference
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/topic_reference_dto.TeacherCreateTopicReferenceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: TeacherCreateTopicReference
+      tags:
+      - topic reference
+    put:
+      consumes:
+      - application/json
+      description: Teacher update topic reference
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/topic_reference_dto.TeacherUpdateTopicReferenceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: TeacherUpdateTopicReference
+      tags:
+      - topic reference
+  /topic-references/teachers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Teacher delete topic reference
       parameters:
       - description: id
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -578,7 +699,32 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user_dto.OutputGetUserSwagger'
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: TeacherDeleteTopicReference
+      tags:
+      - topic reference
+  /users/{id}:
+    get:
+      description: Get User
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.GetUserSwaggerOutput'
         "400":
           description: Bad Request
           schema:
@@ -597,7 +743,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user_dto.OutputGetUserSwagger'
+            $ref: '#/definitions/user_dto.GetUserSwaggerOutput'
         "400":
           description: Bad Request
           schema:
