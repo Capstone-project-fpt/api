@@ -64,9 +64,9 @@ func (tr *topicReferenceService) GetListTopicReferences(ctx *gin.Context, input 
 	getTotalQuery := global.Db.Model(&model.TopicReferences{})
 	getTopicReferencesQuery := global.Db.Model(&model.TopicReferences{}).Joins("Teacher.User")
 
-	if input.TeacherID != 0 {
-		getTotalQuery = getTotalQuery.Where("teacher_id = ?", input.TeacherID)
-		getTopicReferencesQuery = getTopicReferencesQuery.Where("topic_references.teacher_id = ?", input.TeacherID)
+	if len(input.TeacherIDs) > 0 {
+		getTotalQuery = getTotalQuery.Where("teacher_id IN ?", input.TeacherIDs)
+		getTopicReferencesQuery = getTopicReferencesQuery.Where("topic_references.teacher_id IN ?", input.TeacherIDs)
 	}
 
 	if err := getTotalQuery.Count(&total).Error; err != nil {
@@ -86,9 +86,9 @@ func (tr *topicReferenceService) GetListTopicReferences(ctx *gin.Context, input 
 	}
 
 	return topic_reference_dto.ListTopicReferenceOutput{
-		Meta:  dto.MetaPagination{
-			CurrentPage: int(input.Page), 
-			Total: int(total),
+		Meta: dto.MetaPagination{
+			CurrentPage: int(input.Page),
+			Total:       int(total),
 		},
 		Items: itemsTopicReferenceOutput,
 	}, nil

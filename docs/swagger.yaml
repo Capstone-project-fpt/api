@@ -649,7 +649,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get list topic references
+      description: Get list of topic references
       parameters:
       - description: Limit
         in: query
@@ -661,10 +661,13 @@ paths:
         name: page
         required: true
         type: integer
-      - description: TeacherID
+      - collectionFormat: multi
+        description: TeacherIDs
         in: query
-        name: teacher_id
-        type: string
+        items:
+          type: integer
+        name: teacher_ids
+        type: array
       produces:
       - application/json
       responses:

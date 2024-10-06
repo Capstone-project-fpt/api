@@ -52,13 +52,13 @@ func (trc *TopicReferenceController) GetTopicReference(ctx *gin.Context) {
 }
 
 // @Summary GetListTopicReferences
-// @Description Get list topic references
+// @Description Get list of topic references
 // @Tags topic reference
 // @Accept json
 // @Produce json
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
-// @Param teacher_id query string false "TeacherID"
+// @Param teacher_ids query []int false "TeacherIDs" collectionFormat(multi)
 // @Router /topic-references [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} topic_reference_dto.ListTopicReferenceOutput

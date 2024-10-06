@@ -556,7 +556,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get list topic references",
+                "description": "Get list of topic references",
                 "consumes": [
                     "application/json"
                 ],
@@ -583,9 +583,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "TeacherID",
-                        "name": "teacher_id",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "TeacherIDs",
+                        "name": "teacher_ids",
                         "in": "query"
                     }
                 ],
