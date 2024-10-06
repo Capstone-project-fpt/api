@@ -668,6 +668,10 @@ paths:
           type: integer
         name: teacher_ids
         type: array
+      - description: Search
+        in: query
+        name: search
+        type: string
       produces:
       - application/json
       responses:

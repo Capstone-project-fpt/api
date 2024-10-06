@@ -7,10 +7,11 @@ import (
 )
 
 type GetListTopicReferencesInput struct {
-	Limit      int   `form:"limit" binding:"required" example:"10"`
-	Page       int   `form:"page" binding:"required" example:"1"`
-	Offset     int   `swaggerignore:"true"`
-	TeacherIDs []int `form:"teacher_ids"`
+	Limit      int    `form:"limit" binding:"required" example:"10"`
+	Page       int    `form:"page" binding:"required" example:"1"`
+	Offset     int    `swaggerignore:"true"`
+	TeacherIDs []int  `form:"teacher_ids"`
+	Search     string `form:"search"`
 }
 
 type TeacherCreateTopicReferenceInput struct {

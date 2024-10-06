@@ -59,6 +59,7 @@ func (trc *TopicReferenceController) GetTopicReference(ctx *gin.Context) {
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
 // @Param teacher_ids query []int false "TeacherIDs" collectionFormat(multi)
+// @Param search query string false "Search"
 // @Router /topic-references [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} topic_reference_dto.ListTopicReferenceOutput

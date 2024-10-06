@@ -591,6 +591,12 @@ const docTemplate = `{
                         "description": "TeacherIDs",
                         "name": "teacher_ids",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search",
+                        "name": "search",
+                        "in": "query"
                     }
                 ],
                 "responses": {
