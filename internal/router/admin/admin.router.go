@@ -14,6 +14,19 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 
 	adminRouter := r.Group("/admin")
 	adminRouter.Use(middleware.AuthMiddleware())
+	adminRouter.Use(middleware.UserTypeMiddleware(constant.UserType.Admin))
+
+	adminUserRouter := adminRouter.Group("/users")
+	{
+		adminUserRouter.GET("/", adminController.GetListUsers)
+		adminUserRouter.GET(
+			"/:id",
+			middleware.PermissionMiddleware(
+				constant.PermissionType.ViewAccount,
+			),
+			adminController.GetUser,
+		)
+	}
 
 	adminStudentRouter := adminRouter.Group("/students")
 	{

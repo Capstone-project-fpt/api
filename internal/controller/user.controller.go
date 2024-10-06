@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/api/global"
 	"github.com/api/internal/constant"
@@ -21,31 +20,6 @@ func NewUserController(userService service.IUserService) *UserController {
 	return &UserController{
 		userService: userService,
 	}
-}
-
-// @Summary GetUser
-// @Description Get User
-// @Tags User
-// @Produce json
-// @Param id path int true "id"
-// @Router /users/{id} [get]
-// @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} user_dto.GetUserSwaggerOutput
-// @Security ApiKeyAuth
-func (u *UserController) GetUser(ctx *gin.Context) {
-	idParam := ctx.Param("id")
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err)
-		return
-	}
-
-	outputGetUser, err := u.userService.GetUser(ctx, id)
-	if err != nil {
-		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
-		return
-	}
-	response.SuccessResponse(ctx, http.StatusOK, outputGetUser)
 }
 
 // @Summary GetMe

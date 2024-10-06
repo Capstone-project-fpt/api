@@ -16,6 +16,24 @@ type User struct {
 	Roles       []Role    `gorm:"many2many:users_roles;"`
 }
 
+type UserWithDetails struct {
+	UserID          int    `gorm:"column:user_id"`
+	UserName        string `gorm:"column:user_name"`
+	UserEmail       string `gorm:"column:user_email"`
+	UserPhoneNumber string `gorm:"column:user_phone_number"`
+	UserType        string `gorm:"column:user_type"`
+
+	TeacherID         int       `gorm:"column:teacher_id"`
+	TeacherSubMajorID int       `gorm:"column:teacher_sub_major_id"`
+	TeacherCreatedAt  time.Time `gorm:"column:teacher_created_at"`
+
+	StudentID              int       `gorm:"column:student_id"`
+	StudentCode            string    `gorm:"column:student_code"`
+	StudentSubMajorID      int       `gorm:"column:student_sub_major_id"`
+	StudentCapstoneGroupID int       `gorm:"column:student_capstone_group_id"`
+	StudentCreatedAt       time.Time `gorm:"column:student_created_at"`
+}
+
 func (User) TableName() string {
 	return "users"
 }

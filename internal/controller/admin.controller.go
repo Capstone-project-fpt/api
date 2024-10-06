@@ -4,13 +4,16 @@ import (
 	"errors"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/admin_dto"
+	"github.com/api/internal/service"
 	admin_service "github.com/api/internal/service/admin"
 	"github.com/api/pkg/response"
+	util "github.com/api/pkg/utils"
 	file_util "github.com/api/pkg/utils/file"
 	"github.com/api/pkg/validator"
 	"github.com/gin-gonic/gin"
@@ -19,12 +22,69 @@ import (
 
 type AdminController struct {
 	adminService admin_service.IAdminService
+	userService  service.IUserService
 }
 
-func NewAdminController(adminService admin_service.IAdminService) *AdminController {
+func NewAdminController(adminService admin_service.IAdminService, userService service.IUserService) *AdminController {
 	return &AdminController{
 		adminService: adminService,
+		userService:  userService,
 	}
+}
+
+// @Summary GetUser
+// @Description Get User
+// @Tags Admin
+// @Produce json
+// @Param id path int true "id"
+// @Router /admin/users/{id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} user_dto.GetUserSwaggerOutput
+// @Security ApiKeyAuth
+func (ac *AdminController) GetUser(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	outputGetUser, err := ac.userService.GetUser(ctx, id)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, outputGetUser)
+}
+
+// @Summary GetListUsers
+// @Description Get list user
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param limit query int true "Limit"
+// @Param page query int true "Page"
+// @Param user_types query []string false "UserTypes" collectionFormat(multi)
+// @Router /admin/users [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} admin_dto.ListUsersOutput
+// @Security ApiKeyAuth
+func (ac *AdminController) GetListUsers(ctx *gin.Context) {
+	var input admin_dto.GetListUsersInput
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
+	result, err := ac.adminService.GetListUsers(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, result)
 }
 
 // @Summary UploadFileStudentData
