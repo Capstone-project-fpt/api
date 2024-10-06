@@ -35,6 +35,15 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
+  admin_dto.ListUsersOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/user_dto.GetUserOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   auth_dto.ForgotPasswordInput:
     properties:
       email:
@@ -415,6 +424,70 @@ paths:
       summary: UploadFileTeacherData
       tags:
       - Admin
+  /admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Get list user
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - collectionFormat: multi
+        description: UserTypes
+        in: query
+        items:
+          type: string
+        name: user_types
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin_dto.ListUsersOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListUsers
+      tags:
+      - Admin
+  /admin/users/{id}:
+    get:
+      description: Get User
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.GetUserSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetUser
+      tags:
+      - Admin
   /forgot-password:
     post:
       consumes:
@@ -649,7 +722,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get list topic references
+      description: Get list of topic references
       parameters:
       - description: Limit
         in: query
@@ -661,9 +734,16 @@ paths:
         name: page
         required: true
         type: integer
-      - description: TeacherID
+      - collectionFormat: multi
+        description: TeacherIDs
         in: query
-        name: teacher_id
+        items:
+          type: integer
+        name: teacher_ids
+        type: array
+      - description: Search
+        in: query
+        name: search
         type: string
       produces:
       - application/json
@@ -816,31 +896,6 @@ paths:
       summary: TeacherDeleteTopicReference
       tags:
       - topic reference
-  /users/{id}:
-    get:
-      description: Get User
-      parameters:
-      - description: id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user_dto.GetUserSwaggerOutput'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: GetUser
-      tags:
-      - User
   /users/me:
     get:
       description: Get Me

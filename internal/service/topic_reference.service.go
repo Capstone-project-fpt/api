@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/api/database/model"
 	"github.com/api/global"
@@ -11,6 +12,7 @@ import (
 	"github.com/api/internal/types"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/thoas/go-funk"
 )
 
 type ITopicReferenceService interface {
@@ -64,9 +66,21 @@ func (tr *topicReferenceService) GetListTopicReferences(ctx *gin.Context, input 
 	getTotalQuery := global.Db.Model(&model.TopicReferences{})
 	getTopicReferencesQuery := global.Db.Model(&model.TopicReferences{}).Joins("Teacher.User")
 
-	if input.TeacherID != 0 {
-		getTotalQuery = getTotalQuery.Where("teacher_id = ?", input.TeacherID)
-		getTopicReferencesQuery = getTopicReferencesQuery.Where("topic_references.teacher_id = ?", input.TeacherID)
+	var teacherIds []int
+	teacherIds = funk.Filter(input.TeacherIDs, func(id int) bool {
+		return id != 0
+	}).([]int)
+
+	if len(teacherIds) > 0 {
+		fmt.Println("input.TeacherIDs", input.TeacherIDs)
+		getTotalQuery = getTotalQuery.Where("teacher_id IN ?", input.TeacherIDs)
+		getTopicReferencesQuery = getTopicReferencesQuery.Where("topic_references.teacher_id IN ?", input.TeacherIDs)
+	}
+
+	if input.Search != "" {
+		searchQuery := "topic_references.topic_references_tvs @@ plainto_tsquery('simple', unaccent(lower(?)))"
+		getTotalQuery = getTotalQuery.Where(searchQuery, input.Search)
+		getTopicReferencesQuery = getTopicReferencesQuery.Where(searchQuery, input.Search)
 	}
 
 	if err := getTotalQuery.Count(&total).Error; err != nil {
@@ -86,9 +100,9 @@ func (tr *topicReferenceService) GetListTopicReferences(ctx *gin.Context, input 
 	}
 
 	return topic_reference_dto.ListTopicReferenceOutput{
-		Meta:  dto.MetaPagination{
-			CurrentPage: int(input.Page), 
-			Total: int(total),
+		Meta: dto.MetaPagination{
+			CurrentPage: int(input.Page),
+			Total:       int(total),
 		},
 		Items: itemsTopicReferenceOutput,
 	}, nil

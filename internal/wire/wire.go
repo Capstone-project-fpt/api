@@ -34,6 +34,7 @@ func InitializeAdminController() *controller.AdminController {
 	wire.Build(
 		queue.NewEmailNewAccountsPublisher,
 		admin_service.NewAdminService,
+		service.NewUserService,
 		controller.NewAdminController,
 	)
 

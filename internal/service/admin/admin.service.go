@@ -18,6 +18,7 @@ import (
 )
 
 type IAdminService interface {
+	GetListUsers(ctx *gin.Context, input *admin_dto.GetListUsersInput) (interface{}, error)
 	CreateStudentAccount(ctx *gin.Context, input *admin_dto.AdminCreateStudentAccountInput) (int, error)
 	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error)
 	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)

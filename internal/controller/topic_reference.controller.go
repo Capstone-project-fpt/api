@@ -52,7 +52,7 @@ func (trc *TopicReferenceController) GetTopicReference(ctx *gin.Context) {
 }
 
 // @Summary GetListTopicReferences
-// @Description Get list topic references
+// @Description Get list of topic references
 // @Tags topic reference
 // @Accept json
 // @Produce json
