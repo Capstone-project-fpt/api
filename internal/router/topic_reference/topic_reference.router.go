@@ -12,7 +12,7 @@ type TopicReferenceRouter struct{}
 func (tr *TopicReferenceRouter) InitTopicReferenceRouter(r *gin.RouterGroup) {
 	topicReferenceController := wire.InitializeTopicReferenceController()
 
-	topicReferenceRouter := r.Group("/topic-references")
+	topicReferenceRouter := r.Group("/topic_references")
 	topicReferenceRouter.Use(middleware.AuthMiddleware())
 	{
 		topicReferenceRouter.GET("/", topicReferenceController.GetListTopicReferences)
