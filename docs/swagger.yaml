@@ -645,7 +645,7 @@ paths:
       summary: GetSubMajor
       tags:
       - Public
-  /topic-references:
+  /topic_references:
     get:
       consumes:
       - application/json
@@ -681,7 +681,7 @@ paths:
       summary: GetListTopicReferences
       tags:
       - topic reference
-  /topic-references/{id}:
+  /topic_references/{id}:
     get:
       description: Get topic reference
       parameters:
@@ -706,7 +706,7 @@ paths:
       summary: GetTopicReference
       tags:
       - topic reference
-  /topic-references/admins:
+  /topic_references/admins:
     post:
       consumes:
       - application/json
@@ -734,7 +734,7 @@ paths:
       summary: AdminCreateTopicReference
       tags:
       - topic reference
-  /topic-references/teachers:
+  /topic_references/teachers:
     post:
       consumes:
       - application/json
@@ -789,7 +789,7 @@ paths:
       summary: TeacherUpdateTopicReference
       tags:
       - topic reference
-  /topic-references/teachers/{id}:
+  /topic_references/teachers/{id}:
     delete:
       consumes:
       - application/json
