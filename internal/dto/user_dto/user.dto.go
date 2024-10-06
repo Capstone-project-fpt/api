@@ -1,6 +1,10 @@
 package user_dto
 
-import "time"
+import (
+	"time"
+
+	"github.com/api/database/model"
+)
 
 type UserOutput struct {
 	ID          int    `json:"id"`
@@ -35,6 +39,28 @@ type ExtraInfo struct {
 type GetUserOutput struct {
 	CommonInfo *UserOutput `json:"common_info"`
 	ExtraInfo  *ExtraInfo  `json:"extra_info"`
+}
+
+type TeacherOutput struct {
+	ID          int    `json:"id"`
+	UserID      int    `json:"user_id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phone_number"`
+	UserType    string `json:"user_type"`
+	SubMajorID  int    `json:"sub_major_id"`
+}
+
+func ToTeacherOutput(teacher *model.Teacher) TeacherOutput {
+	return TeacherOutput{
+		ID:          int(teacher.ID),
+		UserID:      int(teacher.UserID),
+		Name:        teacher.User.Name,
+		Email:       teacher.User.Email,
+		PhoneNumber: teacher.User.PhoneNumber,
+		UserType:    teacher.User.UserType,
+		SubMajorID:  int(teacher.SubMajorID),
+	}
 }
 
 // This used for swagger

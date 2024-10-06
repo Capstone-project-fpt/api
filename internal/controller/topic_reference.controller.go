@@ -10,6 +10,7 @@ import (
 	"github.com/api/internal/dto/topic_reference_dto"
 	"github.com/api/internal/service"
 	"github.com/api/pkg/response"
+	util "github.com/api/pkg/utils"
 	context_util "github.com/api/pkg/utils/context"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -23,6 +24,61 @@ func NewTopicReferenceController(topicReferenceService service.ITopicReferenceSe
 	return &TopicReferenceController{
 		topicReferenceService: topicReferenceService,
 	}
+}
+
+// @Summary GetTopicReference
+// @Description Get topic reference
+// @Tags topic reference
+// @Produce json
+// @Param id path int true "id"
+// @Router /topic-references/{id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} topic_reference_dto.GetTopicReferenceSwaggerOutput
+// @Security ApiKeyAuth
+func (trc *TopicReferenceController) GetTopicReference(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	topicReference, err := trc.topicReferenceService.GetTopicReference(ctx, id)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, topicReference)
+}
+
+// @Summary GetListTopicReferences
+// @Description Get list topic references
+// @Tags topic reference
+// @Accept json
+// @Produce json
+// @Param limit query int true "Limit"
+// @Param page query int true "Page"
+// @Param teacher_id query string false "TeacherID"
+// @Router /topic-references [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} topic_reference_dto.ListTopicReferenceOutput
+// @Security ApiKeyAuth
+func (trc *TopicReferenceController) GetListTopicReferences(ctx *gin.Context) {
+	var input topic_reference_dto.GetListTopicReferencesInput
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
+	result, err := trc.topicReferenceService.GetListTopicReferences(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, result)
 }
 
 // @Summary TeacherCreateTopicReference

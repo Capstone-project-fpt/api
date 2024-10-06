@@ -13,9 +13,17 @@ func (tr *TopicReferenceRouter) InitTopicReferenceRouter(r *gin.RouterGroup) {
 	topicReferenceController := wire.InitializeTopicReferenceController()
 
 	topicReferenceRouter := r.Group("/topic-references")
+	topicReferenceRouter.Use(middleware.AuthMiddleware())
+	{
+		topicReferenceRouter.GET("/", topicReferenceController.GetListTopicReferences)
+		topicReferenceRouter.GET(
+			"/:id",
+			topicReferenceController.GetTopicReference,
+		)
+	}
 
 	teacherRouter := topicReferenceRouter.Group("/teachers")
-	teacherRouter.Use(middleware.AuthMiddleware(constant.UserType.Teacher))
+	teacherRouter.Use(middleware.UserTypeMiddleware(constant.UserType.Teacher))
 	{
 		teacherRouter.POST(
 			"/",
@@ -41,7 +49,7 @@ func (tr *TopicReferenceRouter) InitTopicReferenceRouter(r *gin.RouterGroup) {
 	}
 
 	adminRouter := topicReferenceRouter.Group("/admins")
-	adminRouter.Use(middleware.AuthMiddleware(constant.UserType.Admin))
+	adminRouter.Use(middleware.UserTypeMiddleware(constant.UserType.Admin))
 	{
 		adminRouter.POST(
 			"/",

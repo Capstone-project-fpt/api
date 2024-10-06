@@ -166,6 +166,24 @@ definitions:
     - path
     - teacher_id
     type: object
+  topic_reference_dto.GetTopicReferenceSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/topic_reference_dto.TopicReferenceOutput'
+      message:
+        type: boolean
+    type: object
+  topic_reference_dto.ListTopicReferenceOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/topic_reference_dto.TopicReferenceOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   topic_reference_dto.TeacherCreateTopicReferenceInput:
     properties:
       name:
@@ -188,6 +206,17 @@ definitions:
     - id
     - name
     - path
+    type: object
+  topic_reference_dto.TopicReferenceOutput:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      path:
+        type: string
+      teacher:
+        $ref: '#/definitions/user_dto.TeacherOutput'
     type: object
   user_dto.AdminInfoOutput:
     type: object
@@ -237,6 +266,23 @@ definitions:
         type: integer
       teacher_id:
         type: integer
+    type: object
+  user_dto.TeacherOutput:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      sub_major_id:
+        type: integer
+      user_id:
+        type: integer
+      user_type:
+        type: string
     type: object
   user_dto.UserOutput:
     properties:
@@ -599,6 +645,67 @@ paths:
       summary: GetSubMajor
       tags:
       - Public
+  /topic-references:
+    get:
+      consumes:
+      - application/json
+      description: Get list topic references
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: TeacherID
+        in: query
+        name: teacher_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topic_reference_dto.ListTopicReferenceOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListTopicReferences
+      tags:
+      - topic reference
+  /topic-references/{id}:
+    get:
+      description: Get topic reference
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topic_reference_dto.GetTopicReferenceSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetTopicReference
+      tags:
+      - topic reference
   /topic-references/admins:
     post:
       consumes:

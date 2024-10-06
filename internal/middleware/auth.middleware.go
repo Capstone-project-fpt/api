@@ -11,10 +11,9 @@ import (
 	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"github.com/thoas/go-funk"
 )
 
-func AuthMiddleware(allowUserTypes ...string) gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorization := ctx.GetHeader("Authorization")
 		splitAuthorization := strings.Split(authorization, "Bearer ")
@@ -43,16 +42,6 @@ func AuthMiddleware(allowUserTypes ...string) gin.HandlerFunc {
 
 		var userContext types.UserContext
 		if err = json.Unmarshal([]byte(val), &userContext); err != nil {
-			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
-			ctx.Abort()
-			return
-		}
-
-		if len(allowUserTypes) > 0 && !funk.Contains(allowUserTypes, userContext.UserType) {
-			message = localizer.MustLocalize(&i18n.LocalizeConfig{
-				MessageID: constant.MessageI18nId.PermissionDenied,
-			})
-
 			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
 			ctx.Abort()
 			return

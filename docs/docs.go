@@ -549,6 +549,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/topic-references": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list topic references",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "GetListTopicReferences",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "TeacherID",
+                        "name": "teacher_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.ListTopicReferenceOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/topic-references/admins": {
             "post": {
                 "security": [
@@ -714,6 +770,46 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get topic reference",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "GetTopicReference",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.GetTopicReferenceSwaggerOutput"
                         }
                     },
                     "400": {
@@ -1049,6 +1145,34 @@ const docTemplate = `{
                 }
             }
         },
+        "topic_reference_dto.GetTopicReferenceSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/topic_reference_dto.TopicReferenceOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "topic_reference_dto.ListTopicReferenceOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/topic_reference_dto.TopicReferenceOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
         "topic_reference_dto.TeacherCreateTopicReferenceInput": {
             "type": "object",
             "required": [
@@ -1080,6 +1204,23 @@ const docTemplate = `{
                 },
                 "path": {
                     "type": "string"
+                }
+            }
+        },
+        "topic_reference_dto.TopicReferenceOutput": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
                 }
             }
         },
@@ -1156,6 +1297,32 @@ const docTemplate = `{
                 },
                 "teacher_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "user_dto.TeacherOutput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_type": {
+                    "type": "string"
                 }
             }
         },
