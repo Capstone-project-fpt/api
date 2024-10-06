@@ -27,7 +27,7 @@ func GenerateAccessToken(payload JwtInput) (string, error) {
 		"sub": payload.UserId,
 		"iss": global.Config.Server.Name,
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Duration(jwtConfig.Expiration)).Unix(),
+		"exp": time.Now().Add(time.Duration(jwtConfig.Expiration) * time.Second).UnixMilli(),
 	})
 
 	token, err := claims.SignedString(secretKey)
@@ -44,7 +44,7 @@ func GenerateRefreshToken(payload JwtInput) (string, error) {
 		"sub":           payload.UserId,
 		"iss":           global.Config.Server.Name,
 		"iat":           time.Now().Unix(),
-		"exp":           time.Now().Add(time.Duration(jwtConfig.RefreshExpiration)).Unix(),
+		"exp":           time.Now().Add(time.Duration(jwtConfig.RefreshExpiration) * time.Second).UnixMilli(),
 		"refresh_token": true,
 	})
 
@@ -62,7 +62,7 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 		"sub": payload,
 		"iss": global.Config.Server.Name,
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Duration(constant.DefaultResetPasswordTokenExpiration) * time.Second).Unix(),
+		"exp": time.Now().Add(time.Duration(constant.DefaultResetPasswordTokenExpiration) * time.Second).UnixMilli(),
 	})
 
 	token, err := claims.SignedString(secretKey)

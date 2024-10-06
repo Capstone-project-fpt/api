@@ -16,5 +16,6 @@
   "InvalidFile": "File không hợp lệ.",
   "NotAllowEmptyDataInFile": "File truyền lên cần phải có dữ liệu để xử lý.",
   "OtherSessionImportStudentInProcess": "Quá trình nhập dữ liệu sinh viên đang được thực hiện trong một phiên làm việc khác, vui lòng đợi đến khi phiên đó kết thúc.",
-  "OtherSessionImportTeacherInProcess": "Quá trình nhập dữ liệu giáo viên đang được thực hiện trong một phiên làm việc khác, vui lòng đợi đến khi phiên đó kết thúc."
+  "OtherSessionImportTeacherInProcess": "Quá trình nhập dữ liệu giáo viên đang được thực hiện trong một phiên làm việc khác, vui lòng đợi đến khi phiên đó kết thúc.",
+  "TopicReferenceNotFound": "Không tìm thấy Đề tài tham khảo."
 }

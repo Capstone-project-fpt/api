@@ -47,3 +47,9 @@ func InitializeSubMajorController() *controller.SubMajorController {
 	subMajorController := controller.NewSubMajorController(iSubMajorService)
 	return subMajorController
 }
+
+func InitializeTopicReferenceController() *controller.TopicReferenceController {
+	iTopicReferenceService := service.NewTopicReferenceService()
+	topicReferenceController := controller.NewTopicReferenceController(iTopicReferenceService)
+	return topicReferenceController
+}

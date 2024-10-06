@@ -9,7 +9,7 @@ import (
 )
 
 type ISubMajorService interface {
-	GetListSubMajor(ctx *gin.Context, input sub_major_dto.InputGetListSubMajor) (interface{}, error)
+	GetListSubMajor(ctx *gin.Context, input sub_major_dto.GetListSubMajorInput) (interface{}, error)
 	GetSubMajor(ctx *gin.Context, id int) (interface{}, error)
 }
 
@@ -19,7 +19,7 @@ func NewSubMajorService() ISubMajorService {
 	return &subMajorService{}
 }
 
-func (s *subMajorService) GetListSubMajor(ctx *gin.Context, input sub_major_dto.InputGetListSubMajor) (interface{}, error) {
+func (s *subMajorService) GetListSubMajor(ctx *gin.Context, input sub_major_dto.GetListSubMajorInput) (interface{}, error) {
 	var total int64
 	var items []model.SubMajor
 	getTotalQuery := global.Db.Model(&model.SubMajor{})
@@ -41,12 +41,12 @@ func (s *subMajorService) GetListSubMajor(ctx *gin.Context, input sub_major_dto.
 		return nil, err
 	}
 
-	itemsSubMajorOutput := make([]sub_major_dto.OutputSubMajor, len(items))
+	itemsSubMajorOutput := make([]sub_major_dto.SubMajorOutput, len(items))
 	for i, item := range items {
 		itemsSubMajorOutput[i] = sub_major_dto.ToSubMajorOutput(item)
 	}
 
-	return sub_major_dto.OutputGetListMajor{
+	return sub_major_dto.GetListSubMajorOutput{
 		Meta: dto.MetaPagination{
 			CurrentPage: int(input.Page),
 			Total:       int(total),

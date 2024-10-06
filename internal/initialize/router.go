@@ -49,6 +49,7 @@ func InitRouter() *gin.Engine {
 	publicRouter := router.RouterGroupApp.Public
 	userRouter := router.RouterGroupApp.User
 	adminRouter := router.RouterGroupApp.Admin
+	topicReferenceRouter := router.RouterGroupApp.TopicReference
 
 	MainGroup := r.Group("/api/v1")
 	{
@@ -59,6 +60,9 @@ func InitRouter() *gin.Engine {
 	}
 	{
 		adminRouter.InitAdminRouter(MainGroup)
+	}
+	{
+		topicReferenceRouter.InitTopicReferenceRouter(MainGroup)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -7,10 +7,10 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/global"
-	"github.com/api/internal/queue"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/dto/import_dto"
+	"github.com/api/internal/queue"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -18,8 +18,8 @@ import (
 )
 
 type IAdminService interface {
-	CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error)
-	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error)
+	CreateStudentAccount(ctx *gin.Context, input *admin_dto.AdminCreateStudentAccountInput) (int, error)
+	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error)
 	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
 	UploadFileTeacherData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
 }
@@ -46,7 +46,7 @@ func NewAdminService(
 	}
 }
 
-func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateStudentAccount) (int, error) {
+func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.AdminCreateStudentAccountInput) (int, error) {
 	return as.createAccount(ctx, InputCreateAccount{
 		Name:        input.Name,
 		Email:       input.Email,
@@ -58,7 +58,7 @@ func (as *adminService) CreateStudentAccount(ctx *gin.Context, input *admin_dto.
 	})
 }
 
-func (as *adminService) CreateTeacherAccount(ctx *gin.Context, input *admin_dto.InputAdminCreateTeacherAccount) (int, error) {
+func (as *adminService) CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error) {
 	return as.createAccount(ctx, InputCreateAccount{
 		Name:        input.Name,
 		Email:       input.Email,

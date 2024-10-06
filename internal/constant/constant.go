@@ -28,6 +28,7 @@ type MessageI18n struct {
 	NotAllowEmptyDataInFile                  string
 	OtherSessionImportStudentInProcess       string
 	OtherSessionImportTeacherInProcess       string
+	TopicReferenceNotFound                   string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -49,6 +50,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	NotAllowEmptyDataInFile:                  "NotAllowEmptyDataInFile",
 	OtherSessionImportStudentInProcess:       "OtherSessionImportStudentInProcess",
 	OtherSessionImportTeacherInProcess:       "OtherSessionImportTeacherInProcess",
+	TopicReferenceNotFound:                   "TopicReferenceNotFound",
 }
 
 type RedisKeyType struct {
@@ -86,13 +88,15 @@ var RoleType roleTypeType = roleTypeType{
 }
 
 type permissionTypeType struct {
-	ManageAccount string
-	ViewAccount   string
+	ManageAccount        string
+	ViewAccount          string
+	ManageTopicReference string
 }
 
 var PermissionType permissionTypeType = permissionTypeType{
-	ManageAccount: "ManageAccount",
-	ViewAccount:   "ViewAccount",
+	ManageAccount:        "ManageAccount",
+	ViewAccount:          "ViewAccount",
+	ManageTopicReference: "ManageTopicReference",
 }
 
 type lockProcessTypeType struct {

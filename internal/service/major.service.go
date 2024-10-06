@@ -9,7 +9,7 @@ import (
 )
 
 type IMajorService interface {
-	GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error)
+	GetListMajor(ctx *gin.Context, input major_dto.GetListMajorInput) (interface{}, error)
 	GetMajor(ctx *gin.Context, id int) (interface{}, error)
 }
 
@@ -19,7 +19,7 @@ func NewMajorService() IMajorService {
 	return &majorService{}
 }
 
-func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetListMajor) (interface{}, error) {
+func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.GetListMajorInput) (interface{}, error) {
 	var total int64
 	if err := global.Db.Model(&model.Major{}).Count(&total).Error; err != nil {
 		return nil, err
@@ -33,12 +33,12 @@ func (s *majorService) GetListMajor(ctx *gin.Context, input major_dto.InputGetLi
 		return nil, err
 	}
 
-	itemsMajorOutput := make([]major_dto.OutputMajor, len(items))
+	itemsMajorOutput := make([]major_dto.MajorOutput, len(items))
 	for i, item := range items {
 		itemsMajorOutput[i] = major_dto.ToMajorOutput(item)
 	}
 
-	return major_dto.OutputGetListMajor{
+	return major_dto.GetListMajorOutput{
 		Meta: dto.MetaPagination{
 			CurrentPage: int(input.Page),
 			Total:       int(total),

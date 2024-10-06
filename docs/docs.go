@@ -42,7 +42,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin_dto.InputAdminCreateStudentAccount"
+                            "$ref": "#/definitions/admin_dto.AdminCreateStudentAccountInput"
                         }
                     }
                 ],
@@ -130,7 +130,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin_dto.InputAdminCreateTeacherAccount"
+                            "$ref": "#/definitions/admin_dto.AdminCreateTeacherAccountInput"
                         }
                     }
                 ],
@@ -213,7 +213,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_dto.InputForgotPassword"
+                            "$ref": "#/definitions/auth_dto.ForgotPasswordInput"
                         }
                     }
                 ],
@@ -287,7 +287,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_dto.InputLogin"
+                            "$ref": "#/definitions/auth_dto.LoginInput"
                         }
                     }
                 ],
@@ -295,7 +295,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth_dto.OutputLoginSwagger"
+                            "$ref": "#/definitions/auth_dto.LoginSwaggerOutput"
                         }
                     },
                     "400": {
@@ -366,7 +366,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/major_dto.OutputGetListMajor"
+                            "$ref": "#/definitions/major_dto.GetListMajorOutput"
                         }
                     },
                     "400": {
@@ -398,7 +398,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -406,7 +406,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/major_dto.OutputGetMajorSwagger"
+                            "$ref": "#/definitions/major_dto.GetMajorSwaggerOutput"
                         }
                     },
                     "400": {
@@ -438,7 +438,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_dto.InputResetPassword"
+                            "$ref": "#/definitions/auth_dto.ResetPasswordInput"
                         }
                     }
                 ],
@@ -497,7 +497,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/sub_major_dto.OutputGetListMajor"
+                            "$ref": "#/definitions/sub_major_dto.GetListSubMajorOutput"
                         }
                     },
                     "400": {
@@ -529,7 +529,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -537,7 +537,279 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/sub_major_dto.OutputGetSubMajorSwagger"
+                            "$ref": "#/definitions/sub_major_dto.GetSubMajorSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list topic references",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "GetListTopicReferences",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "TeacherID",
+                        "name": "teacher_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.ListTopicReferenceOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references/admins": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin create topic reference",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "AdminCreateTopicReference",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.AdminCreateTopicReferenceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references/teachers": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Teacher update topic reference",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "TeacherUpdateTopicReference",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.TeacherUpdateTopicReferenceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Teacher create topic reference",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "TeacherCreateTopicReference",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.TeacherCreateTopicReferenceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references/teachers/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Teacher delete topic reference",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "TeacherDeleteTopicReference",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/topic-references/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get topic reference",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic reference"
+                ],
+                "summary": "GetTopicReference",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic_reference_dto.GetTopicReferenceSwaggerOutput"
                         }
                     },
                     "400": {
@@ -568,7 +840,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                            "$ref": "#/definitions/user_dto.GetUserSwaggerOutput"
                         }
                     },
                     "400": {
@@ -600,7 +872,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -608,7 +880,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_dto.OutputGetUserSwagger"
+                            "$ref": "#/definitions/user_dto.GetUserSwaggerOutput"
                         }
                     },
                     "400": {
@@ -622,7 +894,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "admin_dto.InputAdminCreateStudentAccount": {
+        "admin_dto.AdminCreateStudentAccountInput": {
             "type": "object",
             "required": [
                 "code",
@@ -649,7 +921,7 @@ const docTemplate = `{
                 }
             }
         },
-        "admin_dto.InputAdminCreateTeacherAccount": {
+        "admin_dto.AdminCreateTeacherAccountInput": {
             "type": "object",
             "required": [
                 "email",
@@ -672,7 +944,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_dto.InputForgotPassword": {
+        "auth_dto.ForgotPasswordInput": {
             "type": "object",
             "required": [
                 "email"
@@ -683,7 +955,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_dto.InputLogin": {
+        "auth_dto.LoginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -698,7 +970,32 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_dto.InputResetPassword": {
+        "auth_dto.LoginOutput": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth_dto.LoginSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/auth_dto.LoginOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "auth_dto.ResetPasswordInput": {
             "type": "object",
             "required": [
                 "password",
@@ -713,31 +1010,6 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_dto.OutputLogin": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth_dto.OutputLoginSwagger": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "$ref": "#/definitions/auth_dto.OutputLogin"
-                },
-                "message": {
-                    "type": "boolean"
-                }
-            }
-        },
         "dto.MetaPagination": {
             "type": "object",
             "properties": {
@@ -749,13 +1021,13 @@ const docTemplate = `{
                 }
             }
         },
-        "major_dto.OutputGetListMajor": {
+        "major_dto.GetListMajorOutput": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/major_dto.OutputMajor"
+                        "$ref": "#/definitions/major_dto.MajorOutput"
                     }
                 },
                 "meta": {
@@ -763,21 +1035,21 @@ const docTemplate = `{
                 }
             }
         },
-        "major_dto.OutputGetMajorSwagger": {
+        "major_dto.GetMajorSwaggerOutput": {
             "type": "object",
             "properties": {
                 "code": {
                     "type": "integer"
                 },
                 "data": {
-                    "$ref": "#/definitions/major_dto.OutputMajor"
+                    "$ref": "#/definitions/major_dto.MajorOutput"
                 },
                 "message": {
                     "type": "boolean"
                 }
             }
         },
-        "major_dto.OutputMajor": {
+        "major_dto.MajorOutput": {
             "type": "object",
             "properties": {
                 "id": {
@@ -812,13 +1084,13 @@ const docTemplate = `{
                 }
             }
         },
-        "sub_major_dto.OutputGetListMajor": {
+        "sub_major_dto.GetListSubMajorOutput": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sub_major_dto.OutputSubMajor"
+                        "$ref": "#/definitions/sub_major_dto.SubMajorOutput"
                     }
                 },
                 "meta": {
@@ -826,21 +1098,21 @@ const docTemplate = `{
                 }
             }
         },
-        "sub_major_dto.OutputGetSubMajorSwagger": {
+        "sub_major_dto.GetSubMajorSwaggerOutput": {
             "type": "object",
             "properties": {
                 "code": {
                     "type": "integer"
                 },
                 "data": {
-                    "$ref": "#/definitions/sub_major_dto.OutputSubMajor"
+                    "$ref": "#/definitions/sub_major_dto.SubMajorOutput"
                 },
                 "message": {
                     "type": "boolean"
                 }
             }
         },
-        "sub_major_dto.OutputSubMajor": {
+        "sub_major_dto.SubMajorOutput": {
             "type": "object",
             "properties": {
                 "id": {
@@ -854,49 +1126,147 @@ const docTemplate = `{
                 }
             }
         },
-        "user_dto.ExtraInfo": {
+        "topic_reference_dto.AdminCreateTopicReferenceInput": {
             "type": "object",
+            "required": [
+                "name",
+                "path",
+                "teacher_id"
+            ],
             "properties": {
-                "admin": {
-                    "$ref": "#/definitions/user_dto.OutputAdminInfo"
+                "name": {
+                    "type": "string"
                 },
-                "student": {
-                    "$ref": "#/definitions/user_dto.OutputStudentInfo"
+                "path": {
+                    "type": "string"
                 },
-                "teacher": {
-                    "$ref": "#/definitions/user_dto.OutputTeacherInfo"
+                "teacher_id": {
+                    "type": "integer"
                 }
             }
         },
-        "user_dto.OutputAdminInfo": {
-            "type": "object"
-        },
-        "user_dto.OutputGetUser": {
-            "type": "object",
-            "properties": {
-                "common_info": {
-                    "$ref": "#/definitions/user_dto.OutputUser"
-                },
-                "extra_info": {
-                    "$ref": "#/definitions/user_dto.ExtraInfo"
-                }
-            }
-        },
-        "user_dto.OutputGetUserSwagger": {
+        "topic_reference_dto.GetTopicReferenceSwaggerOutput": {
             "type": "object",
             "properties": {
                 "code": {
                     "type": "integer"
                 },
                 "data": {
-                    "$ref": "#/definitions/user_dto.OutputGetUser"
+                    "$ref": "#/definitions/topic_reference_dto.TopicReferenceOutput"
                 },
                 "message": {
                     "type": "boolean"
                 }
             }
         },
-        "user_dto.OutputStudentInfo": {
+        "topic_reference_dto.ListTopicReferenceOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/topic_reference_dto.TopicReferenceOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "topic_reference_dto.TeacherCreateTopicReferenceInput": {
+            "type": "object",
+            "required": [
+                "name",
+                "path"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "topic_reference_dto.TeacherUpdateTopicReferenceInput": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "path"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "topic_reference_dto.TopicReferenceOutput": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
+                }
+            }
+        },
+        "user_dto.AdminInfoOutput": {
+            "type": "object"
+        },
+        "user_dto.ExtraInfo": {
+            "type": "object",
+            "properties": {
+                "admin": {
+                    "$ref": "#/definitions/user_dto.AdminInfoOutput"
+                },
+                "student": {
+                    "$ref": "#/definitions/user_dto.StudentInfoOutput"
+                },
+                "teacher": {
+                    "$ref": "#/definitions/user_dto.TeacherInfoOutput"
+                }
+            }
+        },
+        "user_dto.GetUserOutput": {
+            "type": "object",
+            "properties": {
+                "common_info": {
+                    "$ref": "#/definitions/user_dto.UserOutput"
+                },
+                "extra_info": {
+                    "$ref": "#/definitions/user_dto.ExtraInfo"
+                }
+            }
+        },
+        "user_dto.GetUserSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/user_dto.GetUserOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "user_dto.StudentInfoOutput": {
             "type": "object",
             "properties": {
                 "capstone_group_id": {
@@ -916,7 +1286,7 @@ const docTemplate = `{
                 }
             }
         },
-        "user_dto.OutputTeacherInfo": {
+        "user_dto.TeacherInfoOutput": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -930,7 +1300,33 @@ const docTemplate = `{
                 }
             }
         },
-        "user_dto.OutputUser": {
+        "user_dto.TeacherOutput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_dto.UserOutput": {
             "type": "object",
             "properties": {
                 "email": {
