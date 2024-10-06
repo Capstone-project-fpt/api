@@ -647,7 +647,7 @@
                 }
             }
         },
-        "/topic-references": {
+        "/topic_references": {
             "get": {
                 "security": [
                     {
@@ -713,7 +713,7 @@
                 }
             }
         },
-        "/topic-references/admins": {
+        "/topic_references/admins": {
             "post": {
                 "security": [
                     {
@@ -758,7 +758,7 @@
                 }
             }
         },
-        "/topic-references/teachers": {
+        "/topic_references/teachers": {
             "put": {
                 "security": [
                     {
@@ -846,7 +846,7 @@
                 }
             }
         },
-        "/topic-references/teachers/{id}": {
+        "/topic_references/teachers/{id}": {
             "delete": {
                 "security": [
                     {
@@ -889,7 +889,7 @@
                 }
             }
         },
-        "/topic-references/{id}": {
+        "/topic_references/{id}": {
             "get": {
                 "security": [
                     {

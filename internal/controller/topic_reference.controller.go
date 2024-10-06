@@ -31,7 +31,7 @@ func NewTopicReferenceController(topicReferenceService service.ITopicReferenceSe
 // @Tags topic reference
 // @Produce json
 // @Param id path int true "id"
-// @Router /topic-references/{id} [get]
+// @Router /topic_references/{id} [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} topic_reference_dto.GetTopicReferenceSwaggerOutput
 // @Security ApiKeyAuth
@@ -58,9 +58,8 @@ func (trc *TopicReferenceController) GetTopicReference(ctx *gin.Context) {
 // @Produce json
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
-// @Param teacher_ids query []int false "TeacherIDs" collectionFormat(multi)
-// @Param search query string false "Search"
-// @Router /topic-references [get]
+// @Param teacher_id query string false "TeacherID"
+// @Router /topic_references [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} topic_reference_dto.ListTopicReferenceOutput
 // @Security ApiKeyAuth
@@ -88,7 +87,7 @@ func (trc *TopicReferenceController) GetListTopicReferences(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body topic_reference_dto.TeacherCreateTopicReferenceInput true "data"
-// @Router /topic-references/teachers [post]
+// @Router /topic_references/teachers [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -134,7 +133,7 @@ func (trc *TopicReferenceController) TeacherCreateTopicReference(ctx *gin.Contex
 // @Accept json
 // @Produce json
 // @Param data body topic_reference_dto.TeacherUpdateTopicReferenceInput true "data"
-// @Router /topic-references/teachers [put]
+// @Router /topic_references/teachers [put]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -189,7 +188,7 @@ func (trc *TopicReferenceController) TeacherUpdateTopicReference(ctx *gin.Contex
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
-// @Router /topic-references/teachers/{id} [delete]
+// @Router /topic_references/teachers/{id} [delete]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -239,7 +238,7 @@ func (trc *TopicReferenceController) TeacherDeleteTopicReference(ctx *gin.Contex
 // @Accept json
 // @Produce json
 // @Param data body topic_reference_dto.AdminCreateTopicReferenceInput true "data"
-// @Router /topic-references/admins [post]
+// @Router /topic_references/admins [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth

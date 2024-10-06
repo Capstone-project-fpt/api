@@ -649,7 +649,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/topic-references": {
+        "/topic_references": {
             "get": {
                 "security": [
                     {
@@ -715,7 +715,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/topic-references/admins": {
+        "/topic_references/admins": {
             "post": {
                 "security": [
                     {
@@ -760,7 +760,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/topic-references/teachers": {
+        "/topic_references/teachers": {
             "put": {
                 "security": [
                     {
@@ -848,7 +848,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/topic-references/teachers/{id}": {
+        "/topic_references/teachers/{id}": {
             "delete": {
                 "security": [
                     {
@@ -891,7 +891,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/topic-references/{id}": {
+        "/topic_references/{id}": {
             "get": {
                 "security": [
                     {
