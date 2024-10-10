@@ -1,0 +1,18 @@
+[build]
+  cmd = "go build -o ./tmp/main ./cmd/server"
+  bin = "./tmp/main"
+  full_bin = "APP_ENV=dev ./tmp/main"
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_dir = ["assets", "tmp", "vendor", "internal/wire"]
+  exclude_file = ["internal/initialize/wire_gen.go"]
+  follow_symlink = true
+
+[log]
+  level = "debug"
+  color = true
+  timestamp = true
+
+[proxy]
+  enabled = false
+  address = "localhost:8080"
+  port = 8080
