@@ -31,7 +31,7 @@ $ make migrate_down
 ### 5.1 create migration file
 
 ```bash
-$ make create_migration MIGRATION_NAME="NameOfMigration"  
+$ make create_migration MIGRATION_NAME="NameOfMigration"
 ```
 
 ### 6. Generate Swagger docs
@@ -46,3 +46,30 @@ $ make swagger
 # development
 $ make run
 ```
+
+#### Optional: Live reload for Go apps in development
+
+1. Install [air](https://github.com/air-verse/air)
+
+If air not command found fix with
+   Export path in `~/.zshrc`:
+
+  ```bash
+  export PATH=$PATH:$(go env GOPATH)/bin
+  ```
+
+   Update path environment:
+
+  ```bash
+  source ~/.zshrc
+  ```
+
+2. Run with bash:
+
+  ```bash
+  air
+  ```
+
+  Happy coding!
+
+
