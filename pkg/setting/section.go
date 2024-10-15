@@ -9,6 +9,8 @@ type Config struct {
 	Smtp          SmtpSetting   `mapstructure:"smtp"`
 	GoogleSetting GoogleSetting `mapstructure:"google"`
 	AsynqSetting  AsynqSetting  `mapstructure:"asynq"`
+	AWS           AWSSetting    `mapstructure:"aws"`
+	S3            S3Setting     `mapstructure:"s3"`
 }
 
 type ServerSetting struct {
@@ -71,4 +73,12 @@ type GoogleSetting struct {
 type AsynqSetting struct {
 	DelayInSeconds       int `mapstructure:"delayInSeconds"`
 	MaxConcurrentWorkers int `mapstructure:"maxConcurrentWorkers"`
+}
+
+type AWSSetting struct {
+	Region string `mapstructure:"region"`
+}
+
+type S3Setting struct {
+	BucketName string `mapstructure:"bucketName"`
 }

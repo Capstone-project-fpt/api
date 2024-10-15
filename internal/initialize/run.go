@@ -5,6 +5,9 @@ import (
 
 	"github.com/api/global"
 	"github.com/api/internal/worker"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 func Run() {
@@ -23,11 +26,17 @@ func Run() {
 		fmt.Printf("Swagger API Docs: http://localhost:%v/swagger/index.html\n", global.Config.Server.Port)
 	}
 
-	go func ()  {
+	go func() {
 		if err := worker.InitWorker(); err != nil {
 			panic(err)
 		}
 	}()
+
+	global.AwsSession, _ = session.NewSession(&aws.Config{
+		Region: &global.Config.AWS.Region,
+	})
+
+	global.S3Client = s3.New(global.AwsSession)
 
 	r.Run("127.0.0.1" + serverAddr)
 }

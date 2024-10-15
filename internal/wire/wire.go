@@ -9,6 +9,7 @@ import (
 	admin_service "github.com/api/internal/service/admin"
 	"github.com/google/wire"
 	"github.com/api/internal/queue"
+	"github.com/api/pkg/service/aws"
 )
 
 func InitializeUserController() *controller.UserController {
@@ -66,4 +67,14 @@ func InitializeTopicReferenceController() *controller.TopicReferenceController {
 	)
 
 	return &controller.TopicReferenceController{}
+}
+
+func InitializeUploadController() *controller.UploadController {
+	wire.Build(
+		aws.NewAwsS3Service,
+		service.NewUploadService,
+		controller.NewUploadController,
+	)
+
+	return &controller.UploadController{}
 }

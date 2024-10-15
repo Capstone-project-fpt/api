@@ -227,6 +227,11 @@ definitions:
       teacher:
         $ref: '#/definitions/user_dto.TeacherOutput'
     type: object
+  upload_dto.GenerateUploadPresignUrlInput:
+    properties:
+      key:
+        type: string
+    type: object
   user_dto.AdminInfoOutput:
     type: object
   user_dto.ExtraInfo:
@@ -734,16 +739,9 @@ paths:
         name: page
         required: true
         type: integer
-      - collectionFormat: multi
-        description: TeacherIDs
+      - description: TeacherID
         in: query
-        items:
-          type: integer
-        name: teacher_ids
-        type: array
-      - description: Search
-        in: query
-        name: search
+        name: teacher_id
         type: string
       produces:
       - application/json
@@ -896,6 +894,34 @@ paths:
       summary: TeacherDeleteTopicReference
       tags:
       - topic reference
+  /upload/presign-url:
+    post:
+      consumes:
+      - application/json
+      description: Generate Upload PresignUrl
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/upload_dto.GenerateUploadPresignUrlInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GenerateUploadPresignUrl
+      tags:
+      - Upload
   /users/me:
     get:
       description: Get Me

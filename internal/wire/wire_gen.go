@@ -12,6 +12,7 @@ import (
 	"github.com/api/internal/service"
 	service2 "github.com/api/internal/service/admin"
 	"github.com/api/internal/service/auth"
+	"github.com/api/pkg/service/aws"
 )
 
 // Injectors from wire.go:
@@ -53,4 +54,11 @@ func InitializeTopicReferenceController() *controller.TopicReferenceController {
 	iTopicReferenceService := service.NewTopicReferenceService()
 	topicReferenceController := controller.NewTopicReferenceController(iTopicReferenceService)
 	return topicReferenceController
+}
+
+func InitializeUploadController() *controller.UploadController {
+	awsS3Service := aws.NewAwsS3Service()
+	iUploadService := service.NewUploadService(awsS3Service)
+	uploadController := controller.NewUploadController(iUploadService)
+	return uploadController
 }
