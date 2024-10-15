@@ -4,6 +4,7 @@ import (
 	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
+	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/dto/user_dto"
 	"github.com/gin-gonic/gin"
@@ -82,5 +83,12 @@ func (as *adminService) GetListUsers(ctx *gin.Context, input *admin_dto.GetListU
 
 		itemsOutput = append(itemsOutput, userOutput)
 	}
-	return itemsOutput, nil
+
+	return admin_dto.ListUsersOutput{
+		Meta: dto.MetaPagination{
+			Total:       int(total),
+			CurrentPage: int(input.Page),
+		},
+		Items: itemsOutput,
+	}, nil
 }
