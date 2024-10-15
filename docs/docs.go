@@ -683,19 +683,9 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "collectionFormat": "multi",
-                        "description": "TeacherIDs",
-                        "name": "teacher_ids",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
-                        "description": "Search",
-                        "name": "search",
+                        "description": "TeacherID",
+                        "name": "teacher_id",
                         "in": "query"
                     }
                 ],
@@ -920,6 +910,51 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/topic_reference_dto.GetTopicReferenceSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload/presign-url": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Generate Upload PresignUrl",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "GenerateUploadPresignUrl",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/upload_dto.GenerateUploadPresignUrlInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
                         }
                     },
                     "400": {
@@ -1305,6 +1340,14 @@ const docTemplate = `{
                 },
                 "teacher": {
                     "$ref": "#/definitions/user_dto.TeacherOutput"
+                }
+            }
+        },
+        "upload_dto.GenerateUploadPresignUrlInput": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
                 }
             }
         },
