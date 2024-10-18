@@ -235,7 +235,13 @@ const docTemplate = `{
                         "description": "UserTypes",
                         "name": "user_types",
                         "in": "query"
-                    }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "query",
+                    },
                 ],
                 "responses": {
                     "200": {
