@@ -10,6 +10,7 @@ type GetListUsersInput struct {
 	Page      int      `form:"page" binding:"required" example:"1"`
 	Offset    int      `swaggerignore:"true"`
 	UserTypes []string `form:"user_types"`
+	Email     string   `form:"email"`
 }
 
 type AdminCreateStudentAccountInput struct {
@@ -28,7 +29,7 @@ type AdminCreateTeacherAccountInput struct {
 }
 
 type ListUsersOutput struct {
-	Meta  dto.MetaPagination     `json:"meta"`
+	Meta  dto.MetaPagination       `json:"meta"`
 	Items []user_dto.GetUserOutput `json:"items"`
 }
 

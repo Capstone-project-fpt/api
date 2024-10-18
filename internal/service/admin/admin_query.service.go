@@ -34,6 +34,11 @@ func (as *adminService) GetListUsers(ctx *gin.Context, input *admin_dto.GetListU
 		getUsersQuery.Where("user_type IN (?)", userTypes)
 	}
 
+	if input.Email != "" {
+		getTotalQuery.Where("email LIKE ?", "%"+input.Email+"%")
+		getUsersQuery.Where("email LIKE ?", "%"+input.Email+"%")
+	}
+
 	if err := getTotalQuery.Count(&total).Error; err != nil {
 		return nil, err
 	}
