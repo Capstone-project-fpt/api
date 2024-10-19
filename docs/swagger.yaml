@@ -135,6 +135,72 @@ definitions:
       message:
         type: boolean
     type: object
+  semester_dto.CreateSemesterInput:
+    properties:
+      end_time:
+        example: "2006-01-02T15:04:05Z"
+        type: string
+      name:
+        type: string
+      start_time:
+        example: "2006-01-02T15:04:05Z"
+        type: string
+    required:
+    - end_time
+    - name
+    - start_time
+    type: object
+  semester_dto.GetSemesterSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/semester_dto.SemesterOutput'
+      message:
+        type: boolean
+    type: object
+  semester_dto.ListSemestersOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/semester_dto.SemesterOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  semester_dto.SemesterOutput:
+    properties:
+      created_at:
+        type: string
+      end_time:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      start_time:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  semester_dto.UpdateSemesterInput:
+    properties:
+      end_time:
+        example: "2006-01-02T15:04:05Z"
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      start_time:
+        example: "2006-01-02T15:04:05Z"
+        type: string
+    required:
+    - end_time
+    - id
+    - name
+    - start_time
+    type: object
   sub_major_dto.GetListSubMajorOutput:
     properties:
       items:
@@ -668,6 +734,145 @@ paths:
       summary: ResetPassword
       tags:
       - Auth
+  /semesters:
+    get:
+      consumes:
+      - application/json
+      description: Get list semester
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.ListSemestersOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListSemesters
+      tags:
+      - Semester
+  /semesters/{id}:
+    get:
+      description: Get Semester
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSemester
+      tags:
+      - Semester
+  /semesters/{id}/admin:
+    delete:
+      consumes:
+      - application/json
+      description: Admin Delete Semester
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminDeleteSemester
+      tags:
+      - Semester
+  /semesters/admin:
+    post:
+      consumes:
+      - application/json
+      description: Admin Create Semester
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/semester_dto.CreateSemesterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminCreateSemester
+      tags:
+      - Semester
+    put:
+      consumes:
+      - application/json
+      description: Admin Update Semester
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/semester_dto.UpdateSemesterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminUpdateSemester
+      tags:
+      - Semester
   /sub-majors:
     get:
       consumes:

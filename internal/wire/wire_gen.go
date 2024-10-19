@@ -62,3 +62,9 @@ func InitializeUploadController() *controller.UploadController {
 	uploadController := controller.NewUploadController(iUploadService)
 	return uploadController
 }
+
+func InitializeSemesterController() *controller.SemesterController {
+	iSemesterService := service.NewSemesterService()
+	semesterController := controller.NewSemesterController(iSemesterService)
+	return semesterController
+}

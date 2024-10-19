@@ -17,6 +17,10 @@ func UserTypeMiddleware(allowUserTypes ...string) gin.HandlerFunc {
 		userContext := context_util.GetUserContext(ctx)
 
 		if userContext == nil {
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.TokenInvalid,
+			})
+			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
 			return
 		}
 
