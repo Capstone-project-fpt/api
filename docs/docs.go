@@ -240,8 +240,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Email",
                         "name": "email",
-                        "in": "query",
-                    },
+                        "in": "query"
+                    }
                 ],
                 "responses": {
                     "200": {

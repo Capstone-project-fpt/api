@@ -65,6 +65,7 @@ func (ac *AdminController) GetUser(ctx *gin.Context) {
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
 // @Param user_types query []string false "UserTypes" collectionFormat(multi)
+// @Param email query string false "Email"
 // @Router /admin/users [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} admin_dto.ListUsersOutput
