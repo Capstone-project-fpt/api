@@ -142,6 +142,16 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  capstone_group_dto.UpdateCapstoneGroupInput:
+    properties:
+      id:
+        type: integer
+      name_group:
+        type: string
+    required:
+    - id
+    - name_group
+    type: object
   dto.MetaPagination:
     properties:
       current_page:
@@ -675,6 +685,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: CreateCapstoneGroup
+      tags:
+      - Capstone Group
+    put:
+      consumes:
+      - application/json
+      description: Update capstone group
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.UpdateCapstoneGroupInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateCapstoneGroup
       tags:
       - Capstone Group
   /capstone-groups/{id}:

@@ -56,6 +56,37 @@ func (cgc *CapstoneGroupController) CreateCapstoneGroup(ctx *gin.Context) {
 	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
 }
 
+// @Summary UpdateCapstoneGroup
+// @Description Update capstone group
+// @Tags Capstone Group
+// @Accept json
+// @Produce json
+// @Param data body capstone_group_dto.UpdateCapstoneGroupInput true "data"
+// @Router /capstone-groups [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) UpdateCapstoneGroup(ctx *gin.Context) {
+	var input capstone_group_dto.UpdateCapstoneGroupInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	err := cgc.capstoneGroupService.UpdateCapstoneGroup(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.CreateCapstoneGroupSuccess,
+	})
+
+	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
+}
+
 // @Summary GetListCapstoneGroups
 // @Description Get list capstone group
 // @Tags Capstone Group

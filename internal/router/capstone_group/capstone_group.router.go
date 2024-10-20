@@ -16,6 +16,7 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 	capstoneGroupRouter.Use(middleware.AuthMiddleware())
 	{
 		capstoneGroupRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.CreateCapstoneGroup)
+		capstoneGroupRouter.PUT("/", capstoneGroupController.UpdateCapstoneGroup)
 		capstoneGroupRouter.GET("/", capstoneGroupController.GetListCapstoneGroups)
 		capstoneGroupRouter.GET("/:id", capstoneGroupController.GetCapstoneGroup)
 	}

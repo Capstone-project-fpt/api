@@ -348,6 +348,49 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "UpdateCapstoneGroup",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.UpdateCapstoneGroupInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -1631,6 +1674,21 @@ const docTemplate = `{
                 },
                 "meta": {
                     "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "capstone_group_dto.UpdateCapstoneGroupInput": {
+            "type": "object",
+            "required": [
+                "id",
+                "name_group"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name_group": {
+                    "type": "string"
                 }
             }
         },

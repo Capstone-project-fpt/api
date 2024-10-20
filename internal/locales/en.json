@@ -24,5 +24,7 @@
   "CreateSemesterSuccess": "Create semester success.",
   "UpdateSemesterSuccess": "Update semester success.",
   "DeleteSemesterSuccess": "Delete semester success.",
-  "CreateCapstoneGroupSuccess": "Create capstone group success."
+  "CreateCapstoneGroupSuccess": "Create capstone group success.",
+  "CapstoneGroupNotFound": "Capstone group not found.",
+  "UpdateCapstoneGroupInput": "Update capstone group input."
 }

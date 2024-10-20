@@ -38,6 +38,8 @@ type MessageI18n struct {
 	UpdateSemesterSuccess                    string
 	DeleteSemesterSuccess                    string
 	CreateCapstoneGroupSuccess               string
+	CapstoneGroupNotFound                    string
+	UpdateCapstoneGroupSuccess               string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -67,6 +69,8 @@ var MessageI18nId MessageI18n = MessageI18n{
 	UpdateSemesterSuccess:                    "UpdateSemesterSuccess",
 	DeleteSemesterSuccess:                    "DeleteSemesterSuccess",
 	CreateCapstoneGroupSuccess:               "CreateCapstoneGroupSuccess",
+	CapstoneGroupNotFound:                    "CapstoneGroupNotFound",
+	UpdateCapstoneGroupSuccess:               "UpdateCapstoneGroupSuccess",
 }
 
 type RedisKeyType struct {

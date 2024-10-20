@@ -14,6 +14,11 @@ type CreateCapstoneGroupInput struct {
 	MajorID    int64   `json:"major_id" binding:"required"`
 }
 
+type UpdateCapstoneGroupInput struct {
+	ID        int64  `json:"id" binding:"required"`
+	NameGroup string `json:"name_group" binding:"required"`
+}
+
 type GetListCapstoneGroupInput struct {
 	Limit  int `form:"limit" binding:"required" example:"10"`
 	Page   int `form:"page" binding:"required" example:"1"`

@@ -24,5 +24,7 @@
   "CreateSemesterSuccess": "Tạo học kỳ thành công",
   "UpdateSemesterSuccess": "Cập nhật thông tin học kỳ thành công.",
   "DeleteSemesterSuccess": "Xoá học kỳ thành công.",
-  "CreateCapstoneGroupSuccess": "Tạo nhóm bảo vệ luận án thành công."
+  "CreateCapstoneGroupSuccess": "Tạo nhóm bảo vệ luận án thành công.",
+  "CapstoneGroupNotFound": "Không tìm thấy nhóm bảo vệ luận án.",
+  "UpdateCapstoneGroupInput": "Cập nhật thông tin nhóm bảo vệ luận án thành công."
 }

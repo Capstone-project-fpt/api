@@ -16,6 +16,7 @@ import (
 
 type ICapstoneGroupService interface {
 	CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) error
+	UpdateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupInput) error
 	GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupOutput, error)
 	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupOutput, error)
 }
@@ -101,10 +102,49 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 	return nil
 }
 
+func (cgs *capstoneGroupService) UpdateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupInput) error {
+	currentUser := context_util.GetUserContext(ctx)
+	if currentUser == nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
+		}))
+	}
+
+	var currentStudent model.Student
+	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.ID).First(&capstoneGroup).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	if capstoneGroup.LeaderID != currentStudent.ID {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
+		}))
+	}
+
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.ID).Updates(&model.CapstoneGroup{
+		NameGroup:  input.NameGroup,
+	}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (cgs *capstoneGroupService) GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupOutput, error) {
 	var capstoneGroup model.CapstoneGroup
 	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", id).First(&capstoneGroup).Error; err != nil {
-		return nil, err
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
 	}
 
 	capstoneGroupOutput := capstone_group_dto.ToCapstoneGroupOutput(&capstoneGroup)
