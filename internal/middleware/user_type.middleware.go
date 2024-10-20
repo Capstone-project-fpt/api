@@ -21,6 +21,7 @@ func UserTypeMiddleware(allowUserTypes ...string) gin.HandlerFunc {
 				MessageID: constant.MessageI18nId.TokenInvalid,
 			})
 			response.ErrorResponse(ctx, http.StatusUnauthorized, message)
+			ctx.Abort()
 			return
 		}
 
@@ -28,6 +29,7 @@ func UserTypeMiddleware(allowUserTypes ...string) gin.HandlerFunc {
 			response.ErrorResponse(ctx, http.StatusForbidden, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				MessageID: constant.MessageI18nId.PermissionDenied,
 			}))
+			ctx.Abort()
 			return
 		}
 		

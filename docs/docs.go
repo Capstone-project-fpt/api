@@ -475,6 +475,96 @@ const docTemplate = `{
                 }
             }
         },
+        "/capstone-groups/{id}/mentors": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Invite mentor to capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "InviteMentorToCapstoneGroup",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.InviteMentorToCapstoneGroupInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{id}/mentors/invitation": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Accept invite mentor to capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "AcceptInviteMentorToCapstoneGroup",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/forgot-password": {
             "post": {
                 "description": "Forgot Password",
@@ -1594,6 +1684,17 @@ const docTemplate = `{
                 }
             }
         },
+        "capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
         "capstone_group_dto.CapstoneGroupOutput": {
             "type": "object",
             "properties": {
@@ -1660,6 +1761,21 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "boolean"
+                }
+            }
+        },
+        "capstone_group_dto.InviteMentorToCapstoneGroupInput": {
+            "type": "object",
+            "required": [
+                "semester_id",
+                "teacher_id"
+            ],
+            "properties": {
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
+                    "type": "integer"
                 }
             }
         },

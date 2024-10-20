@@ -90,6 +90,7 @@ func InitializeSemesterController() *controller.SemesterController {
 
 func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
 	wire.Build(
+		queue.NewEmailInviteMentorToCapstoneGroupPublisher,
 		service.NewCapstoneGroupService,
 		controller.NewCapstoneGroupController,
 	)

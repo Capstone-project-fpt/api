@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone Group Invitation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #28a745;
+            color: #ffffff;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #888888;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Invitation to Mentor a Capstone Group!</h1>
+        </div>
+        <div class="content">
+            <p>Hi <strong>{{.MentorEmail}}</strong>,</p>
+            <p>You have been invited to mentor the capstone group <strong>{{.CapstoneGroupName}}</strong> (Group ID:
+                {{.CapstoneGroupID}}) at FPT University.</p>
+            <p>The capstone group is eager to have you as their mentor and benefit from your guidance and expertise.</p>
+            <p>Please confirm your participation by logging into the system and accepting the invitation.</p>
+            <a href="http://localhost:8080/api/v1/capstone-groups/{{.CapstoneGroupID}}/mentor/invitation?token={{.Token}}"
+                class="button">Accept Invitation</a>
+            <p>If you have any questions or need more details, feel free to contact our support team.</p>
+            <p>Thank you for considering this opportunity to support our students!</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 FPT University. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

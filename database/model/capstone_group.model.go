@@ -13,7 +13,8 @@ type CapstoneGroup struct {
 	SemesterID int64     `gorm:"not null"`
 	Semester   Semester  `gorm:"foreignKey:SemesterID;references:ID"`
 	LeaderID   int64     `gorm:"column:leader_id;not null"`
-	Leader     User      `gorm:"foreignKey:LeaderID;references:ID"`
+	MentorID   int64     `gorm:"column:mentor_id"`
+	Mentor     Teacher   `gorm:"foreignKey:MentorID;references:ID"`
 	CreatedAt  time.Time `gorm:"column:created_at;autoCreateTime"`
 	UpdatedAt  time.Time `gorm:"column:updated_at;autoUpdateTime"`
 }

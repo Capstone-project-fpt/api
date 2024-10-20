@@ -7,8 +7,11 @@ const (
 	DefaultPasswordLength               int64 = 8
 	DefaultResetPasswordTokenLength     int64 = 8
 	DefaultResetPasswordTokenExpiration int64 = 3600 // 1 hour
+	DefaultInviteMentorTokenExpiration  int64 = 3600 // 1 hour
+	DefaultInviteMentorTokenLength      int64 = 8
 	MinTotalMemberInGroup                     = 4
 	MaxTotalMemberInGroup                     = 5
+	MaxTotalCapstoneGroupTeacherMentor        = 2
 )
 
 type MessageI18n struct {
@@ -40,6 +43,10 @@ type MessageI18n struct {
 	CreateCapstoneGroupSuccess               string
 	CapstoneGroupNotFound                    string
 	UpdateCapstoneGroupSuccess               string
+	MaxTotalCapstoneGroupTeacherMentor       string
+	SendInviteToMentorSuccess                string
+	CapstoneGroupAlreadyMentor               string
+	AcceptInviteMentorToCapstoneGroupSuccess string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -71,6 +78,10 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CreateCapstoneGroupSuccess:               "CreateCapstoneGroupSuccess",
 	CapstoneGroupNotFound:                    "CapstoneGroupNotFound",
 	UpdateCapstoneGroupSuccess:               "UpdateCapstoneGroupSuccess",
+	MaxTotalCapstoneGroupTeacherMentor:       "MaxTotalCapstoneGroupTeacherMentor",
+	SendInviteToMentorSuccess:                "SendInviteToMentorSuccess",
+	CapstoneGroupAlreadyMentor:               "CapstoneGroupAlreadyMentor",
+	AcceptInviteMentorToCapstoneGroupSuccess: "AcceptInviteMentorToCapstoneGroupSuccess",
 }
 
 type RedisKeyType struct {
@@ -160,9 +171,11 @@ var TeacherDataImportMapping TeacherDataImportMappingType = TeacherDataImportMap
 }
 
 type systemQueueTaskType struct {
-	SendEmailCreateAccounts string
+	SendEmailCreateAccounts              string
+	SendEmailInviteMentorToCapstoneGroup string
 }
 
 var SystemQueueTask systemQueueTaskType = systemQueueTaskType{
-	SendEmailCreateAccounts: "SystemTask:SendEmailCreateAccounts",
+	SendEmailCreateAccounts:              "SystemTask:SendEmailCreateAccounts",
+	SendEmailInviteMentorToCapstoneGroup: "SystemTask:SendEmailInviteMentorToCapstoneGroup",
 }

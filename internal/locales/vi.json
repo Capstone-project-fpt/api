@@ -26,5 +26,9 @@
   "DeleteSemesterSuccess": "Xoá học kỳ thành công.",
   "CreateCapstoneGroupSuccess": "Tạo nhóm bảo vệ luận án thành công.",
   "CapstoneGroupNotFound": "Không tìm thấy nhóm bảo vệ luận án.",
-  "UpdateCapstoneGroupInput": "Cập nhật thông tin nhóm bảo vệ luận án thành công."
+  "UpdateCapstoneGroupInput": "Cập nhật thông tin nhóm bảo vệ luận án thành công.",
+  "MaxTotalCapstoneGroupTeacherMentor": "Giáo viên này đã mentor tối đa các nhóm bảo vệ trong học kỳ này.",
+  "SendInviteToMentorSuccess": "Gửi yêu cầu mời làm mentor của nhóm cho giáo viên thành công.",
+  "CapstoneGroupAlreadyMentor": "Nhóm bảo vệ đồ án đã có mentor.",
+  "AcceptInviteMentorToCapstoneGroupSuccess": "Chấp nhận làm mentor của nhóm thành công."
 }

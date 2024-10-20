@@ -87,6 +87,13 @@ definitions:
     - password
     - token
     type: object
+  capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
   capstone_group_dto.CapstoneGroupOutput:
     properties:
       created_at:
@@ -132,6 +139,16 @@ definitions:
         $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
       message:
         type: boolean
+    type: object
+  capstone_group_dto.InviteMentorToCapstoneGroupInput:
+    properties:
+      semester_id:
+        type: integer
+      teacher_id:
+        type: integer
+    required:
+    - semester_id
+    - teacher_id
     type: object
   capstone_group_dto.ListCapstoneGroupOutput:
     properties:
@@ -737,6 +754,62 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroup
+      tags:
+      - Capstone Group
+  /capstone-groups/{id}/mentors:
+    post:
+      consumes:
+      - application/json
+      description: Invite mentor to capstone group
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.InviteMentorToCapstoneGroupInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: InviteMentorToCapstoneGroup
+      tags:
+      - Capstone Group
+  /capstone-groups/{id}/mentors/invitation:
+    post:
+      consumes:
+      - application/json
+      description: Accept invite mentor to capstone group
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AcceptInviteMentorToCapstoneGroup
       tags:
       - Capstone Group
   /forgot-password:
