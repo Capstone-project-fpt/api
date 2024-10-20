@@ -78,7 +78,13 @@ func (ac *AdminController) GetListUsers(ctx *gin.Context) {
 	}
 
 	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
-	result, err := ac.adminService.GetListUsers(ctx, &input)
+	result, err := ac.userService.GetListUsers(ctx, service.GetListUsersInput{
+		Limit:     input.Limit,
+		Page:      input.Page,
+		Offset:    input.Offset,
+		UserTypes: input.UserTypes,
+		Email:     input.Email,
+	})
 
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())

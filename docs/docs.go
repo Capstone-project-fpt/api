@@ -24,7 +24,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Student create capstone group",
+                "description": "Admin Create Student Account",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,9 +32,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Capstone Group"
+                    "Admin"
                 ],
-                "summary": "StudentCreateCapstoneGroup",
+                "summary": "CreateStudentAccount",
                 "parameters": [
                     {
                         "description": "data",
@@ -42,7 +42,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/capstone_group_dto.StudentCreateCapstoneGroupInput"
+                            "$ref": "#/definitions/admin_dto.AdminCreateStudentAccountInput"
                         }
                     }
                 ],
@@ -288,6 +288,139 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/user_dto.GetUserSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetListCapstoneGroups",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.ListCapstoneGroupOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "CreateCapstoneGroup",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.CreateCapstoneGroupInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get capstone group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetCapstoneGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.GetCapstoneGroupSwaggerOutput"
                         }
                     },
                     "400": {
@@ -1189,6 +1322,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetListUsers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "UserTypes",
+                        "name": "user_types",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email",
+                        "name": "email",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.ListUsersOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/users/me": {
             "get": {
                 "security": [
@@ -1352,7 +1551,36 @@ const docTemplate = `{
                 }
             }
         },
-        "capstone_group_dto.StudentCreateCapstoneGroupInput": {
+        "capstone_group_dto.CapstoneGroupOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "leader_id": {
+                    "type": "integer"
+                },
+                "major_id": {
+                    "type": "integer"
+                },
+                "name_group": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.CreateCapstoneGroupInput": {
             "type": "object",
             "required": [
                 "major_id",
@@ -1375,6 +1603,34 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "capstone_group_dto.GetCapstoneGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "capstone_group_dto.ListCapstoneGroupOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
                 }
             }
         },

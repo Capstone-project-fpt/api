@@ -11,6 +11,7 @@ import (
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/dto/import_dto"
 	"github.com/api/internal/queue"
+	"github.com/api/internal/service"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -18,7 +19,6 @@ import (
 )
 
 type IAdminService interface {
-	GetListUsers(ctx *gin.Context, input *admin_dto.GetListUsersInput) (interface{}, error)
 	CreateStudentAccount(ctx *gin.Context, input *admin_dto.AdminCreateStudentAccountInput) (int, error)
 	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error)
 	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
@@ -37,13 +37,16 @@ type InputCreateAccount struct {
 
 type adminService struct {
 	emailNewAccountsPublisher queue.IBasePublisher[queue.EmailNewAccountsMessage]
+	userService               service.IUserService
 }
 
 func NewAdminService(
 	emailNewAccountsPublisher queue.IBasePublisher[queue.EmailNewAccountsMessage],
+	userService service.IUserService,
 ) IAdminService {
 	return &adminService{
 		emailNewAccountsPublisher,
+		userService,
 	}
 }
 

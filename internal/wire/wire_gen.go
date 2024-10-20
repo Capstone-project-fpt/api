@@ -32,8 +32,8 @@ func InitializeAuthController() *controller.AuthController {
 
 func InitializeAdminController() *controller.AdminController {
 	iBasePublisher := queue.NewEmailNewAccountsPublisher()
-	iAdminService := service2.NewAdminService(iBasePublisher)
 	iUserService := service.NewUserService()
+	iAdminService := service2.NewAdminService(iBasePublisher, iUserService)
 	adminController := controller.NewAdminController(iAdminService, iUserService)
 	return adminController
 }

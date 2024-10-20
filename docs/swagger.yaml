@@ -87,7 +87,26 @@ definitions:
     - password
     - token
     type: object
-  capstone_group_dto.StudentCreateCapstoneGroupInput:
+  capstone_group_dto.CapstoneGroupOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      leader_id:
+        type: integer
+      major_id:
+        type: integer
+      name_group:
+        type: string
+      semester_id:
+        type: integer
+      topic:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  capstone_group_dto.CreateCapstoneGroupInput:
     properties:
       major_id:
         type: integer
@@ -104,6 +123,24 @@ definitions:
     - name_group
     - semester_id
     - student_ids
+    type: object
+  capstone_group_dto.GetCapstoneGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+      message:
+        type: boolean
+    type: object
+  capstone_group_dto.ListCapstoneGroupOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
     type: object
   dto.MetaPagination:
     properties:
@@ -407,14 +444,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Student create capstone group
+      description: Admin Create Student Account
       parameters:
       - description: data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/capstone_group_dto.StudentCreateCapstoneGroupInput'
+          $ref: '#/definitions/admin_dto.AdminCreateStudentAccountInput'
       produces:
       - application/json
       responses:
@@ -428,9 +465,9 @@ paths:
             $ref: '#/definitions/response.ResponseErr'
       security:
       - ApiKeyAuth: []
-      summary: StudentCreateCapstoneGroup
+      summary: CreateStudentAccount
       tags:
-      - Capstone Group
+      - Admin
   /admin/students/import-data:
     post:
       consumes:
@@ -581,6 +618,90 @@ paths:
       summary: GetUser
       tags:
       - Admin
+  /capstone-groups:
+    get:
+      consumes:
+      - application/json
+      description: Get list capstone group
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.ListCapstoneGroupOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListCapstoneGroups
+      tags:
+      - Capstone Group
+    post:
+      consumes:
+      - application/json
+      description: Create capstone group
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.CreateCapstoneGroupInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateCapstoneGroup
+      tags:
+      - Capstone Group
+  /capstone-groups/{id}:
+    get:
+      description: Get capstone group
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.GetCapstoneGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCapstoneGroup
+      tags:
+      - Capstone Group
   /forgot-password:
     post:
       consumes:
@@ -1147,6 +1268,49 @@ paths:
       summary: GenerateUploadPresignUrl
       tags:
       - Upload
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get list user
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - collectionFormat: multi
+        description: UserTypes
+        in: query
+        items:
+          type: string
+        name: user_types
+        type: array
+      - description: Email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin_dto.ListUsersOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListUsers
+      tags:
+      - User
   /users/me:
     get:
       description: Get Me
