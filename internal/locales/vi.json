@@ -17,5 +17,12 @@
   "NotAllowEmptyDataInFile": "File truyền lên cần phải có dữ liệu để xử lý.",
   "OtherSessionImportStudentInProcess": "Quá trình nhập dữ liệu sinh viên đang được thực hiện trong một phiên làm việc khác, vui lòng đợi đến khi phiên đó kết thúc.",
   "OtherSessionImportTeacherInProcess": "Quá trình nhập dữ liệu giáo viên đang được thực hiện trong một phiên làm việc khác, vui lòng đợi đến khi phiên đó kết thúc.",
-  "TopicReferenceNotFound": "Không tìm thấy Đề tài tham khảo."
+  "TopicReferenceNotFound": "Không tìm thấy Đề tài tham khảo.",
+  "InvalidTotalMemberInGroup": "Tổng số sinh viên trong nhóm không hợp lệ.",
+  "SemesterNotFound": "Không tìm thấy học kỳ.",
+  "SemesterOverlap": "Thời gian học kỳ bị trùng lặp với học kỳ khác.",
+  "CreateSemesterSuccess": "Tạo học kỳ thành công",
+  "UpdateSemesterSuccess": "Cập nhật thông tin học kỳ thành công.",
+  "DeleteSemesterSuccess": "Xoá học kỳ thành công.",
+  "CreateCapstoneGroupSuccess": "Tạo nhóm bảo vệ luận án thành công."
 }

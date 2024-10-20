@@ -17,5 +17,12 @@
   "NotAllowEmptyDataInFile": "Not allow empty data in file.",
   "OtherSessionImportStudentInProcess": "Other session import students in process.",
   "OtherSessionImportTeacherInProcess": "Other session import teachers in process.",
-  "TopicReferenceNotFound": "Topic reference not found."
+  "TopicReferenceNotFound": "Topic reference not found.",
+  "InvalidTotalMemberInGroup": "Invalid total member in group.",
+  "SemesterNotFound": "Semester not found.",
+  "SemesterOverlap": "Semester overlap.",
+  "CreateSemesterSuccess": "Create semester success.",
+  "UpdateSemesterSuccess": "Update semester success.",
+  "DeleteSemesterSuccess": "Delete semester success.",
+  "CreateCapstoneGroupSuccess": "Create capstone group success."
 }

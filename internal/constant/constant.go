@@ -7,6 +7,8 @@ const (
 	DefaultPasswordLength               int64 = 8
 	DefaultResetPasswordTokenLength     int64 = 8
 	DefaultResetPasswordTokenExpiration int64 = 3600 // 1 hour
+	MinTotalMemberInGroup                     = 4
+	MaxTotalMemberInGroup                     = 5
 )
 
 type MessageI18n struct {
@@ -29,6 +31,13 @@ type MessageI18n struct {
 	OtherSessionImportStudentInProcess       string
 	OtherSessionImportTeacherInProcess       string
 	TopicReferenceNotFound                   string
+	InvalidTotalMemberInGroup                string
+	SemesterNotFound                         string
+	SemesterOverlap                          string
+	CreateSemesterSuccess                    string
+	UpdateSemesterSuccess                    string
+	DeleteSemesterSuccess                    string
+	CreateCapstoneGroupSuccess               string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -51,6 +60,13 @@ var MessageI18nId MessageI18n = MessageI18n{
 	OtherSessionImportStudentInProcess:       "OtherSessionImportStudentInProcess",
 	OtherSessionImportTeacherInProcess:       "OtherSessionImportTeacherInProcess",
 	TopicReferenceNotFound:                   "TopicReferenceNotFound",
+	InvalidTotalMemberInGroup:                "InvalidTotalMemberInGroup",
+	SemesterNotFound:                         "SemesterNotFound",
+	SemesterOverlap:                          "SemesterOverlap",
+	CreateSemesterSuccess:                    "CreateSemesterSuccess",
+	UpdateSemesterSuccess:                    "UpdateSemesterSuccess",
+	DeleteSemesterSuccess:                    "DeleteSemesterSuccess",
+	CreateCapstoneGroupSuccess:               "CreateCapstoneGroupSuccess",
 }
 
 type RedisKeyType struct {

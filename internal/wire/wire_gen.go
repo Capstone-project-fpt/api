@@ -32,8 +32,8 @@ func InitializeAuthController() *controller.AuthController {
 
 func InitializeAdminController() *controller.AdminController {
 	iBasePublisher := queue.NewEmailNewAccountsPublisher()
-	iAdminService := service2.NewAdminService(iBasePublisher)
 	iUserService := service.NewUserService()
+	iAdminService := service2.NewAdminService(iBasePublisher, iUserService)
 	adminController := controller.NewAdminController(iAdminService, iUserService)
 	return adminController
 }
@@ -61,4 +61,16 @@ func InitializeUploadController() *controller.UploadController {
 	iUploadService := service.NewUploadService(awsS3Service)
 	uploadController := controller.NewUploadController(iUploadService)
 	return uploadController
+}
+
+func InitializeSemesterController() *controller.SemesterController {
+	iSemesterService := service.NewSemesterService()
+	semesterController := controller.NewSemesterController(iSemesterService)
+	return semesterController
+}
+
+func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
+	iCapstoneGroupService := service.NewCapstoneGroupService()
+	capstoneGroupController := controller.NewCapstoneGroupController(iCapstoneGroupService)
+	return capstoneGroupController
 }

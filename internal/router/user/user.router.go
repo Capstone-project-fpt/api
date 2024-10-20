@@ -14,6 +14,7 @@ func (ur *UserRouter) InitUserRouter(r *gin.RouterGroup) {
 	userRouter := r.Group("/users")
 	userRouter.Use(middleware.AuthMiddleware())
 	{
+		userRouter.GET("/", userController.GetListUsers)
 		userRouter.GET("/me", userController.GetMe)
 	}
 }
