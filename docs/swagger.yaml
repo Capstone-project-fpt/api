@@ -87,6 +87,24 @@ definitions:
     - password
     - token
     type: object
+  capstone_group_dto.StudentCreateCapstoneGroupInput:
+    properties:
+      major_id:
+        type: integer
+      name_group:
+        type: string
+      semester_id:
+        type: integer
+      student_ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - major_id
+    - name_group
+    - semester_id
+    - student_ids
+    type: object
   dto.MetaPagination:
     properties:
       current_page:
@@ -389,14 +407,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Admin Create Student Account
+      description: Student create capstone group
       parameters:
       - description: data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/admin_dto.AdminCreateStudentAccountInput'
+          $ref: '#/definitions/capstone_group_dto.StudentCreateCapstoneGroupInput'
       produces:
       - application/json
       responses:
@@ -410,9 +428,9 @@ paths:
             $ref: '#/definitions/response.ResponseErr'
       security:
       - ApiKeyAuth: []
-      summary: CreateStudentAccount
+      summary: StudentCreateCapstoneGroup
       tags:
-      - Admin
+      - Capstone Group
   /admin/students/import-data:
     post:
       consumes:
@@ -766,59 +784,6 @@ paths:
       summary: GetListSemesters
       tags:
       - Semester
-  /semesters/{id}:
-    get:
-      description: Get Semester
-      parameters:
-      - description: id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: GetSemester
-      tags:
-      - Semester
-  /semesters/{id}/admin:
-    delete:
-      consumes:
-      - application/json
-      description: Admin Delete Semester
-      parameters:
-      - description: id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.ResponseDataSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: AdminDeleteSemester
-      tags:
-      - Semester
-  /semesters/admin:
     post:
       consumes:
       - application/json
@@ -871,6 +836,57 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: AdminUpdateSemester
+      tags:
+      - Semester
+  /semesters/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Admin Delete Semester
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminDeleteSemester
+      tags:
+      - Semester
+    get:
+      description: Get Semester
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetSemester
       tags:
       - Semester
   /sub-majors:

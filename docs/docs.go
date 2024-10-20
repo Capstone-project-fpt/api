@@ -24,7 +24,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Admin Create Student Account",
+                "description": "Student create capstone group",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,9 +32,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Admin"
+                    "Capstone Group"
                 ],
-                "summary": "CreateStudentAccount",
+                "summary": "StudentCreateCapstoneGroup",
                 "parameters": [
                     {
                         "description": "data",
@@ -42,7 +42,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/admin_dto.AdminCreateStudentAccountInput"
+                            "$ref": "#/definitions/capstone_group_dto.StudentCreateCapstoneGroupInput"
                         }
                     }
                 ],
@@ -612,9 +612,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/semesters/admin": {
+            },
             "put": {
                 "security": [
                     {
@@ -740,9 +738,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/semesters/{id}/admin": {
+            },
             "delete": {
                 "security": [
                     {
@@ -1353,6 +1349,32 @@ const docTemplate = `{
                 },
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.StudentCreateCapstoneGroupInput": {
+            "type": "object",
+            "required": [
+                "major_id",
+                "name_group",
+                "semester_id",
+                "student_ids"
+            ],
+            "properties": {
+                "major_id": {
+                    "type": "integer"
+                },
+                "name_group": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "student_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

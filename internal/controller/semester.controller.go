@@ -85,7 +85,7 @@ func (sc *SemesterController) GetSemester(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body semester_dto.CreateSemesterInput true "data"
-// @Router /semesters/admin [post]
+// @Router /semesters [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -116,7 +116,7 @@ func (sc *SemesterController) AdminCreateSemester(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body semester_dto.UpdateSemesterInput true "data"
-// @Router /semesters/admin [put]
+// @Router /semesters [put]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -147,7 +147,7 @@ func (sc *SemesterController) AdminUpdateSemester(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "id"
-// @Router /semesters/{id}/admin [delete]
+// @Router /semesters/{id} [delete]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth

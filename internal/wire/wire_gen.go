@@ -68,3 +68,9 @@ func InitializeSemesterController() *controller.SemesterController {
 	semesterController := controller.NewSemesterController(iSemesterService)
 	return semesterController
 }
+
+func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
+	iCapstoneGroupService := service.NewCapstoneGroupService()
+	capstoneGroupController := controller.NewCapstoneGroupController(iCapstoneGroupService)
+	return capstoneGroupController
+}

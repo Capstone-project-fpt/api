@@ -23,5 +23,6 @@
   "SemesterOverlap": "Thời gian học kỳ bị trùng lặp với học kỳ khác.",
   "CreateSemesterSuccess": "Tạo học kỳ thành công",
   "UpdateSemesterSuccess": "Cập nhật thông tin học kỳ thành công.",
-  "DeleteSemesterSuccess": "Xoá học kỳ thành công."
+  "DeleteSemesterSuccess": "Xoá học kỳ thành công.",
+  "CreateCapstoneGroupSuccess": "Tạo nhóm bảo vệ luận án thành công."
 }

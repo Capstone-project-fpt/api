@@ -87,3 +87,12 @@ func InitializeSemesterController() *controller.SemesterController {
 
 	return &controller.SemesterController{}
 }
+
+func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
+	wire.Build(
+		service.NewCapstoneGroupService,
+		controller.NewCapstoneGroupController,
+	)
+
+	return &controller.CapstoneGroupController{}
+}

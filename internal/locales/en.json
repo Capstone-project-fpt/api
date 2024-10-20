@@ -23,5 +23,6 @@
   "SemesterOverlap": "Semester overlap.",
   "CreateSemesterSuccess": "Create semester success.",
   "UpdateSemesterSuccess": "Update semester success.",
-  "DeleteSemesterSuccess": "Delete semester success."
+  "DeleteSemesterSuccess": "Delete semester success.",
+  "CreateCapstoneGroupSuccess": "Create capstone group success."
 }

@@ -1,6 +1,7 @@
 package semester
 
 import (
+	"github.com/api/internal/constant"
 	"github.com/api/internal/middleware"
 	"github.com/api/internal/wire"
 	"github.com/gin-gonic/gin"
@@ -20,10 +21,10 @@ func (ur *SemesterRouter) InitSemesterRouter(r *gin.RouterGroup) {
 		semesterCommonRouter.GET("/:id", semesterController.GetSemester)
 	}
 
-	semesterAdminRouter := semesterRouter.Group("/admin")
+	semesterAdminRouter := semesterRouter.Group("")
 	{
-		semesterAdminRouter.POST("/", semesterController.AdminCreateSemester)
-		semesterAdminRouter.PUT("/", semesterController.AdminUpdateSemester)
-		semesterRouter.DELETE("/:id/admin", semesterController.AdminDeleteSemester)
+		semesterAdminRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Admin), semesterController.AdminCreateSemester)
+		semesterAdminRouter.PUT("/", middleware.UserTypeMiddleware(constant.UserType.Admin), semesterController.AdminUpdateSemester)
+		semesterRouter.DELETE("/:id", middleware.UserTypeMiddleware(constant.UserType.Admin), semesterController.AdminDeleteSemester)
 	}
 }
