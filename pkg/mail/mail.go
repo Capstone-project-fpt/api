@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	newAccountTemplate    = "new-account.html"
-	resetPasswordTemplate = "reset-password.html"
+	newAccountTemplate                  = "new-account.html"
+	resetPasswordTemplate               = "reset-password.html"
+	inviteMentorToCapstoneGroupTemplate = "invite-mentor-to-capstone-group.html"
 )
 
 type Mail struct {
@@ -21,6 +22,14 @@ type Mail struct {
 	To      []string
 	Subject string
 	Body    string
+}
+
+type MailInviteMentorToCapstoneGroupTemplateData struct {
+	MentorID          int
+	MentorEmail       string
+	CapstoneGroupID   int
+	CapstoneGroupName string
+	Token             string
 }
 
 type MailNewAccountTemplateData struct {
@@ -32,6 +41,19 @@ type MailNewAccountTemplateData struct {
 type MailResetPasswordTemplateData struct {
 	Name      string
 	ResetLink string
+}
+
+func SendEmailInviteMentorToCapstoneGroup(to string, dataTemplate MailInviteMentorToCapstoneGroupTemplateData) error {
+	htmlBody, err := getEmailTemplate(inviteMentorToCapstoneGroupTemplate, dataTemplate)
+	if err != nil {
+		return err
+	}
+
+	if global.Config.Server.Mode == "dev" {
+		fmt.Println("Data invite mentor to capstone group", dataTemplate)
+	}
+
+	return Send([]string{to}, global.Config.Smtp.Sender, "Invite mentor to capstone group", htmlBody)
 }
 
 func SendNewAccountEmail(to string, dataTemplate MailNewAccountTemplateData) error {

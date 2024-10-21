@@ -20,6 +20,7 @@ func InitWorker() error {
 	mux := asynq.NewServeMux()
 
 	mux.HandleFunc(constant.SystemQueueTask.SendEmailCreateAccounts, task.HandleTaskEmailNewAccount)
+	mux.HandleFunc(constant.SystemQueueTask.SendEmailInviteMentorToCapstoneGroup, task.HandleTaskEmailInviteMentorToCapstoneGroup)
 
 	return srv.Run(mux)
 }

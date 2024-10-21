@@ -14,6 +14,22 @@ type CreateCapstoneGroupInput struct {
 	MajorID    int64   `json:"major_id" binding:"required"`
 }
 
+type UpdateCapstoneGroupInput struct {
+	ID        int64  `json:"id" binding:"required"`
+	NameGroup string `json:"name_group" binding:"required"`
+}
+
+type InviteMentorToCapstoneGroupInput struct {
+	TeacherID       int64 `json:"teacher_id" binding:"required"`
+	SemesterID      int64 `json:"semester_id" binding:"required"`
+	CapstoneGroupID int64 `swaggerignore:"true"`
+}
+
+type AcceptInviteMentorToCapstoneGroupInput struct {
+	Token           string `json:"token" binding:"required"`
+	CapstoneGroupID int64  `swaggerignore:"true"`
+}
+
 type GetListCapstoneGroupInput struct {
 	Limit  int `form:"limit" binding:"required" example:"10"`
 	Page   int `form:"page" binding:"required" example:"1"`

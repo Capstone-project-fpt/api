@@ -19,6 +19,11 @@ type ResetPassJwtInput struct {
 	Email  string
 }
 
+type InviteMentorJwtInput struct {
+	TeacherID       int64
+	CapstoneGroupID int64
+}
+
 var jwtConfig = global.Config.Jwt
 
 func GenerateAccessToken(payload JwtInput) (string, error) {
@@ -73,6 +78,48 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 	return token, nil
 }
 
+func GenerateInviteMentorToken(payload InviteMentorJwtInput) (string, error) {
+	secretKey := []byte(jwtConfig.Secret)
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": payload,
+		"iss": global.Config.Server.Name,
+		"iat": time.Now().Unix(),
+		"exp": time.Now().Add(time.Duration(constant.DefaultInviteMentorTokenLength) * time.Second).UnixMilli(),
+	})
+
+	token, err := claims.SignedString(secretKey)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func VerifyInviteMentorToken(tokenString string) (*InviteMentorJwtInput, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtConfig.Secret), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.TokenInvalid,
+		})
+
+		return nil, errors.New(message)
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+	var payload InviteMentorJwtInput
+	payload.TeacherID = int64(claims["sub"].(map[string]interface{})["TeacherID"].(float64))
+	payload.CapstoneGroupID = int64(claims["sub"].(map[string]interface{})["CapstoneGroupID"].(float64))
+
+	return &payload, nil
+}
+
 func VerifyTokenResetPassword(tokenString string) (*ResetPassJwtInput, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtConfig.Secret), nil
@@ -81,15 +128,15 @@ func VerifyTokenResetPassword(tokenString string) (*ResetPassJwtInput, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if !token.Valid {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.TokenInvalid,
 		})
-		
+
 		return nil, errors.New(message)
 	}
-	
+
 	claims := token.Claims.(jwt.MapClaims)
 	var payload ResetPassJwtInput
 	payload.Email = claims["sub"].(map[string]interface{})["Email"].(string)

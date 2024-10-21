@@ -70,7 +70,8 @@ func InitializeSemesterController() *controller.SemesterController {
 }
 
 func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
-	iCapstoneGroupService := service.NewCapstoneGroupService()
+	iBasePublisher := queue.NewEmailInviteMentorToCapstoneGroupPublisher()
+	iCapstoneGroupService := service.NewCapstoneGroupService(iBasePublisher)
 	capstoneGroupController := controller.NewCapstoneGroupController(iCapstoneGroupService)
 	return capstoneGroupController
 }
