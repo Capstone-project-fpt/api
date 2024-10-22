@@ -179,3 +179,15 @@ var SystemQueueTask systemQueueTaskType = systemQueueTaskType{
 	SendEmailCreateAccounts:              "SystemTask:SendEmailCreateAccounts",
 	SendEmailInviteMentorToCapstoneGroup: "SystemTask:SendEmailInviteMentorToCapstoneGroup",
 }
+
+type topicStatusReviewType struct {
+	Reviewing string
+	Approved  string
+	Rejected  string
+}
+
+var TopicStatusReview topicStatusReviewType = topicStatusReviewType{
+	Reviewing: "reviewing",
+	Approved:  "approved",
+	Rejected:  "rejected",
+}
