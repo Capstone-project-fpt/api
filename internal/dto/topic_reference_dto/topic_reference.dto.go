@@ -36,18 +36,20 @@ type AdminCreateTopicReferenceInput struct {
 }
 
 type TopicReferenceOutput struct {
-	ID      int                    `json:"id"`
-	Name    string                 `json:"name"`
-	Path    string                 `json:"path"`
-	Teacher user_dto.TeacherOutput `json:"teacher"`
+	ID           int                    `json:"id"`
+	Name         string                 `json:"name"`
+	Path         string                 `json:"path"`
+	StatusReview string                 `json:"status_review"`
+	Teacher      user_dto.TeacherOutput `json:"teacher"`
 }
 
 func ToTopicReferenceOutput(topicReference *model.TopicReferences) TopicReferenceOutput {
 	return TopicReferenceOutput{
-		ID:      int(topicReference.ID),
-		Name:    topicReference.Name,
-		Path:    topicReference.Path,
-		Teacher: user_dto.ToTeacherOutput(&topicReference.Teacher),
+		ID:           int(topicReference.ID),
+		Name:         topicReference.Name,
+		Path:         topicReference.Path,
+		StatusReview: topicReference.StatusReview,
+		Teacher:      user_dto.ToTeacherOutput(&topicReference.Teacher),
 	}
 }
 

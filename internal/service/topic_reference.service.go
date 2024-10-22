@@ -188,6 +188,7 @@ func (tr *topicReferenceService) CreateTopicReference(ctx *gin.Context, input Cr
 		Name:      input.Name,
 		Path:      input.Path,
 		TeacherID: input.TeacherID,
+		StatusReview: constant.TopicStatusReview.Approved, // TODO: Handle feature review topic upload by teacher and staff
 	}
 
 	err := global.Db.Create(&topicReference).Error
