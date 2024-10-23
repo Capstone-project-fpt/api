@@ -39,10 +39,11 @@ type GetListCapstoneGroupInput struct {
 type CapstoneGroupOutput struct {
 	ID         int64     `json:"id"`
 	NameGroup  string    `json:"name_group"`
-	TopicID    int64    `json:"topic_id"`
+	TopicID    int64     `json:"topic_id"`
 	MajorID    int64     `json:"major_id"`
 	SemesterID int64     `json:"semester_id"`
 	LeaderID   int64     `json:"leader_id"`
+	Status     string    `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
@@ -55,6 +56,7 @@ func ToCapstoneGroupOutput(capstoneGroup *model.CapstoneGroup) CapstoneGroupOutp
 		MajorID:    capstoneGroup.MajorID,
 		SemesterID: capstoneGroup.SemesterID,
 		LeaderID:   capstoneGroup.LeaderID,
+		Status:     capstoneGroup.Status,
 		CreatedAt:  capstoneGroup.CreatedAt,
 		UpdatedAt:  capstoneGroup.UpdatedAt,
 	}

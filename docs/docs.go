@@ -435,7 +435,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/capstone-groups/{id}": {
+        "/capstone-groups/{capstone_group_id}": {
             "get": {
                 "security": [
                     {
@@ -475,7 +475,215 @@ const docTemplate = `{
                 }
             }
         },
-        "/capstone-groups/{id}/mentors": {
+        "/capstone-groups/{capstone_group_id}/capstone-group-topics": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list capstone group topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetListCapstoneGroupTopic",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order by",
+                        "name": "order_by",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_topic_dto.ListCapstoneGroupTopicsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create capstone group topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "CreateCapstoneGroupTopic",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_topic_dto.CreateCapstoneGroupTopicInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/capstone-group-topics/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get capstone group topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetCapstoneGroupTopic",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_topic_dto.GetCapstoneTopicGroupSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update capstone group topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "UpdateCapstoneGroupTopic",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_topic_dto.CreateCapstoneGroupTopicInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete capstone group topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "DeleteCapstoneGroupTopic",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/mentors": {
             "post": {
                 "security": [
                     {
@@ -520,7 +728,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/capstone-groups/{id}/mentors/invitation": {
+        "/capstone-groups/{capstone_group_id}/mentors/invitation": {
             "post": {
                 "security": [
                     {
@@ -1716,8 +1924,11 @@ const docTemplate = `{
                 "semester_id": {
                     "type": "integer"
                 },
-                "topic": {
+                "status": {
                     "type": "string"
+                },
+                "topic_id": {
+                    "type": "integer"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1805,6 +2016,89 @@ const docTemplate = `{
                 },
                 "name_group": {
                     "type": "string"
+                }
+            }
+        },
+        "capstone_group_topic_dto.CapstoneGroupTopicOutput": {
+            "type": "object",
+            "properties": {
+                "approved_at": {
+                    "type": "string"
+                },
+                "approved_by": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
+                },
+                "approved_by_id": {
+                    "type": "integer"
+                },
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "document_path": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rejected_at": {
+                    "type": "string"
+                },
+                "rejected_by": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
+                },
+                "rejected_by_id": {
+                    "type": "integer"
+                },
+                "status_review": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "capstone_group_topic_dto.CreateCapstoneGroupTopicInput": {
+            "type": "object",
+            "properties": {
+                "document_path": {
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "capstone_group_topic_dto.GetCapstoneTopicGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/capstone_group_topic_dto.CapstoneGroupTopicOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "capstone_group_topic_dto.ListCapstoneGroupTopicsOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_topic_dto.CapstoneGroupTopicOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
                 }
             }
         },
@@ -2112,6 +2406,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
+                    "type": "string"
+                },
+                "status_review": {
                     "type": "string"
                 },
                 "teacher": {

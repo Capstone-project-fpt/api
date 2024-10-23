@@ -108,8 +108,10 @@ definitions:
         type: string
       semester_id:
         type: integer
-      topic:
+      status:
         type: string
+      topic_id:
+        type: integer
       updated_at:
         type: string
     type: object
@@ -168,6 +170,60 @@ definitions:
     required:
     - id
     - name_group
+    type: object
+  capstone_group_topic_dto.CapstoneGroupTopicOutput:
+    properties:
+      approved_at:
+        type: string
+      approved_by:
+        $ref: '#/definitions/user_dto.TeacherOutput'
+      approved_by_id:
+        type: integer
+      capstone_group_id:
+        type: integer
+      created_at:
+        type: string
+      document_path:
+        type: string
+      id:
+        type: integer
+      rejected_at:
+        type: string
+      rejected_by:
+        $ref: '#/definitions/user_dto.TeacherOutput'
+      rejected_by_id:
+        type: integer
+      status_review:
+        type: string
+      topic:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  capstone_group_topic_dto.CreateCapstoneGroupTopicInput:
+    properties:
+      document_path:
+        type: string
+      topic:
+        type: string
+    type: object
+  capstone_group_topic_dto.GetCapstoneTopicGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/capstone_group_topic_dto.CapstoneGroupTopicOutput'
+      message:
+        type: boolean
+    type: object
+  capstone_group_topic_dto.ListCapstoneGroupTopicsOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/capstone_group_topic_dto.CapstoneGroupTopicOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
     type: object
   dto.MetaPagination:
     properties:
@@ -371,6 +427,8 @@ definitions:
       name:
         type: string
       path:
+        type: string
+      status_review:
         type: string
       teacher:
         $ref: '#/definitions/user_dto.TeacherOutput'
@@ -731,7 +789,7 @@ paths:
       summary: UpdateCapstoneGroup
       tags:
       - Capstone Group
-  /capstone-groups/{id}:
+  /capstone-groups/{capstone_group_id}:
     get:
       description: Get capstone group
       parameters:
@@ -756,7 +814,138 @@ paths:
       summary: GetCapstoneGroup
       tags:
       - Capstone Group
-  /capstone-groups/{id}/mentors:
+  /capstone-groups/{capstone_group_id}/capstone-group-topics:
+    get:
+      consumes:
+      - application/json
+      description: Get list capstone group topic
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Order by
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_topic_dto.ListCapstoneGroupTopicsOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListCapstoneGroupTopic
+      tags:
+      - Capstone Group
+    post:
+      consumes:
+      - application/json
+      description: Create capstone group topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_topic_dto.CreateCapstoneGroupTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-topics/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete capstone group topic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteCapstoneGroupTopic
+      tags:
+      - Capstone Group
+    get:
+      consumes:
+      - application/json
+      description: Get capstone group topic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_topic_dto.GetCapstoneTopicGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCapstoneGroupTopic
+      tags:
+      - Capstone Group
+    put:
+      consumes:
+      - application/json
+      description: Update capstone group topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_topic_dto.CreateCapstoneGroupTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/mentors:
     post:
       consumes:
       - application/json
@@ -784,7 +973,7 @@ paths:
       summary: InviteMentorToCapstoneGroup
       tags:
       - Capstone Group
-  /capstone-groups/{id}/mentors/invitation:
+  /capstone-groups/{capstone_group_id}/mentors/invitation:
     post:
       consumes:
       - application/json
