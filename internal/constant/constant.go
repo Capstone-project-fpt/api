@@ -191,3 +191,13 @@ var TopicStatusReview topicStatusReviewType = topicStatusReviewType{
 	Approved:  "approved",
 	Rejected:  "rejected",
 }
+
+type capstoneGroupStatusType struct {
+	ReviewingTopic string
+	InProgress     string
+}
+
+var CapstoneGroupStatus capstoneGroupStatusType = capstoneGroupStatusType{
+	ReviewingTopic: "reviewing_topic",
+	InProgress:     "in_progress",
+}
