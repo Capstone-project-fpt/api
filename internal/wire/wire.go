@@ -4,6 +4,7 @@ package wire
 
 import (
 	"github.com/api/internal/controller"
+	capstone_group_controller "github.com/api/internal/controller/capstone_group"
 	"github.com/api/internal/queue"
 	"github.com/api/internal/service"
 	admin_service "github.com/api/internal/service/admin"
@@ -88,12 +89,13 @@ func InitializeSemesterController() *controller.SemesterController {
 	return &controller.SemesterController{}
 }
 
-func InitializeCapstoneGroupController() *controller.CapstoneGroupController {
+func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGroupController {
 	wire.Build(
 		queue.NewEmailInviteMentorToCapstoneGroupPublisher,
 		service.NewCapstoneGroupService,
-		controller.NewCapstoneGroupController,
+		service.NewCapstoneGroupTopicService,
+		capstone_group_controller.NewCapstoneGroupController,
 	)
 
-	return &controller.CapstoneGroupController{}
+	return &capstone_group_controller.CapstoneGroupController{}
 }

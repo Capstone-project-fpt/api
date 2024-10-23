@@ -47,6 +47,11 @@ type MessageI18n struct {
 	SendInviteToMentorSuccess                string
 	CapstoneGroupAlreadyMentor               string
 	AcceptInviteMentorToCapstoneGroupSuccess string
+	CapstoneGroupInProgress                  string
+	CreateCapstoneGroupTopicSuccess          string
+	UpdateCapstoneGroupTopicSuccess          string
+	DeleteCapstoneGroupTopicSuccess          string
+	CapstoneGroupTopicNotFound               string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -82,6 +87,11 @@ var MessageI18nId MessageI18n = MessageI18n{
 	SendInviteToMentorSuccess:                "SendInviteToMentorSuccess",
 	CapstoneGroupAlreadyMentor:               "CapstoneGroupAlreadyMentor",
 	AcceptInviteMentorToCapstoneGroupSuccess: "AcceptInviteMentorToCapstoneGroupSuccess",
+	CapstoneGroupInProgress:                  "CapstoneGroupInProgress",
+	CreateCapstoneGroupTopicSuccess:          "CreateCapstoneGroupTopicSuccess",
+	UpdateCapstoneGroupTopicSuccess:          "UpdateCapstoneGroupTopicSuccess",
+	DeleteCapstoneGroupTopicSuccess:          "DeleteCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicNotFound:               "CapstoneGroupTopicNotFound",
 }
 
 type RedisKeyType struct {
@@ -190,4 +200,14 @@ var TopicStatusReview topicStatusReviewType = topicStatusReviewType{
 	Reviewing: "reviewing",
 	Approved:  "approved",
 	Rejected:  "rejected",
+}
+
+type capstoneGroupStatusType struct {
+	ReviewingTopic string
+	InProgress     string
+}
+
+var CapstoneGroupStatus capstoneGroupStatusType = capstoneGroupStatusType{
+	ReviewingTopic: "reviewing_topic",
+	InProgress:     "in_progress",
 }

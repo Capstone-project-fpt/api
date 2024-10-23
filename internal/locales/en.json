@@ -30,5 +30,10 @@
   "MaxTotalCapstoneGroupTeacherMentor": "Max total capstone group teacher mentor.",
   "SendInviteToMentorSuccess": "Send invite to mentor success.",
   "CapstoneGroupAlreadyMentor": "Capstone group already mentor.",
-  "AcceptInviteMentorToCapstoneGroupSuccess": "Accept invite mentor to capstone group success."
+  "AcceptInviteMentorToCapstoneGroupSuccess": "Accept invite mentor to capstone group success.",
+  "CapstoneGroupInProgress": "Capstone group in progress.",
+  "CreateCapstoneGroupTopicSuccess": "Create capstone group topic success.",
+  "UpdateCapstoneGroupTopicSuccess": "Update capstone group topic success.",
+  "DeleteCapstoneGroupTopicSuccess": "Delete capstone group topic success.",
+  "CapstoneGroupTopicNotFound": "Capstone group topic not found."
 }
