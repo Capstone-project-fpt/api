@@ -40,5 +40,5 @@ func Run() {
 	global.S3Client = s3.New(global.AwsSession)
 	global.Validator = validator.New(validator.WithRequiredStructEnabled())
 
-	r.Run("127.0.0.1" + serverAddr)
+	r.Run("localhost" + serverAddr)
 }
