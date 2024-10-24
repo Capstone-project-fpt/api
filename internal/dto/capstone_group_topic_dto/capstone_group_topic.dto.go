@@ -21,12 +21,39 @@ type UpdateCapstoneGroupTopicInput struct {
 	CapstoneGroupTopicID int64  `swaggerignore:"true"`
 }
 
+type ReviewCapstoneGroupTopicInput struct {
+	StatusReview         string `json:"status_review" validate:"required,oneof=approved rejected"`
+	CapstoneGroupID      int64  `swaggerignore:"true"`
+	CapstoneGroupTopicID int64  `swaggerignore:"true"`
+}
+
+type FeedbackCapstoneGroupTopicInput struct {
+	Feedback             string `json:"feedback" validate:"required"`
+	CapstoneGroupID      int64  `swaggerignore:"true"`
+	CapstoneGroupTopicID int64  `swaggerignore:"true"`
+}
+
+type UpdateFeedbackCapstoneGroupTopicInput struct {
+	Feedback             string `json:"feedback" validate:"required"`
+	FeedbackID           int64  `swaggerignore:"true"`
+	CapstoneGroupID      int64  `swaggerignore:"true"`
+	CapstoneGroupTopicID int64  `swaggerignore:"true"`
+}
+
 type GetListCapstoneGroupTopicInput struct {
 	Limit           int    `form:"limit" binding:"required" example:"10"`
 	Page            int    `form:"page" binding:"required" example:"1"`
 	OrderBy         string `form:"order_by" example:"ASC|DESC"`
 	Offset          int    `swaggerignore:"true"`
 	CapstoneGroupID int64  `swaggerignore:"true"`
+}
+
+type GetListCapstoneGroupTopicFeedbackInput struct {
+	Limit                int    `form:"limit" binding:"required" example:"10"`
+	Page                 int    `form:"page" binding:"required" example:"1"`
+	OrderBy              string `form:"order_by" example:"ASC|DESC"`
+	Offset               int    `swaggerignore:"true"`
+	CapstoneGroupTopicID int64  `swaggerignore:"true"`
 }
 
 type CapstoneGroupTopicOutput struct {
@@ -74,12 +101,47 @@ func ToCapstoneGroupTopicOutput(capstoneGroupTopic *model.CapstoneGroupTopic) Ca
 	}
 }
 
+type CapstoneGroupTopicFeedbackOutput struct {
+	ID                   int64                   `json:"id"`
+	Feedback             string                  `json:"feedback"`
+	ReviewerID           int64                   `json:"reviewer_id"`
+	Reviewer             *user_dto.TeacherOutput `json:"approved_by"`
+	CreatedAt            time.Time               `json:"created_at"`
+	UpdatedAt            time.Time               `json:"updated_at"`
+	CapstoneGroupTopicID int64                   `json:"capstone_group_topic_id"`
+}
+
+func ToCapstoneGroupTopicFeedbackOutput(capstoneGroupTopicFeedback *model.CapstoneGroupTopicFeedback) CapstoneGroupTopicFeedbackOutput {
+	reviewer := user_dto.ToTeacherOutput(&capstoneGroupTopicFeedback.Reviewer)
+
+	return CapstoneGroupTopicFeedbackOutput{
+		ID:                   capstoneGroupTopicFeedback.ID,
+		Feedback:             capstoneGroupTopicFeedback.Feedback,
+		ReviewerID:           capstoneGroupTopicFeedback.ReviewerID,
+		Reviewer:             &reviewer,
+		CreatedAt:            capstoneGroupTopicFeedback.CreatedAt,
+		UpdatedAt:            capstoneGroupTopicFeedback.UpdatedAt,
+		CapstoneGroupTopicID: capstoneGroupTopicFeedback.CapstoneGroupTopicID,
+	}
+}
+
 type ListCapstoneGroupTopicsOutput struct {
 	Meta  dto.MetaPagination         `json:"meta"`
 	Items []CapstoneGroupTopicOutput `json:"items"`
 }
 
+type ListCapstoneGroupTopicFeedbackOutput struct {
+	Meta  dto.MetaPagination                 `json:"meta"`
+	Items []CapstoneGroupTopicFeedbackOutput `json:"items"`
+}
+
 // This used for swagger
+type GetCapstoneGroupTopicFeedbackSwaggerOutput struct {
+	Code    int                               `json:"code"`
+	Success bool                              `json:"message"`
+	Data    *CapstoneGroupTopicFeedbackOutput `json:"data"`
+}
+
 type GetCapstoneTopicGroupSwaggerOutput struct {
 	Code    int                       `json:"code"`
 	Success bool                      `json:"message"`

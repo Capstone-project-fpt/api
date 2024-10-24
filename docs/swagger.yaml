@@ -171,6 +171,23 @@ definitions:
     - id
     - name_group
     type: object
+  capstone_group_topic_dto.CapstoneGroupTopicFeedbackOutput:
+    properties:
+      approved_by:
+        $ref: '#/definitions/user_dto.TeacherOutput'
+      capstone_group_topic_id:
+        type: integer
+      created_at:
+        type: string
+      feedback:
+        type: string
+      id:
+        type: integer
+      reviewer_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   capstone_group_topic_dto.CapstoneGroupTopicOutput:
     properties:
       approved_at:
@@ -207,6 +224,22 @@ definitions:
       topic:
         type: string
     type: object
+  capstone_group_topic_dto.FeedbackCapstoneGroupTopicInput:
+    properties:
+      feedback:
+        type: string
+    required:
+    - feedback
+    type: object
+  capstone_group_topic_dto.GetCapstoneGroupTopicFeedbackSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/capstone_group_topic_dto.CapstoneGroupTopicFeedbackOutput'
+      message:
+        type: boolean
+    type: object
   capstone_group_topic_dto.GetCapstoneTopicGroupSwaggerOutput:
     properties:
       code:
@@ -216,6 +249,15 @@ definitions:
       message:
         type: boolean
     type: object
+  capstone_group_topic_dto.ListCapstoneGroupTopicFeedbackOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/capstone_group_topic_dto.CapstoneGroupTopicFeedbackOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   capstone_group_topic_dto.ListCapstoneGroupTopicsOutput:
     properties:
       items:
@@ -224,6 +266,23 @@ definitions:
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  capstone_group_topic_dto.ReviewCapstoneGroupTopicInput:
+    properties:
+      status_review:
+        enum:
+        - approved
+        - rejected
+        type: string
+    required:
+    - status_review
+    type: object
+  capstone_group_topic_dto.UpdateFeedbackCapstoneGroupTopicInput:
+    properties:
+      feedback:
+        type: string
+    required:
+    - feedback
     type: object
   dto.MetaPagination:
     properties:
@@ -943,6 +1002,165 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UpdateCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-topics/{id}/feedbacks:
+    get:
+      consumes:
+      - application/json
+      description: Get list capstone group topic feedback
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Order by
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_topic_dto.ListCapstoneGroupTopicFeedbackOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListCapstoneGroupTopicFeedback
+      tags:
+      - Capstone Group
+    post:
+      consumes:
+      - application/json
+      description: Feedback capstone group topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_topic_dto.FeedbackCapstoneGroupTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: FeedbackCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-topics/{id}/feedbacks/{feedback_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete feedback capstone group topic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteFeedbackCapstoneGroupTopic
+      tags:
+      - Capstone Group
+    get:
+      consumes:
+      - application/json
+      description: Get capstone group topic feedback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_topic_dto.GetCapstoneGroupTopicFeedbackSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCapstoneGroupTopicFeedback
+      tags:
+      - Capstone Group
+    put:
+      consumes:
+      - application/json
+      description: Update feedback capstone group topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_topic_dto.UpdateFeedbackCapstoneGroupTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateFeedbackCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-topics/{id}/teacher-reviews:
+    put:
+      consumes:
+      - application/json
+      description: Review capstone group topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_topic_dto.ReviewCapstoneGroupTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: ReviewCapstoneGroupTopic
       tags:
       - Capstone Group
   /capstone-groups/{capstone_group_id}/mentors:

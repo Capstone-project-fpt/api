@@ -15,7 +15,7 @@ import (
 	"github.com/api/pkg/response"
 	util "github.com/api/pkg/utils"
 	file_util "github.com/api/pkg/utils/file"
-	"github.com/api/pkg/validator"
+	// "github.com/api/pkg/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
@@ -260,14 +260,14 @@ func validateCreateAccount(ctx *gin.Context, input admin_dto.AccountWithEmail) e
 		return err
 	}
 
-	if !validator.IsValidFptEmail(input.GetEmail()) {
-		message := localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidStudentEmailFPT,
-		})
+	// if !validator.IsValidFptEmail(input.GetEmail()) {
+	// 	message := localizer.MustLocalize(&i18n.LocalizeConfig{
+	// 		MessageID: constant.MessageI18nId.InvalidStudentEmailFPT,
+	// 	})
 
-		response.ErrorResponse(ctx, http.StatusBadRequest, message)
-		return errors.New(message)
-	}
+	// 	response.ErrorResponse(ctx, http.StatusBadRequest, message)
+	// 	return errors.New(message)
+	// }
 
 	return nil
 }

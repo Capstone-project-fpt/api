@@ -52,6 +52,12 @@ type MessageI18n struct {
 	UpdateCapstoneGroupTopicSuccess          string
 	DeleteCapstoneGroupTopicSuccess          string
 	CapstoneGroupTopicNotFound               string
+	ReviewCapstoneGroupTopicSuccess          string
+	CapstoneGroupTopicAlreadyReviewed        string
+	CapstoneGroupTopicFeedbackNotFound       string
+	FeedbackCapstoneGroupTopicSuccess        string
+	UpdateFeedbackCapstoneGroupTopicSuccess  string
+	DeleteFeedbackCapstoneGroupTopicSuccess  string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -92,6 +98,12 @@ var MessageI18nId MessageI18n = MessageI18n{
 	UpdateCapstoneGroupTopicSuccess:          "UpdateCapstoneGroupTopicSuccess",
 	DeleteCapstoneGroupTopicSuccess:          "DeleteCapstoneGroupTopicSuccess",
 	CapstoneGroupTopicNotFound:               "CapstoneGroupTopicNotFound",
+	ReviewCapstoneGroupTopicSuccess:          "ReviewCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicAlreadyReviewed:        "CapstoneGroupTopicAlreadyReviewed",
+	CapstoneGroupTopicFeedbackNotFound:       "CapstoneGroupTopicFeedbackNotFound",
+	FeedbackCapstoneGroupTopicSuccess:        "FeedbackCapstoneGroupTopicSuccess",
+	UpdateFeedbackCapstoneGroupTopicSuccess:  "UpdateFeedbackCapstoneGroupTopicSuccess",
+	DeleteFeedbackCapstoneGroupTopicSuccess:  "DeleteFeedbackCapstoneGroupTopicSuccess",
 }
 
 type RedisKeyType struct {
