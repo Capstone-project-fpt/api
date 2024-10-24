@@ -57,6 +57,32 @@ func (ac *AdminController) GetUser(ctx *gin.Context) {
 	response.SuccessResponse(ctx, http.StatusOK, outputGetUser)
 }
 
+// @Summary DeleteUser
+// @Description Delete a user by ID
+// @Tags Admin
+// @Produce json
+// @Param id path int true "id"
+// @Router /admin/users/{id} [delete]
+// @Failure 400 {object} response.ResponseErr
+// @Failure 404 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (ac *AdminController) DeleteUser(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	err = ac.userService.DeleteUser(ctx, id)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: "User deleted successfully"})
+}
+
 // @Summary GetListUsers
 // @Description Get list user
 // @Tags Admin
