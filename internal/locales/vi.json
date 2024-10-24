@@ -35,5 +35,11 @@
   "CreateCapstoneGroupTopicSuccess": "Tạo đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "UpdateCapstoneGroupTopicSuccess": "Cập nhật đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "DeleteCapstoneGroupTopicSuccess": "Xoá đề tài bảo vệ khoá luận tốt nghiệp thành công.",
-  "CapstoneGroupTopicNotFound": "Không tìm thấy đề tài bảo vệ khoá luận tốt nghiệp."
+  "CapstoneGroupTopicNotFound": "Không tìm thấy đề tài bảo vệ khoá luận tốt nghiệp.",
+  "ReviewCapstoneGroupTopicSuccess": "Thẩm định đề tài khoá luận tốt nghiệp cho nhóm thành công.",
+  "CapstoneGroupTopicAlreadyReviewed": "Đề tài bảo vệ khoá luận tốt nghiệp đã được thẩm định.",
+  "CapstoneGroupTopicFeedbackNotFound": "Không tìm thấy feedback đề tài bảo vệ khoá luận tốt nghiệp.",
+  "FeedbackCapstoneGroupTopicSuccess": "Feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "UpdateFeedbackCapstoneGroupTopicSuccess": "Cập nhật feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "DeleteFeedbackCapstoneGroupTopicSuccess": "Xoá feedback đề tài bảo vệ khoá luận tốt nghiệp thành công."
 }

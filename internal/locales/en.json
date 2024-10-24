@@ -35,5 +35,11 @@
   "CreateCapstoneGroupTopicSuccess": "Create capstone group topic success.",
   "UpdateCapstoneGroupTopicSuccess": "Update capstone group topic success.",
   "DeleteCapstoneGroupTopicSuccess": "Delete capstone group topic success.",
-  "CapstoneGroupTopicNotFound": "Capstone group topic not found."
+  "CapstoneGroupTopicNotFound": "Capstone group topic not found.",
+  "ReviewCapstoneGroupTopicSuccess": "Review capstone group topic success.",
+  "CapstoneGroupTopicAlreadyReviewed": "Capstone group topic already reviewed.",
+  "CapstoneGroupTopicFeedbackNotFound": "Capstone group topic feedback not found.",
+  "FeedbackCapstoneGroupTopicSuccess": "Feedback capstone group topic success.",
+  "UpdateFeedbackCapstoneGroupTopicSuccess": "Update feedback capstone group topic success.",
+  "DeleteFeedbackCapstoneGroupTopicSuccess": "Delete feedback capstone group topic success."
 }
