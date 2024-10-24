@@ -94,6 +94,7 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		MajorID:    input.MajorID,
 		SemesterID: input.SemesterID,
 		LeaderID:   currentStudent.ID,
+		Status:     constant.CapstoneGroupStatus.ReviewingTopic,
 	}
 
 	if err := global.Db.Model(model.CapstoneGroup{}).Create(&capstoneGroup).Error; err != nil {
@@ -264,7 +265,7 @@ func (cgs *capstoneGroupService) AcceptInviteMentorToCapstoneGroup(ctx *gin.Cont
 	}).Error; err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

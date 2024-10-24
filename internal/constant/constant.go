@@ -47,6 +47,17 @@ type MessageI18n struct {
 	SendInviteToMentorSuccess                string
 	CapstoneGroupAlreadyMentor               string
 	AcceptInviteMentorToCapstoneGroupSuccess string
+	CapstoneGroupInProgress                  string
+	CreateCapstoneGroupTopicSuccess          string
+	UpdateCapstoneGroupTopicSuccess          string
+	DeleteCapstoneGroupTopicSuccess          string
+	CapstoneGroupTopicNotFound               string
+	ReviewCapstoneGroupTopicSuccess          string
+	CapstoneGroupTopicAlreadyReviewed        string
+	CapstoneGroupTopicFeedbackNotFound       string
+	FeedbackCapstoneGroupTopicSuccess        string
+	UpdateFeedbackCapstoneGroupTopicSuccess  string
+	DeleteFeedbackCapstoneGroupTopicSuccess  string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -82,6 +93,17 @@ var MessageI18nId MessageI18n = MessageI18n{
 	SendInviteToMentorSuccess:                "SendInviteToMentorSuccess",
 	CapstoneGroupAlreadyMentor:               "CapstoneGroupAlreadyMentor",
 	AcceptInviteMentorToCapstoneGroupSuccess: "AcceptInviteMentorToCapstoneGroupSuccess",
+	CapstoneGroupInProgress:                  "CapstoneGroupInProgress",
+	CreateCapstoneGroupTopicSuccess:          "CreateCapstoneGroupTopicSuccess",
+	UpdateCapstoneGroupTopicSuccess:          "UpdateCapstoneGroupTopicSuccess",
+	DeleteCapstoneGroupTopicSuccess:          "DeleteCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicNotFound:               "CapstoneGroupTopicNotFound",
+	ReviewCapstoneGroupTopicSuccess:          "ReviewCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicAlreadyReviewed:        "CapstoneGroupTopicAlreadyReviewed",
+	CapstoneGroupTopicFeedbackNotFound:       "CapstoneGroupTopicFeedbackNotFound",
+	FeedbackCapstoneGroupTopicSuccess:        "FeedbackCapstoneGroupTopicSuccess",
+	UpdateFeedbackCapstoneGroupTopicSuccess:  "UpdateFeedbackCapstoneGroupTopicSuccess",
+	DeleteFeedbackCapstoneGroupTopicSuccess:  "DeleteFeedbackCapstoneGroupTopicSuccess",
 }
 
 type RedisKeyType struct {
@@ -190,4 +212,14 @@ var TopicStatusReview topicStatusReviewType = topicStatusReviewType{
 	Reviewing: "reviewing",
 	Approved:  "approved",
 	Rejected:  "rejected",
+}
+
+type capstoneGroupStatusType struct {
+	ReviewingTopic string
+	InProgress     string
+}
+
+var CapstoneGroupStatus capstoneGroupStatusType = capstoneGroupStatusType{
+	ReviewingTopic: "reviewing_topic",
+	InProgress:     "in_progress",
 }

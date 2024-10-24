@@ -30,5 +30,16 @@
   "MaxTotalCapstoneGroupTeacherMentor": "Giáo viên này đã mentor tối đa các nhóm bảo vệ trong học kỳ này.",
   "SendInviteToMentorSuccess": "Gửi yêu cầu mời làm mentor của nhóm cho giáo viên thành công.",
   "CapstoneGroupAlreadyMentor": "Nhóm bảo vệ đồ án đã có mentor.",
-  "AcceptInviteMentorToCapstoneGroupSuccess": "Chấp nhận làm mentor của nhóm thành công."
+  "AcceptInviteMentorToCapstoneGroupSuccess": "Chấp nhận làm mentor của nhóm thành công.",
+  "CapstoneGroupInProgress": "Nhóm đang trong quá trình thực hiện đề tài.",
+  "CreateCapstoneGroupTopicSuccess": "Tạo đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "UpdateCapstoneGroupTopicSuccess": "Cập nhật đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "DeleteCapstoneGroupTopicSuccess": "Xoá đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "CapstoneGroupTopicNotFound": "Không tìm thấy đề tài bảo vệ khoá luận tốt nghiệp.",
+  "ReviewCapstoneGroupTopicSuccess": "Thẩm định đề tài khoá luận tốt nghiệp cho nhóm thành công.",
+  "CapstoneGroupTopicAlreadyReviewed": "Đề tài bảo vệ khoá luận tốt nghiệp đã được thẩm định.",
+  "CapstoneGroupTopicFeedbackNotFound": "Không tìm thấy feedback đề tài bảo vệ khoá luận tốt nghiệp.",
+  "FeedbackCapstoneGroupTopicSuccess": "Feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "UpdateFeedbackCapstoneGroupTopicSuccess": "Cập nhật feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "DeleteFeedbackCapstoneGroupTopicSuccess": "Xoá feedback đề tài bảo vệ khoá luận tốt nghiệp thành công."
 }

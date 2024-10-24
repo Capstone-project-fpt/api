@@ -1,4 +1,4 @@
-package controller
+package capstone_group_controller
 
 import (
 	"net/http"
@@ -16,12 +16,17 @@ import (
 )
 
 type CapstoneGroupController struct {
-	capstoneGroupService service.ICapstoneGroupService
+	capstoneGroupService      service.ICapstoneGroupService
+	capstoneGroupTopicService service.ICapstoneGroupTopicService
 }
 
-func NewCapstoneGroupController(capstoneGroupService service.ICapstoneGroupService) *CapstoneGroupController {
+func NewCapstoneGroupController(
+	capstoneGroupService service.ICapstoneGroupService,
+	capstoneGroupTopicService service.ICapstoneGroupTopicService,
+) *CapstoneGroupController {
 	return &CapstoneGroupController{
 		capstoneGroupService: capstoneGroupService,
+		capstoneGroupTopicService: capstoneGroupTopicService,
 	}
 }
 
@@ -93,7 +98,7 @@ func (cgc *CapstoneGroupController) UpdateCapstoneGroup(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body capstone_group_dto.InviteMentorToCapstoneGroupInput true "data"
-// @Router /capstone-groups/{id}/mentors [post]
+// @Router /capstone-groups/{capstone_group_id}/mentors [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -104,7 +109,7 @@ func (cgc *CapstoneGroupController) InviteMentorToCapstoneGroup(ctx *gin.Context
 		return
 	}
 
-	idStr := ctx.Param("id")
+	idStr := ctx.Param("capstone_group_id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -133,7 +138,7 @@ func (cgc *CapstoneGroupController) InviteMentorToCapstoneGroup(ctx *gin.Context
 // @Accept json
 // @Produce json
 // @Param data body capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput true "data"
-// @Router /capstone-groups/{id}/mentors/invitation [post]
+// @Router /capstone-groups/{capstone_group_id}/mentors/invitation [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
@@ -144,7 +149,7 @@ func (cgc *CapstoneGroupController) AcceptInviteMentorToCapstoneGroup(ctx *gin.C
 		return
 	}
 
-	idStr := ctx.Param("id")
+	idStr := ctx.Param("capstone_group_id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -201,12 +206,12 @@ func (cgc *CapstoneGroupController) GetListCapstoneGroups(ctx *gin.Context) {
 // @Tags Capstone Group
 // @Produce json
 // @Param id path int true "id"
-// @Router /capstone-groups/{id} [get]
+// @Router /capstone-groups/{capstone_group_id} [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} capstone_group_dto.GetCapstoneGroupSwaggerOutput
 // @Security ApiKeyAuth
 func (cgc *CapstoneGroupController) GetCapstoneGroup(ctx *gin.Context) {
-	idParam := ctx.Param("id")
+	idParam := ctx.Param("capstone_group_id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err)

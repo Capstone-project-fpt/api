@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/go-playground/validator/v10"
 )
 
 func Run() {
@@ -37,6 +38,7 @@ func Run() {
 	})
 
 	global.S3Client = s3.New(global.AwsSession)
+	global.Validator = validator.New(validator.WithRequiredStructEnabled())
 
 	r.Run("127.0.0.1" + serverAddr)
 }
