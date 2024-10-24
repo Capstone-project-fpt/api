@@ -24,15 +24,14 @@ type InviteMentorJwtInput struct {
 	CapstoneGroupID int64
 }
 
-var jwtConfig = global.Config.Jwt
 
 func GenerateAccessToken(payload JwtInput) (string, error) {
-	secretKey := []byte(jwtConfig.Secret)
+	secretKey := []byte(global.Config.Jwt.Secret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": payload.UserId,
 		"iss": global.Config.Server.Name,
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Duration(jwtConfig.Expiration) * time.Second).UnixMilli(),
+		"exp": time.Now().Add(time.Duration(global.Config.Jwt.Expiration) * time.Second).UnixMilli(),
 	})
 
 	token, err := claims.SignedString(secretKey)
@@ -44,12 +43,12 @@ func GenerateAccessToken(payload JwtInput) (string, error) {
 }
 
 func GenerateRefreshToken(payload JwtInput) (string, error) {
-	secretKey := []byte(jwtConfig.RefreshSecret)
+	secretKey := []byte(global.Config.Jwt.RefreshSecret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":           payload.UserId,
 		"iss":           global.Config.Server.Name,
 		"iat":           time.Now().Unix(),
-		"exp":           time.Now().Add(time.Duration(jwtConfig.RefreshExpiration) * time.Second).UnixMilli(),
+		"exp":           time.Now().Add(time.Duration(global.Config.Jwt.RefreshExpiration) * time.Second).UnixMilli(),
 		"refresh_token": true,
 	})
 
@@ -62,7 +61,7 @@ func GenerateRefreshToken(payload JwtInput) (string, error) {
 }
 
 func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
-	secretKey := []byte(jwtConfig.Secret)
+	secretKey := []byte(global.Config.Jwt.Secret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": payload,
 		"iss": global.Config.Server.Name,
@@ -79,7 +78,7 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 }
 
 func GenerateInviteMentorToken(payload InviteMentorJwtInput) (string, error) {
-	secretKey := []byte(jwtConfig.Secret)
+	secretKey := []byte(global.Config.Jwt.Secret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": payload,
 		"iss": global.Config.Server.Name,
@@ -97,7 +96,7 @@ func GenerateInviteMentorToken(payload InviteMentorJwtInput) (string, error) {
 
 func VerifyInviteMentorToken(tokenString string) (*InviteMentorJwtInput, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(jwtConfig.Secret), nil
+		return []byte(global.Config.Jwt.Secret), nil
 	})
 
 	if err != nil {
@@ -122,7 +121,7 @@ func VerifyInviteMentorToken(tokenString string) (*InviteMentorJwtInput, error) 
 
 func VerifyTokenResetPassword(tokenString string) (*ResetPassJwtInput, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(jwtConfig.Secret), nil
+		return []byte(global.Config.Jwt.Secret), nil
 	})
 
 	if err != nil {
