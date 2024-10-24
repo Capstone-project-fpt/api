@@ -26,6 +26,13 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 			),
 			adminController.GetUser,
 		)
+		adminUserRouter.DELETE(
+			"/:id",
+			middleware.PermissionMiddleware(
+				constant.PermissionType.ManageAccount,
+			),
+			adminController.DeleteUser,
+		)
 	}
 
 	adminStudentRouter := adminRouter.Group("/students")

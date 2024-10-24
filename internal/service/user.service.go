@@ -17,6 +17,7 @@ import (
 type IUserService interface {
 	GetListUsers(ctx *gin.Context, input GetListUsersInput) (interface{}, error)
 	GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOutput, error)
+	DeleteUser(ctx *gin.Context, userID int) error
 }
 
 type userService struct {
@@ -121,7 +122,6 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 	}, nil
 }
 
-
 func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOutput, error) {
 	messageUserNotfound := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		MessageID: constant.MessageI18nId.UserNotFound,
@@ -171,4 +171,17 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOu
 		CommonInfo: &commonUserInfo,
 		ExtraInfo:  &extraInfo,
 	}, nil
+}
+
+func (us *userService) DeleteUser(ctx *gin.Context, userID int) error {
+	var user model.User
+	if err := global.Db.Where("id = ?", userID).First(&user).Error; err != nil {
+		return errors.New("user not found")
+	}
+
+	if err := global.Db.Delete(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
