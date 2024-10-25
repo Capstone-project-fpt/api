@@ -248,7 +248,7 @@ func (cgs *capstoneGroupService) AcceptInviteMentorToCapstoneGroup(ctx *gin.Cont
 		}))
 	}
 
-	if capstoneGroup.MentorID != 0 {
+	if capstoneGroup.MentorID != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.CapstoneGroupAlreadyMentor,
 		}))
@@ -261,7 +261,7 @@ func (cgs *capstoneGroupService) AcceptInviteMentorToCapstoneGroup(ctx *gin.Cont
 	}
 
 	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).Updates(&model.CapstoneGroup{
-		MentorID: currentTeacher.ID,
+		MentorID: &currentTeacher.ID,
 	}).Error; err != nil {
 		return err
 	}
