@@ -423,7 +423,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                            "$ref": "#/definitions/capstone_group_dto.GetCapstoneGroupSwaggerOutput"
                         }
                     },
                     "400": {
