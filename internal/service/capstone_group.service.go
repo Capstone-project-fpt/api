@@ -17,7 +17,7 @@ import (
 )
 
 type ICapstoneGroupService interface {
-	CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) error
+	CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) (*capstone_group_dto.CapstoneGroupOutput, error)
 	UpdateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupInput) error
 	InviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.InviteMentorToCapstoneGroupInput) error
 	AcceptInviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput) error
@@ -35,17 +35,17 @@ func NewCapstoneGroupService(emailInviteMentorToCapstoneGroupPublisher queue.IBa
 	}
 }
 
-func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) error {
+func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) (*capstone_group_dto.CapstoneGroupOutput, error) {
 	currentUser := context_util.GetUserContext(ctx)
 	if currentUser == nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
 	}
 
 	var currentStudent model.Student
 	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
 	}
@@ -57,39 +57,39 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 	totalMembers := len(input.StudentIds) + 1
 
 	if totalMembers > constant.MaxTotalMemberInGroup || totalMembers < constant.MinTotalMemberInGroup {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidTotalMemberInGroup,
 		}))
 	}
 
 	var memberGroups []model.Student
 	if err := global.Db.Model(model.Student{}).Where("id IN ?", input.StudentIds).Find(&memberGroups).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
 	}
 
 	if len(memberGroups) != len(input.StudentIds) {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
 	}
 
 	var major model.Major
 	if err := global.Db.Model(model.Major{}).Where("id = ?", input.MajorID).First(&major).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.MajorNotFound,
 		}))
 	}
 
 	var semester model.Semester
 	if err := global.Db.Model(model.Semester{}).Where("id = ?", input.SemesterID).First(&semester).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterNotFound,
 		}))
 	}
 
-	capstoneGroup := model.CapstoneGroup{
+	data := model.CapstoneGroup{
 		NameGroup:  input.NameGroup,
 		MajorID:    input.MajorID,
 		SemesterID: input.SemesterID,
@@ -97,18 +97,25 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		Status:     constant.CapstoneGroupStatus.ReviewingTopic,
 	}
 
-	if err := global.Db.Model(model.CapstoneGroup{}).Create(&capstoneGroup).Error; err != nil {
-		return err
+	if err := global.Db.Model(model.CapstoneGroup{}).Create(&data).Error; err != nil {
+		return nil, err
 	}
 
 	if err := global.Db.Model(model.Student{}).
 		Where("id IN ?", append(input.StudentIds, currentStudent.ID)).
-		Update("capstone_group_id", capstoneGroup.ID).
+		Update("capstone_group_id", data.ID).
 		Error; err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", data.ID).First(&capstoneGroup).Error; err != nil {
+		return nil, err
+	}
+
+	capstoneGroupOutput := capstone_group_dto.ToCapstoneGroupOutput(&capstoneGroup)
+
+	return &capstoneGroupOutput, nil
 }
 
 func (cgs *capstoneGroupService) UpdateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupInput) error {

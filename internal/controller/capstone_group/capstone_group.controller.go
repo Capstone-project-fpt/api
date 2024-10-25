@@ -38,7 +38,7 @@ func NewCapstoneGroupController(
 // @Param data body capstone_group_dto.CreateCapstoneGroupInput true "data"
 // @Router /capstone-groups [post]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} response.ResponseDataSuccess
+// @Success 200 {object} capstone_group_dto.GetCapstoneGroupSwaggerOutput
 // @Security ApiKeyAuth
 func (cgc *CapstoneGroupController) CreateCapstoneGroup(ctx *gin.Context) {
 	var input capstone_group_dto.CreateCapstoneGroupInput
@@ -47,18 +47,14 @@ func (cgc *CapstoneGroupController) CreateCapstoneGroup(ctx *gin.Context) {
 		return
 	}
 
-	err := cgc.capstoneGroupService.CreateCapstoneGroup(ctx, &input)
+	capstoneGroupOutput, err := cgc.capstoneGroupService.CreateCapstoneGroup(ctx, &input)
 
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-		MessageID: constant.MessageI18nId.CreateCapstoneGroupSuccess,
-	})
-
-	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
+	response.SuccessResponse(ctx, http.StatusOK, capstoneGroupOutput)
 }
 
 // @Summary UpdateCapstoneGroup
