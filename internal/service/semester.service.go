@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/api/database/model"
 	"github.com/api/global"
@@ -17,6 +18,7 @@ type ISemesterService interface {
 	UpdateSemester(ctx *gin.Context, input *semester_dto.UpdateSemesterInput) error
 	DeleteSemester(ctx *gin.Context, id int) error
 	GetSemester(ctx *gin.Context, id int) (*semester_dto.SemesterOutput, error)
+	GetCurrentSemester(ctx *gin.Context) (*semester_dto.SemesterOutput, error)
 	GetListSemester(ctx *gin.Context, input *semester_dto.GetListSemestersInput) (*semester_dto.ListSemestersOutput, error)
 }
 
@@ -106,6 +108,20 @@ func (s *semesterService) GetSemester(ctx *gin.Context, id int) (*semester_dto.S
 	if err := global.Db.Model(model.Semester{}).Where("id = ?", id).First(&semester).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterNotFound,
+		})
+		return nil, errors.New(message)
+	}
+
+	semesterOutput := semester_dto.ToSemesterOutput(&semester)
+
+	return &semesterOutput, nil
+}
+
+func (s *semesterService) GetCurrentSemester(ctx *gin.Context) (*semester_dto.SemesterOutput, error) {
+	var semester model.Semester
+	if err := global.Db.Model(model.Semester{}).Where("start_time <= ? AND end_time >= ?", time.Now(), time.Now()).First(&semester).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CurrentSemesterNotFound,
 		})
 		return nil, errors.New(message)
 	}

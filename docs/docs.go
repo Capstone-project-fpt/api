@@ -1519,6 +1519,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/semesters/current": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Current Semester",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Semester"
+                ],
+                "summary": "GetCurrentSemester",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/semester_dto.GetSemesterSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/semesters/{id}": {
             "get": {
                 "security": [

@@ -79,6 +79,23 @@ func (sc *SemesterController) GetSemester(ctx *gin.Context) {
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
 
+// @Summary GetCurrentSemester
+// @Description Get Current Semester
+// @Tags Semester
+// @Produce json
+// @Router /semesters/current [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} semester_dto.GetSemesterSwaggerOutput
+// @Security ApiKeyAuth
+func (sc *SemesterController) GetCurrentSemester(ctx *gin.Context) {
+	output, err := sc.semesterService.GetCurrentSemester(ctx)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}
+
 // @Summary AdminCreateSemester
 // @Description Admin Create Semester
 // @Tags Semester

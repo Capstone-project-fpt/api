@@ -20,6 +20,7 @@
   "TopicReferenceNotFound": "Không tìm thấy Đề tài tham khảo.",
   "InvalidTotalMemberInGroup": "Tổng số sinh viên trong nhóm không hợp lệ.",
   "SemesterNotFound": "Không tìm thấy học kỳ.",
+  "CurrentSemesterNotFound": "Không tìm thấy học kỳ hiện tại, Admin cần tạo học kỳ cho thời gian hiện tại.",
   "SemesterOverlap": "Thời gian học kỳ bị trùng lặp với học kỳ khác.",
   "CreateSemesterSuccess": "Tạo học kỳ thành công",
   "UpdateSemesterSuccess": "Cập nhật thông tin học kỳ thành công.",
