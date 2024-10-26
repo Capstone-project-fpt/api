@@ -13,6 +13,7 @@ import (
 	"github.com/api/internal/service"
 	service2 "github.com/api/internal/service/admin"
 	"github.com/api/internal/service/auth"
+	"github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/service/aws"
 )
 
@@ -72,8 +73,8 @@ func InitializeSemesterController() *controller.SemesterController {
 
 func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGroupController {
 	iBasePublisher := queue.NewEmailInviteMentorToCapstoneGroupPublisher()
-	iCapstoneGroupService := service.NewCapstoneGroupService(iBasePublisher)
-	iCapstoneGroupTopicService := service.NewCapstoneGroupTopicService()
+	iCapstoneGroupService := capstone_group_service.NewCapstoneGroupService(iBasePublisher)
+	iCapstoneGroupTopicService := capstone_group_service.NewCapstoneGroupTopicService()
 	capstoneGroupController := capstone_group_controller.NewCapstoneGroupController(iCapstoneGroupService, iCapstoneGroupTopicService)
 	return capstoneGroupController
 }

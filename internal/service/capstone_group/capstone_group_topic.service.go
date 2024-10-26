@@ -1,4 +1,4 @@
-package service
+package capstone_group_service
 
 import (
 	"errors"

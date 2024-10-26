@@ -8,7 +8,7 @@ import (
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/capstone_group_dto"
-	"github.com/api/internal/service"
+	capstone_group_service "github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/response"
 	util "github.com/api/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -16,13 +16,13 @@ import (
 )
 
 type CapstoneGroupController struct {
-	capstoneGroupService      service.ICapstoneGroupService
-	capstoneGroupTopicService service.ICapstoneGroupTopicService
+	capstoneGroupService      capstone_group_service.ICapstoneGroupService
+	capstoneGroupTopicService capstone_group_service.ICapstoneGroupTopicService
 }
 
 func NewCapstoneGroupController(
-	capstoneGroupService service.ICapstoneGroupService,
-	capstoneGroupTopicService service.ICapstoneGroupTopicService,
+	capstoneGroupService capstone_group_service.ICapstoneGroupService,
+	capstoneGroupTopicService capstone_group_service.ICapstoneGroupTopicService,
 ) *CapstoneGroupController {
 	return &CapstoneGroupController{
 		capstoneGroupService: capstoneGroupService,

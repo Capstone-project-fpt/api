@@ -9,6 +9,7 @@ import (
 	"github.com/api/internal/service"
 	admin_service "github.com/api/internal/service/admin"
 	auth_service "github.com/api/internal/service/auth"
+	capstone_group_service "github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/service/aws"
 	"github.com/google/wire"
 )
@@ -92,8 +93,8 @@ func InitializeSemesterController() *controller.SemesterController {
 func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGroupController {
 	wire.Build(
 		queue.NewEmailInviteMentorToCapstoneGroupPublisher,
-		service.NewCapstoneGroupService,
-		service.NewCapstoneGroupTopicService,
+		capstone_group_service.NewCapstoneGroupService,
+		capstone_group_service.NewCapstoneGroupTopicService,
 		capstone_group_controller.NewCapstoneGroupController,
 	)
 
