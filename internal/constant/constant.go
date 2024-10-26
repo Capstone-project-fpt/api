@@ -36,6 +36,7 @@ type MessageI18n struct {
 	TopicReferenceNotFound                        string
 	InvalidTotalMemberInGroup                     string
 	SemesterNotFound                              string
+	CurrentSemesterNotFound                       string
 	SemesterOverlap                               string
 	CreateSemesterSuccess                         string
 	UpdateSemesterSuccess                         string
@@ -86,6 +87,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	TopicReferenceNotFound:                        "TopicReferenceNotFound",
 	InvalidTotalMemberInGroup:                     "InvalidTotalMemberInGroup",
 	SemesterNotFound:                              "SemesterNotFound",
+	CurrentSemesterNotFound:                       "CurrentSemesterNotFound",
 	SemesterOverlap:                               "SemesterOverlap",
 	CreateSemesterSuccess:                         "CreateSemesterSuccess",
 	UpdateSemesterSuccess:                         "UpdateSemesterSuccess",

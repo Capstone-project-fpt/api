@@ -20,6 +20,7 @@
   "TopicReferenceNotFound": "Topic reference not found.",
   "InvalidTotalMemberInGroup": "Invalid total member in group.",
   "SemesterNotFound": "Semester not found.",
+  "CurrentSemesterNotFound": "Current semester not found.",
   "SemesterOverlap": "Semester overlap.",
   "CreateSemesterSuccess": "Create semester success.",
   "UpdateSemesterSuccess": "Update semester success.",

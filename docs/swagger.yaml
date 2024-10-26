@@ -1657,6 +1657,25 @@ paths:
       summary: GetSemester
       tags:
       - Semester
+  /semesters/current:
+    get:
+      description: Get Current Semester
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCurrentSemester
+      tags:
+      - Semester
   /sub-majors:
     get:
       consumes:
