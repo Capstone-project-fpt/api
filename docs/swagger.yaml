@@ -87,13 +87,6 @@ definitions:
     - password
     - token
     type: object
-  capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput:
-    properties:
-      token:
-        type: string
-    required:
-    - token
-    type: object
   capstone_group_dto.CapstoneGroupOutput:
     properties:
       created_at:
@@ -142,6 +135,25 @@ definitions:
       message:
         type: boolean
     type: object
+  capstone_group_dto.InvitationMentorCapstoneGroupOutput:
+    properties:
+      capstone_group_id:
+        type: integer
+      created_at:
+        type: string
+      expired_at:
+        type: string
+      id:
+        type: integer
+      mentor:
+        $ref: '#/definitions/user_dto.TeacherOutput'
+      mentor_id:
+        type: integer
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
   capstone_group_dto.InviteMentorToCapstoneGroupInput:
     properties:
       semester_id:
@@ -157,6 +169,15 @@ definitions:
       items:
         items:
           $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  capstone_group_dto.ListInvitationMentorCapstoneGroupOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/capstone_group_dto.InvitationMentorCapstoneGroupOutput'
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
@@ -180,6 +201,19 @@ definitions:
         $ref: '#/definitions/capstone_group_dto.MentorAndListMemberCapstoneGroupOutput'
       message:
         type: boolean
+    type: object
+  capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput:
+    properties:
+      status:
+        enum:
+        - approve
+        - reject
+        type: string
+      token:
+        type: string
+    required:
+    - status
+    - token
     type: object
   capstone_group_dto.UpdateCapstoneGroupInput:
     properties:
@@ -1253,18 +1287,52 @@ paths:
       summary: InviteMentorToCapstoneGroup
       tags:
       - Capstone Group
-  /capstone-groups/{capstone_group_id}/mentors/invitation:
+  /capstone-groups/{capstone_group_id}/mentors/invitations:
+    get:
+      description: Get list invitation mentor capstone group
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.ListInvitationMentorCapstoneGroupOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListInvitationMentorCapstoneGroups
+      tags:
+      - Capstone Group
     post:
       consumes:
       - application/json
-      description: Accept invite mentor to capstone group
+      description: Response invite mentor to capstone group
       parameters:
       - description: data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput'
+          $ref: '#/definitions/capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput'
       produces:
       - application/json
       responses:
@@ -1278,7 +1346,7 @@ paths:
             $ref: '#/definitions/response.ResponseErr'
       security:
       - ApiKeyAuth: []
-      summary: AcceptInviteMentorToCapstoneGroup
+      summary: ResponseInviteMentorToCapstoneGroup
       tags:
       - Capstone Group
   /forgot-password:

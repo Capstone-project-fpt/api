@@ -15,97 +15,103 @@ const (
 )
 
 type MessageI18n struct {
-	EmailNotFound                            string
-	UserNotFound                             string
-	TokenInvalid                             string
-	InternalServerError                      string
-	InvalidParams                            string
-	UserAlreadyExists                        string
-	InvalidStudentEmailFPT                   string
-	CreateStudentAccountSuccess              string
-	CreateTeacherAccountSuccess              string
-	PermissionDenied                         string
-	MajorNotFound                            string
-	SubMajorNotFound                         string
-	AlreadySendResetPasswordLink             string
-	ImportAndCreateListStudentAccountSuccess string
-	InvalidFile                              string
-	NotAllowEmptyDataInFile                  string
-	OtherSessionImportStudentInProcess       string
-	OtherSessionImportTeacherInProcess       string
-	TopicReferenceNotFound                   string
-	InvalidTotalMemberInGroup                string
-	SemesterNotFound                         string
-	SemesterOverlap                          string
-	CreateSemesterSuccess                    string
-	UpdateSemesterSuccess                    string
-	DeleteSemesterSuccess                    string
-	CreateCapstoneGroupSuccess               string
-	CapstoneGroupNotFound                    string
-	UpdateCapstoneGroupSuccess               string
-	MaxTotalCapstoneGroupTeacherMentor       string
-	SendInviteToMentorSuccess                string
-	CapstoneGroupAlreadyMentor               string
-	AcceptInviteMentorToCapstoneGroupSuccess string
-	CapstoneGroupInProgress                  string
-	CreateCapstoneGroupTopicSuccess          string
-	UpdateCapstoneGroupTopicSuccess          string
-	DeleteCapstoneGroupTopicSuccess          string
-	CapstoneGroupTopicNotFound               string
-	ReviewCapstoneGroupTopicSuccess          string
-	CapstoneGroupTopicAlreadyReviewed        string
-	CapstoneGroupTopicFeedbackNotFound       string
-	FeedbackCapstoneGroupTopicSuccess        string
-	UpdateFeedbackCapstoneGroupTopicSuccess  string
-	DeleteFeedbackCapstoneGroupTopicSuccess  string
-	MemberExistInAnotherGroup                string
+	EmailNotFound                                 string
+	UserNotFound                                  string
+	TokenInvalid                                  string
+	InternalServerError                           string
+	InvalidParams                                 string
+	UserAlreadyExists                             string
+	InvalidStudentEmailFPT                        string
+	CreateStudentAccountSuccess                   string
+	CreateTeacherAccountSuccess                   string
+	PermissionDenied                              string
+	MajorNotFound                                 string
+	SubMajorNotFound                              string
+	AlreadySendResetPasswordLink                  string
+	ImportAndCreateListStudentAccountSuccess      string
+	InvalidFile                                   string
+	NotAllowEmptyDataInFile                       string
+	OtherSessionImportStudentInProcess            string
+	OtherSessionImportTeacherInProcess            string
+	TopicReferenceNotFound                        string
+	InvalidTotalMemberInGroup                     string
+	SemesterNotFound                              string
+	SemesterOverlap                               string
+	CreateSemesterSuccess                         string
+	UpdateSemesterSuccess                         string
+	DeleteSemesterSuccess                         string
+	CreateCapstoneGroupSuccess                    string
+	CapstoneGroupNotFound                         string
+	UpdateCapstoneGroupSuccess                    string
+	MaxTotalCapstoneGroupTeacherMentor            string
+	SendInviteToMentorSuccess                     string
+	CapstoneGroupAlreadyMentor                    string
+	ResponseInviteMentorToCapstoneGroupSuccess    string
+	CapstoneGroupInProgress                       string
+	CreateCapstoneGroupTopicSuccess               string
+	UpdateCapstoneGroupTopicSuccess               string
+	DeleteCapstoneGroupTopicSuccess               string
+	CapstoneGroupTopicNotFound                    string
+	ReviewCapstoneGroupTopicSuccess               string
+	CapstoneGroupTopicAlreadyReviewed             string
+	CapstoneGroupTopicFeedbackNotFound            string
+	FeedbackCapstoneGroupTopicSuccess             string
+	UpdateFeedbackCapstoneGroupTopicSuccess       string
+	DeleteFeedbackCapstoneGroupTopicSuccess       string
+	MemberExistInAnotherGroup                     string
+	InvitationMentorCapstoneGroupNotFound         string
+	InvitationMentorCapstoneGroupAlreadyResponded string
+	InvitationMentorCapstoneGroupExpired          string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
-	EmailNotFound:                            "EmailNotFound",
-	UserNotFound:                             "UserNotFound",
-	TokenInvalid:                             "TokenInvalid",
-	InternalServerError:                      "InternalServerError",
-	InvalidParams:                            "InvalidParams",
-	UserAlreadyExists:                        "UserAlreadyExists",
-	InvalidStudentEmailFPT:                   "InvalidStudentEmailFPT",
-	CreateStudentAccountSuccess:              "CreateStudentAccountSuccess",
-	CreateTeacherAccountSuccess:              "CreateTeacherAccountSuccess",
-	PermissionDenied:                         "PermissionDenied",
-	MajorNotFound:                            "MajorNotFound",
-	SubMajorNotFound:                         "SubMajorNotFound",
-	AlreadySendResetPasswordLink:             "AlreadySendResetPasswordLink",
-	ImportAndCreateListStudentAccountSuccess: "ImportAndCreateListStudentAccountSuccess",
-	InvalidFile:                              "InvalidFile",
-	NotAllowEmptyDataInFile:                  "NotAllowEmptyDataInFile",
-	OtherSessionImportStudentInProcess:       "OtherSessionImportStudentInProcess",
-	OtherSessionImportTeacherInProcess:       "OtherSessionImportTeacherInProcess",
-	TopicReferenceNotFound:                   "TopicReferenceNotFound",
-	InvalidTotalMemberInGroup:                "InvalidTotalMemberInGroup",
-	SemesterNotFound:                         "SemesterNotFound",
-	SemesterOverlap:                          "SemesterOverlap",
-	CreateSemesterSuccess:                    "CreateSemesterSuccess",
-	UpdateSemesterSuccess:                    "UpdateSemesterSuccess",
-	DeleteSemesterSuccess:                    "DeleteSemesterSuccess",
-	CreateCapstoneGroupSuccess:               "CreateCapstoneGroupSuccess",
-	CapstoneGroupNotFound:                    "CapstoneGroupNotFound",
-	UpdateCapstoneGroupSuccess:               "UpdateCapstoneGroupSuccess",
-	MaxTotalCapstoneGroupTeacherMentor:       "MaxTotalCapstoneGroupTeacherMentor",
-	SendInviteToMentorSuccess:                "SendInviteToMentorSuccess",
-	CapstoneGroupAlreadyMentor:               "CapstoneGroupAlreadyMentor",
-	AcceptInviteMentorToCapstoneGroupSuccess: "AcceptInviteMentorToCapstoneGroupSuccess",
-	CapstoneGroupInProgress:                  "CapstoneGroupInProgress",
-	CreateCapstoneGroupTopicSuccess:          "CreateCapstoneGroupTopicSuccess",
-	UpdateCapstoneGroupTopicSuccess:          "UpdateCapstoneGroupTopicSuccess",
-	DeleteCapstoneGroupTopicSuccess:          "DeleteCapstoneGroupTopicSuccess",
-	CapstoneGroupTopicNotFound:               "CapstoneGroupTopicNotFound",
-	ReviewCapstoneGroupTopicSuccess:          "ReviewCapstoneGroupTopicSuccess",
-	CapstoneGroupTopicAlreadyReviewed:        "CapstoneGroupTopicAlreadyReviewed",
-	CapstoneGroupTopicFeedbackNotFound:       "CapstoneGroupTopicFeedbackNotFound",
-	FeedbackCapstoneGroupTopicSuccess:        "FeedbackCapstoneGroupTopicSuccess",
-	UpdateFeedbackCapstoneGroupTopicSuccess:  "UpdateFeedbackCapstoneGroupTopicSuccess",
-	DeleteFeedbackCapstoneGroupTopicSuccess:  "DeleteFeedbackCapstoneGroupTopicSuccess",
-	MemberExistInAnotherGroup:                "MemberExistInAnotherGroup",
+	EmailNotFound:                                 "EmailNotFound",
+	UserNotFound:                                  "UserNotFound",
+	TokenInvalid:                                  "TokenInvalid",
+	InternalServerError:                           "InternalServerError",
+	InvalidParams:                                 "InvalidParams",
+	UserAlreadyExists:                             "UserAlreadyExists",
+	InvalidStudentEmailFPT:                        "InvalidStudentEmailFPT",
+	CreateStudentAccountSuccess:                   "CreateStudentAccountSuccess",
+	CreateTeacherAccountSuccess:                   "CreateTeacherAccountSuccess",
+	PermissionDenied:                              "PermissionDenied",
+	MajorNotFound:                                 "MajorNotFound",
+	SubMajorNotFound:                              "SubMajorNotFound",
+	AlreadySendResetPasswordLink:                  "AlreadySendResetPasswordLink",
+	ImportAndCreateListStudentAccountSuccess:      "ImportAndCreateListStudentAccountSuccess",
+	InvalidFile:                                   "InvalidFile",
+	NotAllowEmptyDataInFile:                       "NotAllowEmptyDataInFile",
+	OtherSessionImportStudentInProcess:            "OtherSessionImportStudentInProcess",
+	OtherSessionImportTeacherInProcess:            "OtherSessionImportTeacherInProcess",
+	TopicReferenceNotFound:                        "TopicReferenceNotFound",
+	InvalidTotalMemberInGroup:                     "InvalidTotalMemberInGroup",
+	SemesterNotFound:                              "SemesterNotFound",
+	SemesterOverlap:                               "SemesterOverlap",
+	CreateSemesterSuccess:                         "CreateSemesterSuccess",
+	UpdateSemesterSuccess:                         "UpdateSemesterSuccess",
+	DeleteSemesterSuccess:                         "DeleteSemesterSuccess",
+	CreateCapstoneGroupSuccess:                    "CreateCapstoneGroupSuccess",
+	CapstoneGroupNotFound:                         "CapstoneGroupNotFound",
+	UpdateCapstoneGroupSuccess:                    "UpdateCapstoneGroupSuccess",
+	MaxTotalCapstoneGroupTeacherMentor:            "MaxTotalCapstoneGroupTeacherMentor",
+	SendInviteToMentorSuccess:                     "SendInviteToMentorSuccess",
+	CapstoneGroupAlreadyMentor:                    "CapstoneGroupAlreadyMentor",
+	ResponseInviteMentorToCapstoneGroupSuccess:    "ResponseInviteMentorToCapstoneGroupSuccess",
+	CapstoneGroupInProgress:                       "CapstoneGroupInProgress",
+	CreateCapstoneGroupTopicSuccess:               "CreateCapstoneGroupTopicSuccess",
+	UpdateCapstoneGroupTopicSuccess:               "UpdateCapstoneGroupTopicSuccess",
+	DeleteCapstoneGroupTopicSuccess:               "DeleteCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicNotFound:                    "CapstoneGroupTopicNotFound",
+	ReviewCapstoneGroupTopicSuccess:               "ReviewCapstoneGroupTopicSuccess",
+	CapstoneGroupTopicAlreadyReviewed:             "CapstoneGroupTopicAlreadyReviewed",
+	CapstoneGroupTopicFeedbackNotFound:            "CapstoneGroupTopicFeedbackNotFound",
+	FeedbackCapstoneGroupTopicSuccess:             "FeedbackCapstoneGroupTopicSuccess",
+	UpdateFeedbackCapstoneGroupTopicSuccess:       "UpdateFeedbackCapstoneGroupTopicSuccess",
+	DeleteFeedbackCapstoneGroupTopicSuccess:       "DeleteFeedbackCapstoneGroupTopicSuccess",
+	MemberExistInAnotherGroup:                     "MemberExistInAnotherGroup",
+	InvitationMentorCapstoneGroupNotFound:         "InvitationMentorCapstoneGroupNotFound",
+	InvitationMentorCapstoneGroupAlreadyResponded: "InvitationMentorCapstoneGroupAlreadyResponded",
+	InvitationMentorCapstoneGroupExpired:          "InvitationMentorCapstoneGroupExpired",
 }
 
 type RedisKeyType struct {
@@ -224,4 +230,16 @@ type capstoneGroupStatusType struct {
 var CapstoneGroupStatus capstoneGroupStatusType = capstoneGroupStatusType{
 	ReviewingTopic: "reviewing_topic",
 	InProgress:     "in_progress",
+}
+
+type invitationMentorCapstoneGroupType struct {
+	Pending string
+	Approve string
+	Reject  string
+}
+
+var InvitationMentorCapstoneGroup invitationMentorCapstoneGroupType = invitationMentorCapstoneGroupType{
+	Pending: "pending",
+	Approve: "approve",
+	Reject:  "reject",
 }

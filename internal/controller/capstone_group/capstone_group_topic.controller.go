@@ -7,7 +7,7 @@ import (
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/capstone_group_topic_dto"
-	"github.com/api/internal/service"
+	capstone_group_service "github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/response"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -110,7 +110,7 @@ func (cgc *CapstoneGroupController) DeleteCapstoneGroupTopic(ctx *gin.Context) {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	input := service.DeleteCapstoneGroupTopicInput{
+	input := capstone_group_service.DeleteCapstoneGroupTopicInput{
 		CapstoneGroupTopicID: int64(id),
 		CapstoneGroupID:      int64(capstoneGroupID),
 	}
@@ -306,7 +306,7 @@ func (cgc *CapstoneGroupController) DeleteFeedbackCapstoneGroupTopic(ctx *gin.Co
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	var input service.DeleteFeedbackCapstoneGroupTopicInput
+	var input capstone_group_service.DeleteFeedbackCapstoneGroupTopicInput
 	input.FeedbackID = int64(feedbackID)
 	input.CapstoneGroupTopicID = int64(capstoneGroupTopicID)
 	input.CapstoneGroupID = int64(capstoneGroupID)
@@ -344,7 +344,7 @@ func (cgc *CapstoneGroupController) GetCapstoneGroupTopic(ctx *gin.Context) {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	input := service.GetCapstoneGroupTopicInput{
+	input := capstone_group_service.GetCapstoneGroupTopicInput{
 		CapstoneGroupTopicID: int64(id),
 		CapstoneGroupID:      int64(capstoneGroupID),
 	}
@@ -417,7 +417,7 @@ func (cgc *CapstoneGroupController) GetCapstoneGroupTopicFeedback(ctx *gin.Conte
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	input := service.GetCapstoneGroupTopicFeedbackInput{
+	input := capstone_group_service.GetCapstoneGroupTopicFeedbackInput{
 		CapstoneGroupTopicID: int64(id),
 		FeedbackID:           int64(feedbackID),
 	}
