@@ -44,7 +44,7 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 	getUsersQuery := global.Db.Model(&model.User{}).
 		Select("users.id as user_id, users.name as user_name, users.email as user_email, users.phone_number as user_phone_number, users.user_type as user_type, " +
 			"COALESCE(teachers.id, 0) as teacher_id, COALESCE(teachers.sub_major_id, 0) as teacher_sub_major_id, teachers.created_at as teacher_created_at, " +
-			"COALESCE(students.id, 0) as student_id, students.code as student_code, COALESCE(students.capstone_group_id, 0) as student_capstone_group_id, COALESCE(students.sub_major_id, 0) as student_sub_major_id, students.created_at as student_created_at").
+			"COALESCE(students.id, 0) as student_id, students.code as student_code, COALESCE(students.sub_major_id, 0) as student_sub_major_id, students.created_at as student_created_at").
 		Joins("LEFT JOIN teachers ON teachers.user_id = users.id").
 		Joins("LEFT JOIN students ON students.user_id = users.id")
 

@@ -27,11 +27,10 @@ type UserWithDetails struct {
 	TeacherSubMajorID int       `gorm:"column:teacher_sub_major_id"`
 	TeacherCreatedAt  time.Time `gorm:"column:teacher_created_at"`
 
-	StudentID              int       `gorm:"column:student_id"`
-	StudentCode            string    `gorm:"column:student_code"`
-	StudentSubMajorID      int       `gorm:"column:student_sub_major_id"`
-	StudentCapstoneGroupID int       `gorm:"column:student_capstone_group_id"`
-	StudentCreatedAt       time.Time `gorm:"column:student_created_at"`
+	StudentID         int       `gorm:"column:student_id"`
+	StudentCode       string    `gorm:"column:student_code"`
+	StudentSubMajorID int       `gorm:"column:student_sub_major_id"`
+	StudentCreatedAt  time.Time `gorm:"column:student_created_at"`
 }
 
 func (User) TableName() string {
