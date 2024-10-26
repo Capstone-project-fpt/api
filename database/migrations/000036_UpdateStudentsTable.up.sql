@@ -1,0 +1,1 @@
+ALTER TABLE "students" DROP COLUMN IF EXISTS "capstone_group_id";

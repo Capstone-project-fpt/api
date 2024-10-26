@@ -366,7 +366,8 @@ func (cgts *capstoneGroupTopicService) GetListCapstoneGroupTopicFeedbacks(ctx *g
 }
 
 func (cgts *capstoneGroupTopicService) validatePermissionActionToCapstoneGroupTopic(currentStudent *model.Student, capstoneGroup *model.CapstoneGroup) error {
-	if currentStudent.CapstoneGroupID != capstoneGroup.ID {
+	var studentCapstoneGroup model.StudentCapstoneGroup
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Select("id").Where("student_id = ? AND capstone_group_id = ?", currentStudent.ID, capstoneGroup.ID).First(&studentCapstoneGroup).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.PermissionDenied,
 		}))

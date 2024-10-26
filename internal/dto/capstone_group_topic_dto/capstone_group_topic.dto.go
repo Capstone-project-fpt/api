@@ -73,8 +73,8 @@ type CapstoneGroupTopicOutput struct {
 }
 
 func ToCapstoneGroupTopicOutput(capstoneGroupTopic *model.CapstoneGroupTopic) CapstoneGroupTopicOutput {
-	var approvedBy user_dto.TeacherOutput
-	var rejectedBy user_dto.TeacherOutput
+	var approvedBy *user_dto.TeacherOutput
+	var rejectedBy *user_dto.TeacherOutput
 
 	if capstoneGroupTopic.ApprovedBy != nil {
 		approvedBy = user_dto.ToTeacherOutput(capstoneGroupTopic.ApprovedBy)
@@ -91,10 +91,10 @@ func ToCapstoneGroupTopicOutput(capstoneGroupTopic *model.CapstoneGroupTopic) Ca
 		StatusReview:    capstoneGroupTopic.StatusReview,
 		ApprovedAt:      capstoneGroupTopic.ApprovedAt,
 		ApprovedByID:    capstoneGroupTopic.ApprovedByID,
-		ApprovedBy:      &approvedBy,
+		ApprovedBy:      approvedBy,
 		RejectedAt:      capstoneGroupTopic.RejectedAt,
 		RejectedByID:    capstoneGroupTopic.RejectedByID,
-		RejectedBy:      &rejectedBy,
+		RejectedBy:      rejectedBy,
 		CreatedAt:       capstoneGroupTopic.CreatedAt,
 		UpdatedAt:       capstoneGroupTopic.UpdatedAt,
 		CapstoneGroupID: capstoneGroupTopic.CapstoneGroupID,
@@ -112,13 +112,11 @@ type CapstoneGroupTopicFeedbackOutput struct {
 }
 
 func ToCapstoneGroupTopicFeedbackOutput(capstoneGroupTopicFeedback *model.CapstoneGroupTopicFeedback) CapstoneGroupTopicFeedbackOutput {
-	reviewer := user_dto.ToTeacherOutput(&capstoneGroupTopicFeedback.Reviewer)
-
 	return CapstoneGroupTopicFeedbackOutput{
 		ID:                   capstoneGroupTopicFeedback.ID,
 		Feedback:             capstoneGroupTopicFeedback.Feedback,
 		ReviewerID:           capstoneGroupTopicFeedback.ReviewerID,
-		Reviewer:             &reviewer,
+		Reviewer:             user_dto.ToTeacherOutput(&capstoneGroupTopicFeedback.Reviewer),
 		CreatedAt:            capstoneGroupTopicFeedback.CreatedAt,
 		UpdatedAt:            capstoneGroupTopicFeedback.UpdatedAt,
 		CapstoneGroupTopicID: capstoneGroupTopicFeedback.CapstoneGroupTopicID,
@@ -134,6 +132,7 @@ type ListCapstoneGroupTopicFeedbackOutput struct {
 	Meta  dto.MetaPagination                 `json:"meta"`
 	Items []CapstoneGroupTopicFeedbackOutput `json:"items"`
 }
+
 
 // This used for swagger
 type GetCapstoneGroupTopicFeedbackSwaggerOutput struct {

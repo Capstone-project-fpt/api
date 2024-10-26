@@ -5,6 +5,7 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/internal/dto"
+	"github.com/api/internal/dto/user_dto"
 )
 
 type CreateCapstoneGroupInput struct {
@@ -67,9 +68,22 @@ type ListCapstoneGroupOutput struct {
 	Items []CapstoneGroupOutput `json:"items"`
 }
 
+type MentorAndListMemberCapstoneGroupOutput struct {
+	Mentor   *user_dto.TeacherOutput  `json:"mentor"`
+	Members  []*user_dto.StudentOutput `json:"members"`
+	LeaderID int64                    `json:"leader_id"`
+}
+
 // This used for swagger
 type GetCapstoneGroupSwaggerOutput struct {
 	Code    int                  `json:"code"`
 	Success bool                 `json:"message"`
 	Data    *CapstoneGroupOutput `json:"data"`
+}
+
+
+type MentorAndListMemberCapstoneGroupSwaggerOutput struct {
+	Code    int                                     `json:"code"`
+	Success bool                                    `json:"message"`
+	Data    *MentorAndListMemberCapstoneGroupOutput `json:"data"`
 }

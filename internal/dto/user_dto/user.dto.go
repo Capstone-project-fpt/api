@@ -15,11 +15,10 @@ type UserOutput struct {
 }
 
 type StudentInfoOutput struct {
-	StudentID       int       `json:"student_id"`
-	Code            string    `json:"code"`
-	SubMajorId      int       `json:"sub_major_id"`
-	CapstoneGroupID int       `json:"capstone_group_id"`
-	CreatedAt       time.Time `json:"created_at"`
+	StudentID  int       `json:"student_id"`
+	Code       string    `json:"code"`
+	SubMajorId int       `json:"sub_major_id"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 type TeacherInfoOutput struct {
@@ -51,8 +50,8 @@ type TeacherOutput struct {
 	SubMajorID  int    `json:"sub_major_id"`
 }
 
-func ToTeacherOutput(teacher *model.Teacher) TeacherOutput {
-	return TeacherOutput{
+func ToTeacherOutput(teacher *model.Teacher) *TeacherOutput {
+	return &TeacherOutput{
 		ID:          int(teacher.ID),
 		UserID:      int(teacher.UserID),
 		Name:        teacher.User.Name,
@@ -60,6 +59,30 @@ func ToTeacherOutput(teacher *model.Teacher) TeacherOutput {
 		PhoneNumber: teacher.User.PhoneNumber,
 		UserType:    teacher.User.UserType,
 		SubMajorID:  int(teacher.SubMajorID),
+	}
+}
+
+type StudentOutput struct {
+	ID          int    `json:"id"`
+	UserID      int    `json:"user_id"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phone_number"`
+	UserType    string `json:"user_type"`
+	SubMajorID  int    `json:"sub_major_id"`
+	Code        string `json:"code"`
+}
+
+func ToStudentOutput(student *model.Student) *StudentOutput {
+	return &StudentOutput{
+		ID:          int(student.ID),
+		UserID:      int(student.UserID),
+		Name:        student.User.Name,
+		Email:       student.User.Email,
+		PhoneNumber: student.User.PhoneNumber,
+		UserType:    student.User.UserType,
+		SubMajorID:  int(student.SubMajorID),
+		Code:        student.Code,
 	}
 }
 

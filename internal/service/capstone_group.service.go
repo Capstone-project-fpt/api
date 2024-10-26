@@ -2,12 +2,14 @@ package service
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/api/database/model"
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/capstone_group_dto"
+	"github.com/api/internal/dto/user_dto"
 	"github.com/api/internal/queue"
 	context_util "github.com/api/pkg/utils/context"
 	jwt_util "github.com/api/pkg/utils/jwt"
@@ -23,6 +25,7 @@ type ICapstoneGroupService interface {
 	AcceptInviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput) error
 	GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupOutput, error)
 	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupOutput, error)
+	GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error)
 }
 
 type capstoneGroupService struct {
@@ -54,6 +57,7 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		return id != currentStudent.ID
 	})
 
+	memberGroupsIDs := append(input.StudentIds, currentStudent.ID)
 	totalMembers := len(input.StudentIds) + 1
 
 	if totalMembers > constant.MaxTotalMemberInGroup || totalMembers < constant.MinTotalMemberInGroup {
@@ -63,10 +67,36 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 	}
 
 	var memberGroups []model.Student
-	if err := global.Db.Model(model.Student{}).Where("id IN ?", input.StudentIds).Find(&memberGroups).Error; err != nil {
+	if err := global.Db.Model(model.Student{}).Joins("User").Where("students.id IN ?", memberGroupsIDs).Find(&memberGroups).Error; err != nil {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
+	}
+
+	var memberExistInAnotherGroup []model.StudentCapstoneGroup
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Where("student_id IN ? AND semester_id = ?", memberGroupsIDs, input.SemesterID).Find(&memberExistInAnotherGroup).Error; err == nil {
+		if len(memberExistInAnotherGroup) > 0 {
+			memberIDExistInAnotherGroup := funk.Map(memberExistInAnotherGroup, func(member model.StudentCapstoneGroup) int64 {
+				return member.StudentID
+			})
+
+			studentExist := funk.Filter(memberGroups, func(student model.Student) bool {
+				return funk.ContainsInt64((memberIDExistInAnotherGroup).([]int64), student.ID)
+			})
+
+			memberNameArr := funk.Map(studentExist, func(student model.Student) string {
+				return student.User.Name
+			}).([]string)
+
+			memberNames := strings.Join(memberNameArr, ", ")
+
+			return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.MemberExistInAnotherGroup,
+				TemplateData: map[string]interface{}{
+					"MemberNames": memberNames,
+				},
+			}))
+		}
 	}
 
 	if len(memberGroups) != len(input.StudentIds) {
@@ -101,10 +131,15 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		return nil, err
 	}
 
-	if err := global.Db.Model(model.Student{}).
-		Where("id IN ?", append(input.StudentIds, currentStudent.ID)).
-		Update("capstone_group_id", data.ID).
-		Error; err != nil {
+	studentCapstoneGroups := make([]model.StudentCapstoneGroup, 0)
+	for _, id := range memberGroupsIDs {
+		studentCapstoneGroups = append(studentCapstoneGroups, model.StudentCapstoneGroup{
+			StudentID:       id,
+			SemesterID:      input.SemesterID,
+			CapstoneGroupID: data.ID,
+		})
+	}
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Create(&studentCapstoneGroups).Error; err != nil {
 		return nil, err
 	}
 
@@ -315,4 +350,41 @@ func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *c
 		},
 		Items: itemsCapstoneGroupOutput,
 	}, nil
+}
+
+func (cgs *capstoneGroupService) GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error) {
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Joins("Mentor.User").Where("capstone_groups.id = ?", id).First(&capstoneGroup).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+	mentor := capstoneGroup.Mentor
+	var mentorOutput *user_dto.TeacherOutput
+	mentorOutput = nil
+	if mentor != nil {
+		mentorOutput = user_dto.ToTeacherOutput(mentor)
+	}
+
+	var membersCapstoneGroup []model.StudentCapstoneGroup
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Joins("Student.User").
+		Where("student_capstone_groups.capstone_group_id = ?", id).
+		Find(&membersCapstoneGroup).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	var output capstone_group_dto.MentorAndListMemberCapstoneGroupOutput
+	output.LeaderID = capstoneGroup.LeaderID
+	output.Mentor = mentorOutput
+	output.Members = make([]*user_dto.StudentOutput, len(membersCapstoneGroup))
+
+	for index, memberCapstoneGroup := range membersCapstoneGroup {
+		member := memberCapstoneGroup.Student
+		memberOutput := user_dto.ToStudentOutput(&member)
+		output.Members[index] = memberOutput
+	}
+
+	return &output, nil
 }

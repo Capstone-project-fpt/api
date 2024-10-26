@@ -58,6 +58,7 @@ type MessageI18n struct {
 	FeedbackCapstoneGroupTopicSuccess        string
 	UpdateFeedbackCapstoneGroupTopicSuccess  string
 	DeleteFeedbackCapstoneGroupTopicSuccess  string
+	MemberExistInAnotherGroup                string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -104,6 +105,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	FeedbackCapstoneGroupTopicSuccess:        "FeedbackCapstoneGroupTopicSuccess",
 	UpdateFeedbackCapstoneGroupTopicSuccess:  "UpdateFeedbackCapstoneGroupTopicSuccess",
 	DeleteFeedbackCapstoneGroupTopicSuccess:  "DeleteFeedbackCapstoneGroupTopicSuccess",
+	MemberExistInAnotherGroup:                "MemberExistInAnotherGroup",
 }
 
 type RedisKeyType struct {
