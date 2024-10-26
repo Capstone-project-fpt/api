@@ -17,11 +17,12 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 	{
 		capstoneGroupRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.CreateCapstoneGroup)
 		capstoneGroupRouter.POST("/:capstone_group_id/mentors", capstoneGroupController.InviteMentorToCapstoneGroup)
-		capstoneGroupRouter.POST("/:capstone_group_id/mentors/invitation", middleware.UserTypeMiddleware(constant.UserType.Teacher), capstoneGroupController.AcceptInviteMentorToCapstoneGroup)
+		capstoneGroupRouter.POST("/:capstone_group_id/mentors/invitations", middleware.UserTypeMiddleware(constant.UserType.Teacher), capstoneGroupController.ResponseInviteMentorToCapstoneGroup)
 		capstoneGroupRouter.PUT("/", capstoneGroupController.UpdateCapstoneGroup)
 		capstoneGroupRouter.GET("/", capstoneGroupController.GetListCapstoneGroups)
 		capstoneGroupRouter.GET("/:capstone_group_id", capstoneGroupController.GetCapstoneGroup)
 		capstoneGroupRouter.GET("/:capstone_group_id/members", capstoneGroupController.GetMentorAndListMemberCapstoneGroup)
+		capstoneGroupRouter.GET("/:capstone_group_id/mentors/invitations", capstoneGroupController.GetListInvitationMentorCapstoneGroups)
 	}
 
 	capstoneGroupTopicRouter := capstoneGroupRouter.Group("/:capstone_group_id/capstone-group-topics")

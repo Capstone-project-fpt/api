@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS "invitation_mentor_capstone_groups";

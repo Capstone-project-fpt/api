@@ -1021,14 +1021,66 @@ const docTemplate = `{
                 }
             }
         },
-        "/capstone-groups/{capstone_group_id}/mentors/invitation": {
+        "/capstone-groups/{capstone_group_id}/mentors/invitations": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list invitation mentor capstone group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetListInvitationMentorCapstoneGroups",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.ListInvitationMentorCapstoneGroupOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Accept invite mentor to capstone group",
+                "description": "Response invite mentor to capstone group",
                 "consumes": [
                     "application/json"
                 ],
@@ -1038,7 +1090,7 @@ const docTemplate = `{
                 "tags": [
                     "Capstone Group"
                 ],
-                "summary": "AcceptInviteMentorToCapstoneGroup",
+                "summary": "ResponseInviteMentorToCapstoneGroup",
                 "parameters": [
                     {
                         "description": "data",
@@ -1046,7 +1098,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput"
+                            "$ref": "#/definitions/capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput"
                         }
                     }
                 ],
@@ -2185,17 +2237,6 @@ const docTemplate = `{
                 }
             }
         },
-        "capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput": {
-            "type": "object",
-            "required": [
-                "token"
-            ],
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "capstone_group_dto.CapstoneGroupOutput": {
             "type": "object",
             "properties": {
@@ -2268,6 +2309,35 @@ const docTemplate = `{
                 }
             }
         },
+        "capstone_group_dto.InvitationMentorCapstoneGroupOutput": {
+            "type": "object",
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "expired_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mentor": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
+                },
+                "mentor_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "capstone_group_dto.InviteMentorToCapstoneGroupInput": {
             "type": "object",
             "required": [
@@ -2290,6 +2360,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "capstone_group_dto.ListInvitationMentorCapstoneGroupOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.InvitationMentorCapstoneGroupOutput"
                     }
                 },
                 "meta": {
@@ -2325,6 +2409,25 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "boolean"
+                }
+            }
+        },
+        "capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput": {
+            "type": "object",
+            "required": [
+                "status",
+                "token"
+            ],
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "approve",
+                        "reject"
+                    ]
+                },
+                "token": {
+                    "type": "string"
                 }
             }
         },

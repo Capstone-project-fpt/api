@@ -22,8 +22,8 @@ type ResetPassJwtInput struct {
 type InviteMentorJwtInput struct {
 	TeacherID       int64
 	CapstoneGroupID int64
+	InviteID        int64
 }
-
 
 func GenerateAccessToken(payload JwtInput) (string, error) {
 	secretKey := []byte(global.Config.Jwt.Secret)
@@ -77,13 +77,13 @@ func GenerateResetPasswordToken(payload ResetPassJwtInput) (string, error) {
 	return token, nil
 }
 
-func GenerateInviteMentorToken(payload InviteMentorJwtInput) (string, error) {
+func GenerateInviteMentorToken(payload InviteMentorJwtInput, expirationAt int64) (string, error) {
 	secretKey := []byte(global.Config.Jwt.Secret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": payload,
 		"iss": global.Config.Server.Name,
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Duration(constant.DefaultInviteMentorTokenLength) * time.Second).UnixMilli(),
+		"exp": expirationAt,
 	})
 
 	token, err := claims.SignedString(secretKey)
@@ -115,6 +115,7 @@ func VerifyInviteMentorToken(tokenString string) (*InviteMentorJwtInput, error) 
 	var payload InviteMentorJwtInput
 	payload.TeacherID = int64(claims["sub"].(map[string]interface{})["TeacherID"].(float64))
 	payload.CapstoneGroupID = int64(claims["sub"].(map[string]interface{})["CapstoneGroupID"].(float64))
+	payload.InviteID = int64(claims["sub"].(map[string]interface{})["InviteID"].(float64))
 
 	return &payload, nil
 }

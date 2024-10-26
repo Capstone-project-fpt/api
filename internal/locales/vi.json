@@ -30,7 +30,7 @@
   "MaxTotalCapstoneGroupTeacherMentor": "Giáo viên này đã mentor tối đa các nhóm bảo vệ trong học kỳ này.",
   "SendInviteToMentorSuccess": "Gửi yêu cầu mời làm mentor của nhóm cho giáo viên thành công.",
   "CapstoneGroupAlreadyMentor": "Nhóm bảo vệ đồ án đã có mentor.",
-  "AcceptInviteMentorToCapstoneGroupSuccess": "Chấp nhận làm mentor của nhóm thành công.",
+  "ResponseInviteMentorToCapstoneGroupSuccess": "{{.Status}} thành mentor của nhóm thành công.",
   "CapstoneGroupInProgress": "Nhóm đang trong quá trình thực hiện đề tài.",
   "CreateCapstoneGroupTopicSuccess": "Tạo đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "UpdateCapstoneGroupTopicSuccess": "Cập nhật đề tài bảo vệ khoá luận tốt nghiệp thành công.",
@@ -42,5 +42,8 @@
   "FeedbackCapstoneGroupTopicSuccess": "Feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "UpdateFeedbackCapstoneGroupTopicSuccess": "Cập nhật feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "DeleteFeedbackCapstoneGroupTopicSuccess": "Xoá feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
-  "MemberExistInAnotherGroup": "Sinh viên {{.MemberNames}} đã có nhóm đồ án khác trong học kỳ được chọn."
+  "MemberExistInAnotherGroup": "Sinh viên {{.MemberNames}} đã có nhóm đồ án khác trong học kỳ được chọn.",
+  "InvitationMentorCapstoneGroupNotFound": "Lời mời giảng viên làm mentor cho nhóm bảo về đồ án không tìm thấy.",
+  "InvitationMentorCapstoneGroupAlreadyResponded": "Giảng viên đã {{.Status}} lời mời giảng làm mentor cho nhóm bảo về đồ án.",
+  "InvitationMentorCapstoneGroupExpired": "Lời mời giảng viên làm mentor cho nhóm bảo vệ đồ án đã quá hạn, vui lòng tạo thêm lời mời khác."
 }

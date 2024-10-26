@@ -30,7 +30,7 @@
   "MaxTotalCapstoneGroupTeacherMentor": "Max total capstone group teacher mentor.",
   "SendInviteToMentorSuccess": "Send invite to mentor success.",
   "CapstoneGroupAlreadyMentor": "Capstone group already mentor.",
-  "AcceptInviteMentorToCapstoneGroupSuccess": "Accept invite mentor to capstone group success.",
+  "ResponseInviteMentorToCapstoneGroupSuccess": "{{.Status}} to mentor of capstone group success.",
   "CapstoneGroupInProgress": "Capstone group in progress.",
   "CreateCapstoneGroupTopicSuccess": "Create capstone group topic success.",
   "UpdateCapstoneGroupTopicSuccess": "Update capstone group topic success.",
@@ -42,5 +42,8 @@
   "FeedbackCapstoneGroupTopicSuccess": "Feedback capstone group topic success.",
   "UpdateFeedbackCapstoneGroupTopicSuccess": "Update feedback capstone group topic success.",
   "DeleteFeedbackCapstoneGroupTopicSuccess": "Delete feedback capstone group topic success.",
-  "MemberExistInAnotherGroup": "Member {{.MemberNames}} exist in another group."
+  "MemberExistInAnotherGroup": "Member {{.MemberNames}} exist in another group.",
+  "InvitationMentorCapstoneGroupNotFound": "Invitation mentor capstone group not found.",
+  "InvitationMentorCapstoneGroupAlreadyResponded": "Mentor already {{.Status}} invitation capstone group.",
+  "InvitationMentorCapstoneGroupExpired": "Invitation mentor capstone group expired."
 }

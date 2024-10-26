@@ -25,7 +25,7 @@ func NewCapstoneGroupController(
 	capstoneGroupTopicService capstone_group_service.ICapstoneGroupTopicService,
 ) *CapstoneGroupController {
 	return &CapstoneGroupController{
-		capstoneGroupService: capstoneGroupService,
+		capstoneGroupService:      capstoneGroupService,
 		capstoneGroupTopicService: capstoneGroupTopicService,
 	}
 }
@@ -128,20 +128,29 @@ func (cgc *CapstoneGroupController) InviteMentorToCapstoneGroup(ctx *gin.Context
 	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
 }
 
-// @Summary AcceptInviteMentorToCapstoneGroup
-// @Description Accept invite mentor to capstone group
+// @Summary ResponseInviteMentorToCapstoneGroup
+// @Description Response invite mentor to capstone group
 // @Tags Capstone Group
 // @Accept json
 // @Produce json
-// @Param data body capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput true "data"
-// @Router /capstone-groups/{capstone_group_id}/mentors/invitation [post]
+// @Param data body capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput true "data"
+// @Router /capstone-groups/{capstone_group_id}/mentors/invitations [post]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth
-func (cgc *CapstoneGroupController) AcceptInviteMentorToCapstoneGroup(ctx *gin.Context) {
-	var input capstone_group_dto.AcceptInviteMentorToCapstoneGroupInput
+func (cgc *CapstoneGroupController) ResponseInviteMentorToCapstoneGroup(ctx *gin.Context) {
+	var input capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	if err := global.Validator.Struct(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
 		return
 	}
 
@@ -154,7 +163,7 @@ func (cgc *CapstoneGroupController) AcceptInviteMentorToCapstoneGroup(ctx *gin.C
 
 	input.CapstoneGroupID = int64(id)
 
-	err = cgc.capstoneGroupService.AcceptInviteMentorToCapstoneGroup(ctx, &input)
+	err = cgc.capstoneGroupService.ResponseInviteMentorToCapstoneGroup(ctx, &input)
 
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
@@ -162,7 +171,10 @@ func (cgc *CapstoneGroupController) AcceptInviteMentorToCapstoneGroup(ctx *gin.C
 	}
 
 	message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-		MessageID: constant.MessageI18nId.AcceptInviteMentorToCapstoneGroupSuccess,
+		MessageID: constant.MessageI18nId.ResponseInviteMentorToCapstoneGroupSuccess,
+		TemplateData: map[string]interface{}{
+			"Status": input.Status,
+		},
 	})
 
 	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
@@ -240,6 +252,42 @@ func (cgc *CapstoneGroupController) GetMentorAndListMemberCapstoneGroup(ctx *gin
 	}
 
 	output, err := cgc.capstoneGroupService.GetMentorAndListMemberCapstoneGroup(ctx, int64(id))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}
+
+// @Summary GetListInvitationMentorCapstoneGroups
+// @Description Get list invitation mentor capstone group
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Param limit query int true "Limit"
+// @Param page query int true "Page"
+// @Router /capstone-groups/{capstone_group_id}/mentors/invitations [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} capstone_group_dto.ListInvitationMentorCapstoneGroupOutput
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) GetListInvitationMentorCapstoneGroups(ctx *gin.Context) {
+	idParam := ctx.Param("capstone_group_id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	var input capstone_group_dto.GetListInviteMentorToCapstoneGroupInput
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
+	input.CapstoneGroupID = int64(id)
+
+	output, err := cgc.capstoneGroupService.GetListInvitationMentorCapstoneGroups(ctx, &input)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
 		return
