@@ -201,7 +201,7 @@ func (cgc *CapstoneGroupController) GetListCapstoneGroups(ctx *gin.Context) {
 // @Description Get capstone group
 // @Tags Capstone Group
 // @Produce json
-// @Param id path int true "id"
+// @Param capstone_group_id path int true "capstone_group_id"
 // @Router /capstone-groups/{capstone_group_id} [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} capstone_group_dto.GetCapstoneGroupSwaggerOutput
@@ -215,6 +215,31 @@ func (cgc *CapstoneGroupController) GetCapstoneGroup(ctx *gin.Context) {
 	}
 
 	output, err := cgc.capstoneGroupService.GetCapstoneGroup(ctx, id)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}
+
+// @Summary GetMentorAndListMemberCapstoneGroup
+// @Description Get mentor and list member capstone group
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Router /capstone-groups/{capstone_group_id}/members [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} capstone_group_dto.MentorAndListMemberCapstoneGroupSwaggerOutput
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) GetMentorAndListMemberCapstoneGroup(ctx *gin.Context) {
+	idParam := ctx.Param("capstone_group_id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	output, err := cgc.capstoneGroupService.GetMentorAndListMemberCapstoneGroup(ctx, int64(id))
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
 		return

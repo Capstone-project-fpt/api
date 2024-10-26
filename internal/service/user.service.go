@@ -90,7 +90,6 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 			studentInfo := user_dto.StudentInfoOutput{
 				StudentID:       int(item.StudentID),
 				Code:            item.StudentCode,
-				CapstoneGroupID: int(item.StudentCapstoneGroupID),
 				SubMajorId:      int(item.StudentSubMajorID),
 				CreatedAt:       item.StudentCreatedAt,
 			}
@@ -151,7 +150,6 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOu
 			StudentID:       int(student.ID),
 			Code:            student.Code,
 			SubMajorId:      int(student.SubMajorID),
-			CapstoneGroupID: int(student.CapstoneGroupID),
 			CreatedAt:       student.CreatedAt,
 		}
 	case constant.UserType.Teacher:

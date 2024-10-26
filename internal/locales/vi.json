@@ -41,5 +41,6 @@
   "CapstoneGroupTopicFeedbackNotFound": "Không tìm thấy feedback đề tài bảo vệ khoá luận tốt nghiệp.",
   "FeedbackCapstoneGroupTopicSuccess": "Feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
   "UpdateFeedbackCapstoneGroupTopicSuccess": "Cập nhật feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
-  "DeleteFeedbackCapstoneGroupTopicSuccess": "Xoá feedback đề tài bảo vệ khoá luận tốt nghiệp thành công."
+  "DeleteFeedbackCapstoneGroupTopicSuccess": "Xoá feedback đề tài bảo vệ khoá luận tốt nghiệp thành công.",
+  "MemberExistInAnotherGroup": "Sinh viên {{.MemberNames}} đã có nhóm đồ án khác trong học kỳ được chọn."
 }

@@ -40,7 +40,7 @@ type TopicReferenceOutput struct {
 	Name         string                 `json:"name"`
 	Path         string                 `json:"path"`
 	StatusReview string                 `json:"status_review"`
-	Teacher      user_dto.TeacherOutput `json:"teacher"`
+	Teacher      *user_dto.TeacherOutput `json:"teacher"`
 }
 
 func ToTopicReferenceOutput(topicReference *model.TopicReferences) TopicReferenceOutput {

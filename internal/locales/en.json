@@ -41,5 +41,6 @@
   "CapstoneGroupTopicFeedbackNotFound": "Capstone group topic feedback not found.",
   "FeedbackCapstoneGroupTopicSuccess": "Feedback capstone group topic success.",
   "UpdateFeedbackCapstoneGroupTopicSuccess": "Update feedback capstone group topic success.",
-  "DeleteFeedbackCapstoneGroupTopicSuccess": "Delete feedback capstone group topic success."
+  "DeleteFeedbackCapstoneGroupTopicSuccess": "Delete feedback capstone group topic success.",
+  "MemberExistInAnotherGroup": "Member {{.MemberNames}} exist in another group."
 }

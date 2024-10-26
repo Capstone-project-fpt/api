@@ -453,8 +453,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "id",
-                        "name": "id",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
                         "in": "path",
                         "required": true
                     }
@@ -925,6 +925,46 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/members": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get mentor and list member capstone group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetMentorAndListMemberCapstoneGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.MentorAndListMemberCapstoneGroupSwaggerOutput"
                         }
                     },
                     "400": {
@@ -2257,6 +2297,37 @@ const docTemplate = `{
                 }
             }
         },
+        "capstone_group_dto.MentorAndListMemberCapstoneGroupOutput": {
+            "type": "object",
+            "properties": {
+                "leader_id": {
+                    "type": "integer"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.StudentOutput"
+                    }
+                },
+                "mentor": {
+                    "$ref": "#/definitions/user_dto.TeacherOutput"
+                }
+            }
+        },
+        "capstone_group_dto.MentorAndListMemberCapstoneGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/capstone_group_dto.MentorAndListMemberCapstoneGroupOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
         "capstone_group_dto.UpdateCapstoneGroupInput": {
             "type": "object",
             "required": [
@@ -2813,9 +2884,6 @@ const docTemplate = `{
         "user_dto.StudentInfoOutput": {
             "type": "object",
             "properties": {
-                "capstone_group_id": {
-                    "type": "integer"
-                },
                 "code": {
                     "type": "string"
                 },
@@ -2827,6 +2895,35 @@ const docTemplate = `{
                 },
                 "sub_major_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "user_dto.StudentOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "sub_major_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "user_type": {
+                    "type": "string"
                 }
             }
         },

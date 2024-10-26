@@ -161,6 +161,26 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  capstone_group_dto.MentorAndListMemberCapstoneGroupOutput:
+    properties:
+      leader_id:
+        type: integer
+      members:
+        items:
+          $ref: '#/definitions/user_dto.StudentOutput'
+        type: array
+      mentor:
+        $ref: '#/definitions/user_dto.TeacherOutput'
+    type: object
+  capstone_group_dto.MentorAndListMemberCapstoneGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/capstone_group_dto.MentorAndListMemberCapstoneGroupOutput'
+      message:
+        type: boolean
+    type: object
   capstone_group_dto.UpdateCapstoneGroupInput:
     properties:
       id:
@@ -526,8 +546,6 @@ definitions:
     type: object
   user_dto.StudentInfoOutput:
     properties:
-      capstone_group_id:
-        type: integer
       code:
         type: string
       created_at:
@@ -536,6 +554,25 @@ definitions:
         type: integer
       sub_major_id:
         type: integer
+    type: object
+  user_dto.StudentOutput:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone_number:
+        type: string
+      sub_major_id:
+        type: integer
+      user_id:
+        type: integer
+      user_type:
+        type: string
     type: object
   user_dto.TeacherInfoOutput:
     properties:
@@ -852,9 +889,9 @@ paths:
     get:
       description: Get capstone group
       parameters:
-      - description: id
+      - description: capstone_group_id
         in: path
-        name: id
+        name: capstone_group_id
         required: true
         type: integer
       produces:
@@ -1161,6 +1198,31 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: ReviewCapstoneGroupTopic
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/members:
+    get:
+      description: Get mentor and list member capstone group
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.MentorAndListMemberCapstoneGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetMentorAndListMemberCapstoneGroup
       tags:
       - Capstone Group
   /capstone-groups/{capstone_group_id}/mentors:
