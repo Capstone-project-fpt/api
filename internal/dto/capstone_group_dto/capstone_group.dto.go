@@ -33,9 +33,10 @@ type ResponseInviteMentorToCapstoneGroupInput struct {
 }
 
 type GetListCapstoneGroupInput struct {
-	Limit  int `form:"limit" binding:"required" example:"10"`
-	Page   int `form:"page" binding:"required" example:"1"`
-	Offset int `swaggerignore:"true"`
+	Limit      int `form:"limit" binding:"required" example:"10"`
+	Page       int `form:"page" binding:"required" example:"1"`
+	SemesterID int `form:"semester_id"`
+	Offset     int `swaggerignore:"true"`
 }
 
 type GetListInviteMentorToCapstoneGroupInput struct {
@@ -57,6 +58,19 @@ type CapstoneGroupOutput struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type CapstoneGroupWithTotalMemberOutput struct {
+	ID           int64     `json:"id"`
+	NameGroup    string    `json:"name_group"`
+	TopicID      *int64    `json:"topic_id"`
+	MajorID      int64     `json:"major_id"`
+	SemesterID   int64     `json:"semester_id"`
+	LeaderID     int64     `json:"leader_id"`
+	Status       string    `json:"status"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
+	TotalMembers int64     `json:"total_members"`
+}
+
 func ToCapstoneGroupOutput(capstoneGroup *model.CapstoneGroup) CapstoneGroupOutput {
 	return CapstoneGroupOutput{
 		ID:         capstoneGroup.ID,
@@ -68,6 +82,21 @@ func ToCapstoneGroupOutput(capstoneGroup *model.CapstoneGroup) CapstoneGroupOutp
 		Status:     capstoneGroup.Status,
 		CreatedAt:  capstoneGroup.CreatedAt,
 		UpdatedAt:  capstoneGroup.UpdatedAt,
+	}
+}
+
+func ToCapstoneGroupWithTotalMemberOutput(capstoneGroup *model.CapstoneGroupWithTotalMember) CapstoneGroupWithTotalMemberOutput {
+	return CapstoneGroupWithTotalMemberOutput{
+		ID:           capstoneGroup.ID,
+		NameGroup:    capstoneGroup.NameGroup,
+		TopicID:      capstoneGroup.TopicID,
+		MajorID:      capstoneGroup.MajorID,
+		SemesterID:   capstoneGroup.SemesterID,
+		LeaderID:     capstoneGroup.LeaderID,
+		Status:       capstoneGroup.Status,
+		CreatedAt:    capstoneGroup.CreatedAt,
+		UpdatedAt:    capstoneGroup.UpdatedAt,
+		TotalMembers: capstoneGroup.TotalMembers,
 	}
 }
 
@@ -103,6 +132,11 @@ type ListInvitationMentorCapstoneGroupOutput struct {
 type ListCapstoneGroupOutput struct {
 	Meta  dto.MetaPagination    `json:"meta"`
 	Items []CapstoneGroupOutput `json:"items"`
+}
+
+type ListCapstoneGroupWithTotalMemberOutput struct {
+	Meta  dto.MetaPagination                   `json:"meta"`
+	Items []CapstoneGroupWithTotalMemberOutput `json:"items"`
 }
 
 type MentorAndListMemberCapstoneGroupOutput struct {

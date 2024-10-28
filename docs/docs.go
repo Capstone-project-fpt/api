@@ -331,6 +331,12 @@ const docTemplate = `{
                         "name": "page",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "SemesterID",
+                        "name": "semester_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {

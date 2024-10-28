@@ -849,6 +849,10 @@ paths:
         name: page
         required: true
         type: integer
+      - description: SemesterID
+        in: query
+        name: semester_id
+        type: integer
       produces:
       - application/json
       responses:
