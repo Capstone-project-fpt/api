@@ -16,6 +16,11 @@ type User struct {
 	Roles       []Role    `gorm:"many2many:users_roles;"`
 }
 
+func (User) TableName() string {
+	return "users"
+}
+
+// For custom query
 type UserWithDetails struct {
 	UserID          int    `gorm:"column:user_id"`
 	UserName        string `gorm:"column:user_name"`
@@ -31,8 +36,4 @@ type UserWithDetails struct {
 	StudentCode       string    `gorm:"column:student_code"`
 	StudentSubMajorID int       `gorm:"column:student_sub_major_id"`
 	StudentCreatedAt  time.Time `gorm:"column:student_created_at"`
-}
-
-func (User) TableName() string {
-	return "users"
 }
