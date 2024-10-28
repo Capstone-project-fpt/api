@@ -23,3 +23,21 @@ type CapstoneGroup struct {
 func (CapstoneGroup) TableName() string {
 	return "capstone_groups"
 }
+
+// For custom query
+type CapstoneGroupWithTotalMember struct {
+	ID           int64  `gorm:"column:id"`
+	NameGroup    string `gorm:"column:name_group"`
+	TopicID      *int64 `gorm:"column:topic_id"`
+	MajorID      int64  `gorm:"column:major_id"`
+	Major        Major
+	SemesterID   int64 `gorm:"column:semester_id"`
+	Semester     Semester
+	LeaderID     int64  `gorm:"column:leader_id"`
+	MentorID     *int64 `gorm:"column:mentor_id"`
+	Mentor       *Teacher
+	Status       string    `gorm:"column:status"`
+	CreatedAt    time.Time `gorm:"column:created_at"`
+	UpdatedAt    time.Time `gorm:"column:updated_at"`
+	TotalMembers int64     `gorm:"column:total_members"`
+}

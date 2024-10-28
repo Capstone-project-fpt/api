@@ -22,8 +22,8 @@ type ICapstoneGroupService interface {
 	UpdateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupInput) error
 	InviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.InviteMentorToCapstoneGroupInput) error
 	ResponseInviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput) error
-	GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupOutput, error)
-	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupOutput, error)
+	GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error)
+	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupWithTotalMemberOutput, error)
 	GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error)
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 }
@@ -190,39 +190,53 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroup(ctx *gin.Context, input *ca
 	return nil
 }
 
-func (cgs *capstoneGroupService) GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupOutput, error) {
-	var capstoneGroup model.CapstoneGroup
-	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", id).First(&capstoneGroup).Error; err != nil {
+func (cgs *capstoneGroupService) GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error) {
+	var capstoneGroupWithTotalMember model.CapstoneGroupWithTotalMember
+	if err := global.Db.Model(model.CapstoneGroup{}).
+		Select("capstone_groups.*, COUNT(sg.student_id) AS total_members").
+		Joins("LEFT JOIN student_capstone_groups AS sg ON sg.capstone_group_id = capstone_groups.id").
+		Where("capstone_groups.id = ?", id).
+		Group("capstone_groups.id").
+		First(&capstoneGroupWithTotalMember).Error; err != nil {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
 		}))
 	}
 
-	capstoneGroupOutput := capstone_group_dto.ToCapstoneGroupOutput(&capstoneGroup)
+	capstoneGroupOutput := capstone_group_dto.ToCapstoneGroupWithTotalMemberOutput(&capstoneGroupWithTotalMember)
 	return &capstoneGroupOutput, nil
 }
 
-func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupOutput, error) {
+func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupWithTotalMemberOutput, error) {
 	var total int64
-	var items []model.CapstoneGroup
+	var items []model.CapstoneGroupWithTotalMember
+
+	query := global.Db.Model(model.CapstoneGroup{}).
+		Select("capstone_groups.*, COUNT(sg.student_id) AS total_members").
+		Joins("LEFT JOIN student_capstone_groups AS sg ON sg.capstone_group_id = capstone_groups.id").
+		Group("capstone_groups.id")
 
 	if err := global.Db.Model(model.CapstoneGroup{}).Count(&total).Error; err != nil {
 		return nil, err
 	}
 
-	if err := global.Db.Model(model.CapstoneGroup{}).
+	if input.SemesterID != 0 {
+		query = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
+	}
+
+	if err := query.
 		Limit(int(input.Limit)).
 		Offset(int(input.Offset)).
 		Find(&items).Error; err != nil {
 		return nil, err
 	}
 
-	itemsCapstoneGroupOutput := make([]capstone_group_dto.CapstoneGroupOutput, len(items))
+	itemsCapstoneGroupOutput := make([]capstone_group_dto.CapstoneGroupWithTotalMemberOutput, len(items))
 	for i, item := range items {
-		itemsCapstoneGroupOutput[i] = capstone_group_dto.ToCapstoneGroupOutput(&item)
+		itemsCapstoneGroupOutput[i] = capstone_group_dto.ToCapstoneGroupWithTotalMemberOutput(&item)
 	}
 
-	return &capstone_group_dto.ListCapstoneGroupOutput{
+	return &capstone_group_dto.ListCapstoneGroupWithTotalMemberOutput{
 		Meta: dto.MetaPagination{
 			CurrentPage: int(input.Page),
 			Total:       int(total),

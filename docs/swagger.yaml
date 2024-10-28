@@ -849,6 +849,10 @@ paths:
         name: page
         required: true
         type: integer
+      - description: SemesterID
+        in: query
+        name: semester_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -1046,6 +1050,26 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroupTopic
+      tags:
+      - Capstone Group
+    post:
+      consumes:
+      - application/json
+      description: Select capstone group topic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: SelectCapstoneGroupTopic
       tags:
       - Capstone Group
     put:

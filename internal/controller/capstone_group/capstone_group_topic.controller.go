@@ -125,6 +125,42 @@ func (cgc *CapstoneGroupController) DeleteCapstoneGroupTopic(ctx *gin.Context) {
 	}))
 }
 
+// @Summary SelectCapstoneGroupTopic
+// @Description Select capstone group topic
+// @Tags Capstone Group
+// @Accept json
+// @Produce json
+// @Router /capstone-groups/{capstone_group_id}/capstone-group-topics/{id} [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) SelectCapstoneGroupTopic(ctx *gin.Context) {
+	var input capstone_group_topic_dto.SelectCapstoneGroupTopicInput
+	capstoneGroupIDStr := ctx.Param("capstone_group_id")
+	capstoneGroupID, err := strconv.Atoi(capstoneGroupIDStr)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+	input.CapstoneGroupTopicID = int64(id)
+	input.CapstoneGroupID = int64(capstoneGroupID)
+	statusCode, err := cgc.capstoneGroupTopicService.SelectCapstoneGroupTopic(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, statusCode, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, statusCode, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.SelectCapstoneGroupTopicSuccess,
+	}))
+}
+
 // @Summary ReviewCapstoneGroupTopic
 // @Description Review capstone group topic
 // @Tags Capstone Group

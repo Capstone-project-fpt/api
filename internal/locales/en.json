@@ -46,5 +46,9 @@
   "MemberExistInAnotherGroup": "Member {{.MemberNames}} exist in another group.",
   "InvitationMentorCapstoneGroupNotFound": "Invitation mentor capstone group not found.",
   "InvitationMentorCapstoneGroupAlreadyResponded": "Mentor already {{.Status}} invitation capstone group.",
-  "InvitationMentorCapstoneGroupExpired": "Invitation mentor capstone group expired."
+  "InvitationMentorCapstoneGroupExpired": "Invitation mentor capstone group expired.",
+  "CapstoneGroupNotReviewingTopic": "Capstone group not in status reviewing topic.",
+  "CapstoneGroupNeedToHaveMentor": "Capstone group need to have mentor.",
+  "CapstoneGroupTopicNotApproved": "Capstone group topic not approved.",
+  "SelectCapstoneGroupTopicSuccess": "Select capstone group topic success."
 }
