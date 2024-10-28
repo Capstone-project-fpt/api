@@ -21,6 +21,11 @@ type UpdateCapstoneGroupTopicInput struct {
 	CapstoneGroupTopicID int64  `swaggerignore:"true"`
 }
 
+type SelectCapstoneGroupTopicInput struct {
+	CapstoneGroupTopicID int64 `swaggerignore:"true"`
+	CapstoneGroupID      int64 `swaggerignore:"true"`
+}
+
 type ReviewCapstoneGroupTopicInput struct {
 	StatusReview         string `json:"status_review" validate:"required,oneof=approved rejected"`
 	CapstoneGroupID      int64  `swaggerignore:"true"`
@@ -132,7 +137,6 @@ type ListCapstoneGroupTopicFeedbackOutput struct {
 	Meta  dto.MetaPagination                 `json:"meta"`
 	Items []CapstoneGroupTopicFeedbackOutput `json:"items"`
 }
-
 
 // This used for swagger
 type GetCapstoneGroupTopicFeedbackSwaggerOutput struct {

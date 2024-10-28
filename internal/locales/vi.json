@@ -46,5 +46,9 @@
   "MemberExistInAnotherGroup": "Sinh viên {{.MemberNames}} đã có nhóm đồ án khác trong học kỳ được chọn.",
   "InvitationMentorCapstoneGroupNotFound": "Lời mời giảng viên làm mentor cho nhóm bảo về đồ án không tìm thấy.",
   "InvitationMentorCapstoneGroupAlreadyResponded": "Giảng viên đã {{.Status}} lời mời giảng làm mentor cho nhóm bảo về đồ án.",
-  "InvitationMentorCapstoneGroupExpired": "Lời mời giảng viên làm mentor cho nhóm bảo vệ đồ án đã quá hạn, vui lòng tạo thêm lời mời khác."
+  "InvitationMentorCapstoneGroupExpired": "Lời mời giảng viên làm mentor cho nhóm bảo vệ đồ án đã quá hạn, vui lòng tạo thêm lời mời khác.",
+  "CapstoneGroupNotReviewingTopic": "Nhóm bảo vệ đồ án đang không ở trong trạng thái thẩm định đề tài.",
+  "CapstoneGroupNeedToHaveMentor": "Nhóm bảo vệ đồ án cần phải có mentor.",
+  "CapstoneGroupTopicNotApproved": "Đề tài bảo vệ khoá luận tốt nghiệp cần được chấp nhận bởi hội đồng thẩm định.",
+  "SelectCapstoneGroupTopicSuccess": "Lựa chọn đề tại bảo vệ khoá luận tốt nghiệp thành công."
 }

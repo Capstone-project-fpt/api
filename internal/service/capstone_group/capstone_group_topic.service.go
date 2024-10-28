@@ -2,6 +2,7 @@ package capstone_group_service
 
 import (
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/api/database/model"
@@ -18,6 +19,7 @@ type ICapstoneGroupTopicService interface {
 	CreateCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.CreateCapstoneGroupTopicInput) error
 	UpdateCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.UpdateCapstoneGroupTopicInput) error
 	DeleteCapstoneGroupTopic(ctx *gin.Context, input *DeleteCapstoneGroupTopicInput) error
+	SelectCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.SelectCapstoneGroupTopicInput) (int, error)
 	ReviewCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.ReviewCapstoneGroupTopicInput) error
 	FeedbackCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.FeedbackCapstoneGroupTopicInput) error
 	UpdateFeedbackCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.UpdateFeedbackCapstoneGroupTopicInput) error
@@ -141,6 +143,62 @@ func (cgts *capstoneGroupTopicService) DeleteCapstoneGroupTopic(ctx *gin.Context
 	}
 
 	return nil
+}
+
+func (cgts *capstoneGroupTopicService) SelectCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.SelectCapstoneGroupTopicInput) (int, error) {
+	currentStudent, err := cgts.getCurrentStudent(ctx)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).First(&capstoneGroup).Error; err != nil {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	if capstoneGroup.Status != constant.CapstoneGroupStatus.ReviewingTopic {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotReviewingTopic,
+		}))
+	}
+
+	if capstoneGroup.MentorID == nil {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNeedToHaveMentor,
+		}))
+	}
+
+	if capstoneGroup.LeaderID != currentStudent.ID {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
+		}))
+	}
+
+	var capstoneGroupTopic model.CapstoneGroupTopic
+	if err := global.Db.Model(model.CapstoneGroupTopic{}).Where("id = ?", input.CapstoneGroupTopicID).First(&capstoneGroupTopic).Error; err != nil {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupTopicNotFound,
+		}))
+	}
+
+	if capstoneGroupTopic.StatusReview != constant.TopicStatusReview.Approved {
+		return http.StatusBadRequest, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupTopicNotApproved,
+		}))
+	}
+
+	if err := global.Db.Model(&model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).Updates(&model.CapstoneGroup{
+		Status:  constant.CapstoneGroupStatus.InProgress,
+		TopicID: &capstoneGroupTopic.ID,
+	}).Error; err != nil {
+		return http.StatusInternalServerError, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		}))
+	}
+
+	return http.StatusOK, nil
 }
 
 func (cgts *capstoneGroupTopicService) ReviewCapstoneGroupTopic(ctx *gin.Context, input *capstone_group_topic_dto.ReviewCapstoneGroupTopicInput) error {

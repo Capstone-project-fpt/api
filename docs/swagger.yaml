@@ -1048,6 +1048,26 @@ paths:
       summary: GetCapstoneGroupTopic
       tags:
       - Capstone Group
+    post:
+      consumes:
+      - application/json
+      description: Select capstone group topic
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: SelectCapstoneGroupTopic
+      tags:
+      - Capstone Group
     put:
       consumes:
       - application/json

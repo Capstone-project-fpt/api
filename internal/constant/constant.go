@@ -63,6 +63,10 @@ type MessageI18n struct {
 	InvitationMentorCapstoneGroupNotFound         string
 	InvitationMentorCapstoneGroupAlreadyResponded string
 	InvitationMentorCapstoneGroupExpired          string
+	CapstoneGroupNotReviewingTopic                string
+	CapstoneGroupNeedToHaveMentor                 string
+	CapstoneGroupTopicNotApproved                 string
+	SelectCapstoneGroupTopicSuccess								string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -114,6 +118,10 @@ var MessageI18nId MessageI18n = MessageI18n{
 	InvitationMentorCapstoneGroupNotFound:         "InvitationMentorCapstoneGroupNotFound",
 	InvitationMentorCapstoneGroupAlreadyResponded: "InvitationMentorCapstoneGroupAlreadyResponded",
 	InvitationMentorCapstoneGroupExpired:          "InvitationMentorCapstoneGroupExpired",
+	CapstoneGroupNotReviewingTopic:                "CapstoneGroupNotReviewingTopic",
+	CapstoneGroupNeedToHaveMentor:                 "CapstoneGroupNeedToHaveMentor",
+	CapstoneGroupTopicNotApproved:                 "CapstoneGroupTopicNotApproved",
+	SelectCapstoneGroupTopicSuccess: 							 "SelectCapstoneGroupTopicSuccess",
 }
 
 type RedisKeyType struct {

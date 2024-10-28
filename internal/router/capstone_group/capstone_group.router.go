@@ -29,6 +29,7 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 	{
 		capstoneGroupTopicRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.CreateCapstoneGroupTopic)
 		capstoneGroupTopicRouter.PUT("/:id", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.UpdateCapstoneGroupTopic)
+		capstoneGroupTopicRouter.POST("/:id", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.SelectCapstoneGroupTopic)
 		capstoneGroupTopicRouter.DELETE("/:id", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.DeleteCapstoneGroupTopic)
 		capstoneGroupTopicRouter.GET("/", capstoneGroupController.GetListCapstoneGroupTopic)
 		capstoneGroupTopicRouter.GET("/:id", capstoneGroupController.GetCapstoneGroupTopic)
