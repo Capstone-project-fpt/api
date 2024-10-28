@@ -27,6 +27,7 @@ type LoginSwaggerOutput struct {
 }
 
 type ChangePasswordInput struct {
+	User_id     string `json:"user_id" binding:"required"`
 	OldPassword string `json:"oldPassword" binding:"required"`
 	NewPassword string `json:"newPassword" binding:"required"`
 }

@@ -291,14 +291,7 @@ func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error 
 }
 
 func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error) {
-	userID, exists := ctx.Get("userID")
-	if !exists {
-		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotAuthorized,
-		})
-		return http.StatusUnauthorized, errors.New(message)
-	}
-
+	var userID = input.User_id
 	var user model.User
 	if err := global.Db.Model(&user).Select("id", "email", "name", "password").Where("id = ?", userID).First(&user).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
