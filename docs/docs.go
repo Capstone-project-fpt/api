@@ -1421,6 +1421,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/change-password": {
+    "post": {
+        "description": "Change Password",
+        "consumes": [
+            "application/json"
+        ],
+        "produces": [
+            "application/json"
+        ],
+        "tags": [
+            "Auth"
+        ],
+        "summary": "ChangePassword",
+        "parameters": [
+            {
+                "description": "data",
+                "name": "data",
+                "in": "body",
+                "required": true,
+                "schema": {
+                    "$ref": "#/definitions/auth_dto.ChangePasswordInput"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "OK",
+                "schema": {
+                    "$ref": "#/definitions/response.ResponseDataSuccess"
+                }
+            },
+            "400": {
+                "description": "Bad Request",
+                "schema": {
+                    "$ref": "#/definitions/response.ResponseErr"
+                }
+            }
+        }
+    }
+},
         "/semesters": {
             "get": {
                 "security": [

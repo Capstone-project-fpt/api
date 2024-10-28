@@ -66,7 +66,9 @@ type MessageI18n struct {
 	CapstoneGroupNotReviewingTopic                string
 	CapstoneGroupNeedToHaveMentor                 string
 	CapstoneGroupTopicNotApproved                 string
-	SelectCapstoneGroupTopicSuccess								string
+	SelectCapstoneGroupTopicSuccess               string
+	UserNotAuthorized                             string
+	InvalidOldPassword                            string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -121,7 +123,9 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CapstoneGroupNotReviewingTopic:                "CapstoneGroupNotReviewingTopic",
 	CapstoneGroupNeedToHaveMentor:                 "CapstoneGroupNeedToHaveMentor",
 	CapstoneGroupTopicNotApproved:                 "CapstoneGroupTopicNotApproved",
-	SelectCapstoneGroupTopicSuccess: 							 "SelectCapstoneGroupTopicSuccess",
+	SelectCapstoneGroupTopicSuccess:               "SelectCapstoneGroupTopicSuccess",
+	UserNotAuthorized:                             "UserNotAuthorized",
+	InvalidOldPassword:                            "InvalidOldPassword",
 }
 
 type RedisKeyType struct {

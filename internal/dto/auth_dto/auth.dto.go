@@ -25,3 +25,8 @@ type LoginSwaggerOutput struct {
 	Success bool        `json:"message"`
 	Data    LoginOutput `json:"data"`
 }
+
+type ChangePasswordInput struct {
+	OldPassword string `json:"oldPassword" binding:"required"`
+	NewPassword string `json:"newPassword" binding:"required"`
+}

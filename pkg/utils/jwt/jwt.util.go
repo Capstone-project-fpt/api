@@ -25,6 +25,10 @@ type InviteMentorJwtInput struct {
 	InviteID        int64
 }
 
+type ChangePasswordJwtInput struct {
+	UserId int64
+}
+
 func GenerateAccessToken(payload JwtInput) (string, error) {
 	secretKey := []byte(global.Config.Jwt.Secret)
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

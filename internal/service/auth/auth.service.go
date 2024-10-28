@@ -30,6 +30,7 @@ type IAuthService interface {
 	LoginGoogleCallbackHandle(ctx *gin.Context) (string, error)
 	ForgotPassword(ctx *gin.Context, email string) error
 	ResetPassword(ctx *gin.Context, input *auth_dto.ResetPasswordInput) (int, error)
+	ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error)
 }
 
 type authService struct {
@@ -287,4 +288,48 @@ func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error 
 	}
 
 	return nil
+}
+
+func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error) {
+	userID, exists := ctx.Get("userID")
+	if !exists {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotAuthorized,
+		})
+		return http.StatusUnauthorized, errors.New(message)
+	}
+
+	var user model.User
+	if err := global.Db.Model(&user).Select("id", "email", "name", "password").Where("id = ?", userID).First(&user).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	if !password_util.CheckPasswordHash(input.OldPassword, user.Password) {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidOldPassword,
+		})
+		return http.StatusUnauthorized, errors.New(message)
+	}
+
+	hashedNewPassword, err := password_util.HashPassword(input.NewPassword)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	if err := global.Db.Model(&user).Where("id = ?", userID).Update("password", hashedNewPassword).Error; err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	global.Logger.Info("User password changed successfully", zap.Int64("userID", user.ID))
+
+	return http.StatusOK, nil
 }

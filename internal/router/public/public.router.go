@@ -24,6 +24,7 @@ func (pr *PublicRouter) InitPublicRouter(r *gin.RouterGroup) {
 	r.GET("/auth/:provider/callback", authController.LoginGoogleCallbackHandle)
 	r.POST("/forgot-password", authController.ForgotPassword)
 	r.POST("/reset-password", authController.ResetPassword)
+	r.POST("/change-password", authController.ChangePassword)
 	r.GET(
 		"/hello-world",
 		middleware.AuthMiddleware(),

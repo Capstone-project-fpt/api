@@ -170,3 +170,24 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, statusCode, "")
 }
+
+func (ac *AuthController) ChangePassword(ctx *gin.Context) {
+	var input auth_dto.ChangePasswordInput
+	localizer := global.Localizer
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	statusCode, err := ac.authService.ChangePassword(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, statusCode, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, "Password changed successfully.")
+}
