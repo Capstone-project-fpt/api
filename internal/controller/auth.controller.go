@@ -171,6 +171,15 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 	response.SuccessResponse(ctx, statusCode, "")
 }
 
+// @Summary ChangePassword
+// @Description Change Password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body auth_dto.ChangePassword true "data"
+// @Router /reset-password [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) ChangePassword(ctx *gin.Context) {
 	var input auth_dto.ChangePasswordInput
 	localizer := global.Localizer
