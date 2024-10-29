@@ -12,6 +12,7 @@ import (
 	"github.com/api/internal/dto/auth_dto"
 	"github.com/api/internal/types"
 	"github.com/api/pkg/mail"
+	context_util "github.com/api/pkg/utils/context"
 	jwt_util "github.com/api/pkg/utils/jwt"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
@@ -291,9 +292,15 @@ func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error 
 }
 
 func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error) {
-	var userID = input.User_id
+	currentUser := context_util.GetUserContext(ctx)
+	fmt.Println(currentUser.ID)
+	if currentUser == nil {
+		return http.StatusNotFound, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
 	var user model.User
-	if err := global.Db.Model(&user).Select("id", "email", "name", "password").Where("id = ?", userID).First(&user).Error; err != nil {
+	if err := global.Db.Model(&user).Select("id", "email", "name", "password").Where("id = ?", currentUser.ID).First(&user).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		})
@@ -315,7 +322,7 @@ func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePas
 		return http.StatusInternalServerError, errors.New(message)
 	}
 
-	if err := global.Db.Model(&user).Where("id = ?", userID).Update("password", hashedNewPassword).Error; err != nil {
+	if err := global.Db.Model(&user).Where("id = ?", currentUser.ID).Update("password", hashedNewPassword).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
