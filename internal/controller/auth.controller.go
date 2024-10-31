@@ -198,5 +198,8 @@ func (ac *AuthController) ChangePassword(ctx *gin.Context) {
 		return
 	}
 
-	response.SuccessResponse(ctx, http.StatusOK, "Password changed successfully.")
+	successMessage := localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.PasswordChangedSuccess,
+	})
+	response.SuccessResponse(ctx, http.StatusOK, successMessage)
 }

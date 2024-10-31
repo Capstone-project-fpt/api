@@ -293,7 +293,6 @@ func (as *authService) clearTokenSessions(ctx *gin.Context, email string) error 
 
 func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error) {
 	currentUser := context_util.GetUserContext(ctx)
-	fmt.Println(currentUser.ID)
 	if currentUser == nil {
 		return http.StatusNotFound, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
@@ -328,8 +327,5 @@ func (s *authService) ChangePassword(ctx *gin.Context, input *auth_dto.ChangePas
 		})
 		return http.StatusInternalServerError, errors.New(message)
 	}
-
-	global.Logger.Info("User password changed successfully", zap.Int64("userID", user.ID))
-
 	return http.StatusOK, nil
 }

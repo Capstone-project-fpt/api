@@ -69,6 +69,7 @@ type MessageI18n struct {
 	SelectCapstoneGroupTopicSuccess               string
 	UserNotAuthorized                             string
 	InvalidOldPassword                            string
+	PasswordChangedSuccess                        string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -126,6 +127,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	SelectCapstoneGroupTopicSuccess:               "SelectCapstoneGroupTopicSuccess",
 	UserNotAuthorized:                             "UserNotAuthorized",
 	InvalidOldPassword:                            "InvalidOldPassword",
+	PasswordChangedSuccess:                        "PasswordChangedSuccess",
 }
 
 type RedisKeyType struct {

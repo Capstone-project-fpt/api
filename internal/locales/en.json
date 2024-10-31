@@ -52,5 +52,6 @@
   "CapstoneGroupTopicNotApproved": "Capstone group topic not approved.",
   "SelectCapstoneGroupTopicSuccess": "Select capstone group topic success.",
   "InvalidOldPassword" : "Input invalid old password.",
-  "UserNotAuthorized" : "User are not authorized."
+  "UserNotAuthorized" : "User are not authorized.",
+  "PasswordChangedSuccess": "Change password successfull."
 }
