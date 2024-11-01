@@ -50,5 +50,8 @@
   "CapstoneGroupNotReviewingTopic": "Capstone group not in status reviewing topic.",
   "CapstoneGroupNeedToHaveMentor": "Capstone group need to have mentor.",
   "CapstoneGroupTopicNotApproved": "Capstone group topic not approved.",
-  "SelectCapstoneGroupTopicSuccess": "Select capstone group topic success."
+  "SelectCapstoneGroupTopicSuccess": "Select capstone group topic success.",
+  "InvalidOldPassword" : "Input invalid old password.",
+  "UserNotAuthorized" : "User are not authorized.",
+  "PasswordChangedSuccess": "Change password successfull."
 }
