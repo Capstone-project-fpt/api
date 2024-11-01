@@ -44,6 +44,16 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  auth_dto.ChangePasswordInput:
+    properties:
+      new_password:
+        type: string
+      old_password:
+        type: string
+    required:
+    - new_password
+    - old_password
+    type: object
   auth_dto.ForgotPasswordInput:
     properties:
       email:
@@ -1542,6 +1552,31 @@ paths:
           schema:
             $ref: '#/definitions/response.ResponseErr'
       summary: ResetPassword
+      tags:
+      - Auth
+    put:
+      consumes:
+      - application/json
+      description: Change Password
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/auth_dto.ChangePasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: ChangePassword
       tags:
       - Auth
   /semesters:
