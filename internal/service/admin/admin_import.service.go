@@ -9,9 +9,9 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/global"
-	"github.com/api/internal/queue"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/import_dto"
+	"github.com/api/internal/queue"
 	file_util "github.com/api/pkg/utils/file"
 	password_util "github.com/api/pkg/utils/password"
 	"github.com/gin-gonic/gin"
@@ -480,6 +480,15 @@ func (as *adminService) UploadFileStudentData(ctx *gin.Context, fileUpload *mult
 			resultImport.FailedImportDocs = append(resultImport.FailedImportDocs, import_dto.FailedImportRecordOutput{
 				Row:   userStudentInfo.Row,
 				Error: "Mã sinh viên đã tồn tại",
+			})
+		}
+
+		var exitStudentEmail model.User
+		if err := global.Db.Model(model.User{}).Where("email = ?", userStudentInfo.User.Email).First(&exitStudentEmail).Error; err == nil {
+			resultImport.FailedCount++
+			resultImport.FailedImportDocs = append(resultImport.FailedImportDocs, import_dto.FailedImportRecordOutput{
+				Row:   userStudentInfo.Row,
+				Error: "Email đã tồn tại",
 			})
 		}
 	}
