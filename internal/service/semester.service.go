@@ -30,7 +30,20 @@ func NewSemesterService() ISemesterService {
 
 func (s *semesterService) CreateSemester(ctx *gin.Context, input *semester_dto.CreateSemesterInput) error {
 	var overlapSemester model.Semester
-	if err := global.Db.Model(model.Semester{}).Where("start_time < ? AND end_time > ?", input.EndTime, input.StartTime).First(&overlapSemester).Error; err == nil {
+
+	if input.StartTime.After(input.EndTime) {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.SemesterStartTimeNeedToBeBeforeSemesterEndTime,
+		})
+		return errors.New(message)
+	}
+
+	if err := global.Db.Model(model.Semester{}).
+		Where(
+			"start_time <= ? AND end_time >= ?",
+			input.EndTime.UTC(),
+			input.StartTime.UTC(),
+		).First(&overlapSemester).Error; err == nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterOverlap,
 		})
@@ -56,6 +69,13 @@ func (s *semesterService) UpdateSemester(ctx *gin.Context, input *semester_dto.U
 	if err := global.Db.Model(model.Semester{}).Where("id = ?", input.ID).First(&semester).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterNotFound,
+		})
+		return errors.New(message)
+	}
+
+	if input.StartTime.After(input.EndTime) {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.SemesterStartTimeNeedToBeBeforeSemesterEndTime,
 		})
 		return errors.New(message)
 	}
@@ -134,12 +154,17 @@ func (s *semesterService) GetCurrentSemester(ctx *gin.Context) (*semester_dto.Se
 func (s *semesterService) GetListSemester(ctx *gin.Context, input *semester_dto.GetListSemestersInput) (*semester_dto.ListSemestersOutput, error) {
 	var total int64
 	var items []model.Semester
+	query := global.Db.Model(model.Semester{})
 
 	if err := global.Db.Model(model.Semester{}).Count(&total).Error; err != nil {
 		return nil, err
 	}
 
-	if err := global.Db.Model(model.Semester{}).
+	if input.OrderBy != "" {
+		query.Order("semesters.start_time " + input.OrderBy)
+	}
+
+	if err := query.
 		Limit(int(input.Limit)).
 		Offset(int(input.Offset)).
 		Find(&items).Error; err != nil {

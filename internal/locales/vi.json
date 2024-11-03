@@ -53,5 +53,6 @@
   "SelectCapstoneGroupTopicSuccess": "Lựa chọn đề tại bảo vệ khoá luận tốt nghiệp thành công.",
   "InvalidOldPassword" : "Nhập sai mật khẩu cũ.",
   "UserNotAuthorized" : "Người dùng không được phép.",
-  "PasswordChangedSuccess" : "Đổi mật khẩu thành công."
+  "PasswordChangedSuccess" : "Đổi mật khẩu thành công.",
+  "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của học kỳ bắt buộc phải trước thời gian kết thúc học kỳ."
 }
