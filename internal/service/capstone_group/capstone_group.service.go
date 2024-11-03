@@ -99,7 +99,7 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		}
 	}
 
-	if len(memberGroups) != len(input.StudentIds) {
+	if len(memberGroups) != len(memberGroupsIDs) {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
