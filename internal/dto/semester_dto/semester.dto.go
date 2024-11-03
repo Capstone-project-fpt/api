@@ -8,9 +8,10 @@ import (
 )
 
 type GetListSemestersInput struct {
-	Limit  int `form:"limit" binding:"required" example:"10"`
-	Page   int `form:"page" binding:"required" example:"1"`
-	Offset int `swaggerignore:"true"`
+	Limit   int    `form:"limit" binding:"required" example:"10"`
+	Page    int    `form:"page" binding:"required" example:"1"`
+	OrderBy string `form:"order_by" example:"ASC|DESC"`
+	Offset  int    `swaggerignore:"true"`
 }
 
 type CreateSemesterInput struct {
