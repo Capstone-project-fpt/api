@@ -16,6 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type IAdminService interface {
@@ -23,6 +24,7 @@ type IAdminService interface {
 	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error)
 	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
 	UploadFileTeacherData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
+	UpdateAccount(ctx *gin.Context, userID int64, input *admin_dto.UpdateAccountInput) (int, error)
 }
 
 type InputCreateAccount struct {
@@ -187,4 +189,101 @@ func (as *adminService) createAccount(ctx *gin.Context, input InputCreateAccount
 	}
 
 	return http.StatusOK, nil
+}
+
+func (as *adminService) UpdateAccount(ctx *gin.Context, userID int64, input *admin_dto.UpdateAccountInput) (int, error) {
+	var user model.User
+	err := global.Db.First(&user, userID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.UserNotFound,
+			})
+			return http.StatusNotFound, errors.New(message)
+		}
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	if input.Name != "" {
+		user.Name = input.Name
+	}
+	if input.Email != "" {
+		user.Email = input.Email
+	}
+	if input.PhoneNumber != "" {
+		user.PhoneNumber = input.PhoneNumber
+	}
+
+	tx := global.Db.Begin()
+	if tx.Error != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+
+	if err := tx.Save(&user).Error; err != nil {
+		tx.Rollback()
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UpdateFailed,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	switch user.UserType {
+	case constant.UserType.Student:
+		var student model.Student
+		if tx.First(&student, "user_id = ?", user.ID).Error == nil {
+			if input.SubMajorID != 0 {
+				student.SubMajorID = input.SubMajorID
+			}
+			if input.Code != "" {
+				student.Code = input.Code
+			}
+			if err := tx.Save(&student).Error; err != nil {
+				tx.Rollback()
+				message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.UpdateStudentDetailsFailed,
+				})
+				return http.StatusInternalServerError, errors.New(message)
+			}
+		}
+	case constant.UserType.Teacher:
+		var teacher model.Teacher
+		if tx.First(&teacher, "user_id = ?", user.ID).Error == nil {
+			if input.SubMajorID != 0 {
+				teacher.SubMajorID = input.SubMajorID
+			}
+			if err := tx.Save(&teacher).Error; err != nil {
+				tx.Rollback()
+				message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.UpdateTeacherDetailsFailed,
+				})
+				return http.StatusInternalServerError, errors.New(message)
+			}
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return http.StatusInternalServerError, errors.New(message)
+	}
+
+	successMessage := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.UpdateAccountSuccess,
+	})
+	return http.StatusOK, errors.New(successMessage)
 }
