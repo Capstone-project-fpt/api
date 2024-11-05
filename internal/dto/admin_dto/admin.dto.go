@@ -29,6 +29,7 @@ type AdminCreateTeacherAccountInput struct {
 }
 
 type UpdateAccountInput struct {
+	UserID      int64  `swaggerignore:"true"`
 	Name        string `json:"name"`
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phone_number"`

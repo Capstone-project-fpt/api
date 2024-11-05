@@ -56,7 +56,9 @@
   "PasswordChangedSuccess": "Đổi mật khẩu thành công.",
   "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của học kỳ bắt buộc phải trước thời gian kết thúc học kỳ.",
   "UpdateFailed": "Cập nhập tài khoản thất bại.",
-  "UpdateStudentDetailsFailed": "Cập nhập tài khoản sinh viên thất bại",
-  "UpdateTeacherDetailsFailed": "Cập nhập tài khoản giáo viên thất bại",
-  "UpdateAccountSuccess": "Cập nhập tài khoản thành công"
+  "UpdateStudentDetailsFailed": "Cập nhập tài khoản sinh viên thất bại.",
+  "UpdateTeacherDetailsFailed": "Cập nhập tài khoản giáo viên thất bại.",
+  "UpdateAccountSuccess": "Cập nhập tài khoản thành công.",
+  "StudentNotFound": "Không tìm thấy sinh viên.",
+  "TeacherNotFound": "Không tìm thấy giáo viên."
 }

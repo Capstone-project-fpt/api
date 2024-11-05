@@ -75,6 +75,8 @@ type MessageI18n struct {
 	UpdateStudentDetailsFailed                     string
 	UpdateTeacherDetailsFailed                     string
 	UpdateAccountSuccess                           string
+	StudentNotFound                                string
+	TeacherNotFound                                string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -138,6 +140,8 @@ var MessageI18nId MessageI18n = MessageI18n{
 	UpdateStudentDetailsFailed:                     "UpdateStudentDetailsFailed",
 	UpdateTeacherDetailsFailed:                     "UpdateTeacherDetailsFailed",
 	UpdateAccountSuccess:                           "UpdateAccountSuccess",
+	StudentNotFound:                                "StudentNotFound",
+	TeacherNotFound:                                "TeacherNotFound",
 }
 
 type RedisKeyType struct {

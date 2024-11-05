@@ -24,7 +24,7 @@ type IAdminService interface {
 	CreateTeacherAccount(ctx *gin.Context, input *admin_dto.AdminCreateTeacherAccountInput) (int, error)
 	UploadFileStudentData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
 	UploadFileTeacherData(ctx *gin.Context, file *multipart.FileHeader) (int, *import_dto.ImportOutput)
-	UpdateAccount(ctx *gin.Context, userID int64, input *admin_dto.UpdateAccountInput) (int, error)
+	UpdateAccount(ctx *gin.Context, input *admin_dto.UpdateAccountInput) (int, error)
 }
 
 type InputCreateAccount struct {
@@ -191,9 +191,9 @@ func (as *adminService) createAccount(ctx *gin.Context, input InputCreateAccount
 	return http.StatusOK, nil
 }
 
-func (as *adminService) UpdateAccount(ctx *gin.Context, userID int64, input *admin_dto.UpdateAccountInput) (int, error) {
+func (as *adminService) UpdateAccount(ctx *gin.Context, input *admin_dto.UpdateAccountInput) (int, error) {
 	var user model.User
-	err := global.Db.First(&user, userID).Error
+	err := global.Db.First(&user, input.UserID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -243,34 +243,59 @@ func (as *adminService) UpdateAccount(ctx *gin.Context, userID int64, input *adm
 	switch user.UserType {
 	case constant.UserType.Student:
 		var student model.Student
-		if tx.First(&student, "user_id = ?", user.ID).Error == nil {
-			if input.SubMajorID != 0 {
-				student.SubMajorID = input.SubMajorID
-			}
-			if input.Code != "" {
-				student.Code = input.Code
-			}
-			if err := tx.Save(&student).Error; err != nil {
-				tx.Rollback()
+		err := tx.First(&student, "user_id = ?", user.ID).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
 				message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					MessageID: constant.MessageI18nId.UpdateStudentDetailsFailed,
+					MessageID: constant.MessageI18nId.StudentNotFound,
 				})
 				return http.StatusInternalServerError, errors.New(message)
 			}
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.InternalServerError,
+			})
+			return http.StatusInternalServerError, errors.New(message)
 		}
+
+		if input.SubMajorID != 0 {
+			student.SubMajorID = input.SubMajorID
+		}
+		if input.Code != "" {
+			student.Code = input.Code
+		}
+		if err := tx.Save(&student).Error; err != nil {
+			tx.Rollback()
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.UpdateStudentDetailsFailed,
+			})
+			return http.StatusInternalServerError, errors.New(message)
+		}
+
 	case constant.UserType.Teacher:
 		var teacher model.Teacher
-		if tx.First(&teacher, "user_id = ?", user.ID).Error == nil {
-			if input.SubMajorID != 0 {
-				teacher.SubMajorID = input.SubMajorID
-			}
-			if err := tx.Save(&teacher).Error; err != nil {
-				tx.Rollback()
+		err := tx.First(&teacher, "user_id = ?", user.ID).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
 				message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					MessageID: constant.MessageI18nId.UpdateTeacherDetailsFailed,
+					MessageID: constant.MessageI18nId.TeacherNotFound,
 				})
 				return http.StatusInternalServerError, errors.New(message)
 			}
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.InternalServerError,
+			})
+			return http.StatusInternalServerError, errors.New(message)
+		}
+
+		if input.SubMajorID != 0 {
+			teacher.SubMajorID = input.SubMajorID
+		}
+		if err := tx.Save(&teacher).Error; err != nil {
+			tx.Rollback()
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.UpdateTeacherDetailsFailed,
+			})
+			return http.StatusInternalServerError, errors.New(message)
 		}
 	}
 

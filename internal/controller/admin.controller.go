@@ -288,21 +288,32 @@ func (ac *AdminController) UpdateAccount(ctx *gin.Context) {
 	idParam := ctx.Param("id")
 	userID, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
 		return
 	}
 
 	var input admin_dto.UpdateAccountInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
 		return
 	}
 
-	status, err := ac.adminService.UpdateAccount(ctx, userID, &input)
+	input.UserID = userID
+
+	status, err := ac.adminService.UpdateAccount(ctx, &input)
 	if err != nil {
-		ctx.JSON(status, gin.H{"error": err.Error()})
+		response.ErrorResponse(ctx, status, err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Account updated successfully"})
+	successMessage := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.UpdateAccountSuccess,
+	})
+	response.SuccessResponse(ctx, http.StatusOK, successMessage)
 }

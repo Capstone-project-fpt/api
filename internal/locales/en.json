@@ -55,8 +55,10 @@
   "UserNotAuthorized": "User are not authorized.",
   "PasswordChangedSuccess": "Change password success.",
   "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Semester start time need to be before semester end time.",
-  "UpdateFailed": "Update account failed",
-  "UpdateStudentDetailsFailed": "Update student details failed",
-  "UpdateTeacherDetailsFailed": "Update teacher details failed",
-  "UpdateAccountSuccess": "Update account success"
+  "UpdateFailed": "Update account failed.",
+  "UpdateStudentDetailsFailed": "Update student details failed.",
+  "UpdateTeacherDetailsFailed": "Update teacher details failed.",
+  "UpdateAccountSuccess": "Update account success.",
+  "StudentNotFound": "Student not found.",
+  "TeacherNotFound": "Teacher not found."
 }
