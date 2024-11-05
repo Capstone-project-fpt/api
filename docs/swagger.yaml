@@ -355,6 +355,22 @@ definitions:
       total:
         type: integer
     type: object
+  evaluation_committee_dto.CreateEvaluationCommitteeInput:
+    properties:
+      name:
+        type: string
+      semester_id:
+        type: integer
+      teacher_ids:
+        items:
+          type: integer
+        minItems: 1
+        type: array
+    required:
+    - name
+    - semester_id
+    - teacher_ids
+    type: object
   evaluation_committee_dto.EvaluationCommitteeOutput:
     properties:
       created_at:
@@ -1409,6 +1425,32 @@ paths:
       summary: ResponseInviteMentorToCapstoneGroup
       tags:
       - Capstone Group
+  /evaluation-committees:
+    post:
+      description: Create Evaluation Committee
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation_committee_dto.CreateEvaluationCommitteeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateEvaluationCommittee
+      tags:
+      - Evaluation Committee
   /evaluation-committees/{id}:
     get:
       description: Get Evaluation Committee

@@ -54,5 +54,7 @@
   "InvalidOldPassword" : "Nhập sai mật khẩu cũ.",
   "UserNotAuthorized" : "Người dùng không được phép.",
   "PasswordChangedSuccess" : "Đổi mật khẩu thành công.",
-  "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của học kỳ bắt buộc phải trước thời gian kết thúc học kỳ."
+  "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của học kỳ bắt buộc phải trước thời gian kết thúc học kỳ.",
+  "EvaluationCommitteeTeacherHadAssigned": "Giảng viên {{.TeacherNames}} đã ở trong hội đồng thẩm định khác.",
+  "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công."
 }

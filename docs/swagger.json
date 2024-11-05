@@ -1154,6 +1154,48 @@
                 }
             }
         },
+        "/evaluation-committees": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create Evaluation Committee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Evaluation Committee"
+                ],
+                "summary": "CreateEvaluationCommittee",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/evaluation_committee_dto.CreateEvaluationCommitteeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/evaluation-committees/{id}": {
             "get": {
                 "security": [
@@ -2788,6 +2830,29 @@
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "evaluation_committee_dto.CreateEvaluationCommitteeInput": {
+            "type": "object",
+            "required": [
+                "name",
+                "semester_id",
+                "teacher_ids"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teacher_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

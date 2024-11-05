@@ -6,10 +6,16 @@ import (
 	"github.com/api/database/model"
 )
 
+type CreateEvaluationCommitteeInput struct {
+	Name       string  `json:"name" binding:"required" validate:"required"`
+	TeacherIDs []int64 `json:"teacher_ids" binding:"required" validate:"required,min=1"`
+	SemesterID int64   `json:"semester_id" binding:"required" validate:"required"`
+}
+
 type EvaluationCommitteeOutput struct {
 	ID         int64     `json:"id"`
 	Name       string    `json:"name"`
-	TeacherIds []int64   `json:"teacher_ids"`
+	TeacherIDs []int64   `json:"teacher_ids"`
 	SemesterID int64     `json:"semester_id"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
@@ -19,7 +25,7 @@ func ToEvaluationCommitteeOutput(e *model.EvaluationCommittee) *EvaluationCommit
 	return &EvaluationCommitteeOutput{
 		ID:         e.ID,
 		Name:       e.Name,
-		TeacherIds: e.TeacherIds,
+		TeacherIDs: e.TeacherIDs,
 		SemesterID: e.SemesterID,
 		CreatedAt:  e.CreatedAt,
 		UpdatedAt:  e.UpdatedAt,
