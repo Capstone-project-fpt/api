@@ -1156,6 +1156,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/evaluation-committees/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Evaluation Committee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Evaluation Committee"
+                ],
+                "summary": "GetEvaluationCommittee",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/forgot-password": {
             "post": {
                 "description": "Forgot Password",
@@ -2750,6 +2790,46 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "evaluation_committee_dto.EvaluationCommitteeOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teacher_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "evaluation_committee_dto.EvaluationCommitteeSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeOutput"
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

@@ -100,3 +100,12 @@ func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGrou
 
 	return &capstone_group_controller.CapstoneGroupController{}
 }
+
+func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeController {
+	wire.Build(
+		service.NewEvaluationCommitteeService,
+		controller.NewEvaluationCommitteeController,
+	)
+
+	return &controller.EvaluationCommitteeController{}
+}

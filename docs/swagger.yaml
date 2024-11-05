@@ -355,6 +355,32 @@ definitions:
       total:
         type: integer
     type: object
+  evaluation_committee_dto.EvaluationCommitteeOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      semester_id:
+        type: integer
+      teacher_ids:
+        items:
+          type: integer
+        type: array
+      updated_at:
+        type: string
+    type: object
+  evaluation_committee_dto.EvaluationCommitteeSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeOutput'
+      message:
+        type: boolean
+    type: object
   major_dto.GetListMajorOutput:
     properties:
       items:
@@ -1383,6 +1409,31 @@ paths:
       summary: ResponseInviteMentorToCapstoneGroup
       tags:
       - Capstone Group
+  /evaluation-committees/{id}:
+    get:
+      description: Get Evaluation Committee
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetEvaluationCommittee
+      tags:
+      - Evaluation Committee
   /forgot-password:
     post:
       consumes:
