@@ -60,5 +60,10 @@
   "UpdateTeacherDetailsFailed": "Cập nhập tài khoản giáo viên thất bại.",
   "UpdateAccountSuccess": "Cập nhập tài khoản thành công.",
   "StudentNotFound": "Không tìm thấy sinh viên.",
-  "TeacherNotFound": "Không tìm thấy giáo viên."
+  "TeacherNotFound": "Không tìm thấy giáo viên.",
+  "EvaluationCommitteeTeacherHadAssigned": "Giảng viên {{.TeacherNames}} đã ở trong hội đồng thẩm định khác.",
+  "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công.",
+  "EvaluationCommitteeNotFound": "Không tìm thấy hội đồng thẩm định.",
+  "UpdateEvaluationCommitteeSuccess": "Cập nhật hội đồng thẩm định thành công.",
+  "DeleteEvaluationCommitteeSuccess": "Xoá hội đồng thầm định thành công."
 }

@@ -60,5 +60,10 @@
   "UpdateTeacherDetailsFailed": "Update teacher details failed.",
   "UpdateAccountSuccess": "Update account success.",
   "StudentNotFound": "Student not found.",
-  "TeacherNotFound": "Teacher not found."
+  "TeacherNotFound": "Teacher not found.",
+  "EvaluationCommitteeTeacherHadAssigned": "Teacher {{.TeacherNames}} had assigned to another evaluation committee.",
+  "CreateEvaluationCommitteeSuccess": "Create evaluation committee success.",
+  "EvaluationCommitteeNotFound": "Evaluation committee not found.",
+  "UpdateEvaluationCommitteeSuccess": "Update evaluation committee success.",
+  "DeleteEvaluationCommitteeSuccess": "Delete evaluation committee success."
 }

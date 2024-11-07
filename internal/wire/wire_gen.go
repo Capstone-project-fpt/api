@@ -78,3 +78,9 @@ func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGrou
 	capstoneGroupController := capstone_group_controller.NewCapstoneGroupController(iCapstoneGroupService, iCapstoneGroupTopicService)
 	return capstoneGroupController
 }
+
+func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeController {
+	iEvaluationCommitteeService := service.NewEvaluationCommitteeService()
+	evaluationCommitteeController := controller.NewEvaluationCommitteeController(iEvaluationCommitteeService)
+	return evaluationCommitteeController
+}
