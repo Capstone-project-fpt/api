@@ -397,6 +397,22 @@ definitions:
       message:
         type: boolean
     type: object
+  evaluation_committee_dto.UpdateEvaluationCommitteeInput:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      teacher_ids:
+        items:
+          type: integer
+        minItems: 1
+        type: array
+    required:
+    - id
+    - name
+    - teacher_ids
+    type: object
   major_dto.GetListMajorOutput:
     properties:
       items:
@@ -1426,6 +1442,43 @@ paths:
       tags:
       - Capstone Group
   /evaluation-committees:
+    get:
+      consumes:
+      - application/json
+      description: Get list evaluation committee
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Order by
+        in: query
+        name: order_by
+        type: string
+      - description: SemesterID
+        in: query
+        name: semester_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/major_dto.GetListMajorOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      summary: GetListEvaluationCommittee
+      tags:
+      - Evaluation Committee
     post:
       description: Create Evaluation Committee
       parameters:
@@ -1451,7 +1504,50 @@ paths:
       summary: CreateEvaluationCommittee
       tags:
       - Evaluation Committee
+    put:
+      description: Update Evaluation Committee
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/evaluation_committee_dto.UpdateEvaluationCommitteeInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateEvaluationCommittee
+      tags:
+      - Evaluation Committee
   /evaluation-committees/{id}:
+    delete:
+      description: Delete Evaluation Committee
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteEvaluationCommittee
+      tags:
+      - Evaluation Committee
     get:
       description: Get Evaluation Committee
       parameters:

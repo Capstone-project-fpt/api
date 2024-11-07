@@ -16,6 +16,9 @@ func (e *EvaluationCommitteeRouter) InitEvaluationCommitteeRouter(group *gin.Rou
 	evaluationCommitteeRouter.Use(middleware.AuthMiddleware())
 	{
 		evaluationCommitteeRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Admin), evaluationCommitteeController.CreateEvaluationCommittee)
+		evaluationCommitteeRouter.PUT("/", middleware.UserTypeMiddleware(constant.UserType.Admin), evaluationCommitteeController.UpdateEvaluationCommittee)
+		evaluationCommitteeRouter.DELETE("/:id", middleware.UserTypeMiddleware(constant.UserType.Admin), evaluationCommitteeController.DeleteEvaluationCommittee)
+		evaluationCommitteeRouter.GET("/", evaluationCommitteeController.GetListEvaluationCommittee)
 		evaluationCommitteeRouter.GET("/:id", evaluationCommitteeController.GetEvaluationCommittee)
 	}
 }

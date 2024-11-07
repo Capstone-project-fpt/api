@@ -73,6 +73,9 @@ type MessageI18n struct {
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime string
 	EvaluationCommitteeTeacherHadAssigned          string
 	CreateEvaluationCommitteeSuccess               string
+	EvaluationCommitteeNotFound                    string
+	UpdateEvaluationCommitteeSuccess               string
+	DeleteEvaluationCommitteeSuccess               string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -134,6 +137,9 @@ var MessageI18nId MessageI18n = MessageI18n{
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime: "SemesterStartTimeNeedToBeBeforeSemesterEndTime",
 	EvaluationCommitteeTeacherHadAssigned:          "EvaluationCommitteeTeacherHadAssigned",
 	CreateEvaluationCommitteeSuccess:               "CreateEvaluationCommitteeSuccess",
+	EvaluationCommitteeNotFound:                    "EvaluationCommitteeNotFound",
+	UpdateEvaluationCommitteeSuccess:               "UpdateEvaluationCommitteeSuccess",
+	DeleteEvaluationCommitteeSuccess:               "DeleteEvaluationCommitteeSuccess",
 }
 
 type RedisKeyType struct {

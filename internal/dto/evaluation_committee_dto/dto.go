@@ -4,12 +4,27 @@ import (
 	"time"
 
 	"github.com/api/database/model"
+	"github.com/api/internal/dto"
 )
 
 type CreateEvaluationCommitteeInput struct {
 	Name       string  `json:"name" binding:"required" validate:"required"`
 	TeacherIDs []int64 `json:"teacher_ids" binding:"required" validate:"required,min=1"`
 	SemesterID int64   `json:"semester_id" binding:"required" validate:"required"`
+}
+
+type UpdateEvaluationCommitteeInput struct {
+	ID         int64   `json:"id" binding:"required" validate:"required"`
+	Name       string  `json:"name" binding:"required" validate:"required"`
+	TeacherIDs []int64 `json:"teacher_ids" binding:"required" validate:"required,min=1"`
+}
+
+type GetListEvaluationCommitteeInput struct {
+	Limit      int     `form:"limit" binding:"required" example:"10"`
+	Page       int     `form:"page" binding:"required" example:"1"`
+	OrderBy    *string `form:"order_by" example:"ASC|DESC"`
+	SemesterID *int64  `form:"semester_id" example:"1"`
+	Offset     int     `swaggerignore:"true"`
 }
 
 type EvaluationCommitteeOutput struct {
@@ -30,6 +45,11 @@ func ToEvaluationCommitteeOutput(e *model.EvaluationCommittee) *EvaluationCommit
 		CreatedAt:  e.CreatedAt,
 		UpdatedAt:  e.UpdatedAt,
 	}
+}
+
+type ListEvaluationCommitteeOutput struct {
+	Meta  dto.MetaPagination          `json:"meta"`
+	Items []*EvaluationCommitteeOutput `json:"items"`
 }
 
 // This used for swagger

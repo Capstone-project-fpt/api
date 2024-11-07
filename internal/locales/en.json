@@ -56,5 +56,8 @@
   "PasswordChangedSuccess": "Change password success.",
   "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Semester start time need to be before semester end time.",
   "EvaluationCommitteeTeacherHadAssigned": "Teacher {{.TeacherNames}} had assigned to another evaluation committee.",
-  "CreateEvaluationCommitteeSuccess": "Create evaluation committee success."
+  "CreateEvaluationCommitteeSuccess": "Create evaluation committee success.",
+  "EvaluationCommitteeNotFound": "Evaluation committee not found.",
+  "UpdateEvaluationCommitteeSuccess": "Update evaluation committee success.",
+  "DeleteEvaluationCommitteeSuccess": "Delete evaluation committee success."
 }

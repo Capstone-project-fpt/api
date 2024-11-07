@@ -51,10 +51,13 @@
   "CapstoneGroupNeedToHaveMentor": "Nhóm bảo vệ đồ án cần phải có mentor.",
   "CapstoneGroupTopicNotApproved": "Đề tài bảo vệ khoá luận tốt nghiệp cần được chấp nhận bởi hội đồng thẩm định.",
   "SelectCapstoneGroupTopicSuccess": "Lựa chọn đề tại bảo vệ khoá luận tốt nghiệp thành công.",
-  "InvalidOldPassword" : "Nhập sai mật khẩu cũ.",
-  "UserNotAuthorized" : "Người dùng không được phép.",
-  "PasswordChangedSuccess" : "Đổi mật khẩu thành công.",
+  "InvalidOldPassword": "Nhập sai mật khẩu cũ.",
+  "UserNotAuthorized": "Người dùng không được phép.",
+  "PasswordChangedSuccess": "Đổi mật khẩu thành công.",
   "SemesterStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của học kỳ bắt buộc phải trước thời gian kết thúc học kỳ.",
   "EvaluationCommitteeTeacherHadAssigned": "Giảng viên {{.TeacherNames}} đã ở trong hội đồng thẩm định khác.",
-  "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công."
+  "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công.",
+  "EvaluationCommitteeNotFound": "Không tìm thấy hội đồng thẩm định.",
+  "UpdateEvaluationCommitteeSuccess": "Cập nhật hội đồng thẩm định thành công.",
+  "DeleteEvaluationCommitteeSuccess": "Xoá hội đồng thầm định thành công."
 }
