@@ -28,6 +28,15 @@ type AdminCreateTeacherAccountInput struct {
 	SubMajorID  int64  `json:"sub_major_id" binding:"required"`
 }
 
+type UpdateAccountInput struct {
+	UserID      int64  `swaggerignore:"true"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phone_number"`
+	SubMajorID  int64  `json:"sub_major_id"`
+	Code        string `json:"code"`
+}
+
 type ListUsersOutput struct {
 	Meta  dto.MetaPagination       `json:"meta"`
 	Items []user_dto.GetUserOutput `json:"items"`

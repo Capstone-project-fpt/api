@@ -71,6 +71,12 @@ type MessageI18n struct {
 	InvalidOldPassword                             string
 	PasswordChangedSuccess                         string
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime string
+	UpdateFailed                                   string
+	UpdateStudentDetailsFailed                     string
+	UpdateTeacherDetailsFailed                     string
+	UpdateAccountSuccess                           string
+	StudentNotFound                                string
+	TeacherNotFound                                string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -130,6 +136,12 @@ var MessageI18nId MessageI18n = MessageI18n{
 	InvalidOldPassword:                             "InvalidOldPassword",
 	PasswordChangedSuccess:                         "PasswordChangedSuccess",
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime: "SemesterStartTimeNeedToBeBeforeSemesterEndTime",
+	UpdateFailed:                                   "UpdateFailed",
+	UpdateStudentDetailsFailed:                     "UpdateStudentDetailsFailed",
+	UpdateTeacherDetailsFailed:                     "UpdateTeacherDetailsFailed",
+	UpdateAccountSuccess:                           "UpdateAccountSuccess",
+	StudentNotFound:                                "StudentNotFound",
+	TeacherNotFound:                                "TeacherNotFound",
 }
 
 type RedisKeyType struct {

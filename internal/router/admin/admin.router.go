@@ -26,6 +26,13 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 			),
 			adminController.GetUser,
 		)
+		adminUserRouter.PUT(
+			"/:id",
+			middleware.PermissionMiddleware(
+				constant.PermissionType.ManageAccount,
+			),
+			adminController.UpdateAccount,
+		)
 	}
 
 	adminStudentRouter := adminRouter.Group("/students")

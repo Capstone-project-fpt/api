@@ -15,6 +15,7 @@ import (
 	"github.com/api/pkg/response"
 	util "github.com/api/pkg/utils"
 	file_util "github.com/api/pkg/utils/file"
+
 	// "github.com/api/pkg/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -270,4 +271,49 @@ func validateCreateAccount(ctx *gin.Context, input admin_dto.AccountWithEmail) e
 	// }
 
 	return nil
+}
+
+// @Summary UpdateAccount
+// @Description Admin Update User Account
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param data body admin_dto.UpdateAccountInput true "data"
+// @Router /admin/users/{id} [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (ac *AdminController) UpdateAccount(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	userID, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	var input admin_dto.UpdateAccountInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	input.UserID = userID
+
+	status, err := ac.adminService.UpdateAccount(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, status, err.Error())
+		return
+	}
+
+	successMessage := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.UpdateAccountSuccess,
+	})
+	response.SuccessResponse(ctx, http.StatusOK, successMessage)
 }
