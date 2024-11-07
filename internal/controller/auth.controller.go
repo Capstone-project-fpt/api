@@ -177,7 +177,7 @@ func (ac *AuthController) ResetPassword(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body auth_dto.ChangePasswordInput true "data"
-// @Router /reset-password [put]
+// @Router /change-password [put]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) ChangePassword(ctx *gin.Context) {
