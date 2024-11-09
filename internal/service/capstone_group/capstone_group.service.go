@@ -215,6 +215,8 @@ func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *c
 		Select("capstone_groups.*, COUNT(sg.student_id) AS total_members").
 		Joins("LEFT JOIN student_capstone_groups AS sg ON sg.capstone_group_id = capstone_groups.id").
 		Group("capstone_groups.id")
+	
+	queryTotal := global.Db.Model(model.CapstoneGroup{})
 
 	if err := global.Db.Model(model.CapstoneGroup{}).Count(&total).Error; err != nil {
 		return nil, err
@@ -222,6 +224,11 @@ func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *c
 
 	if input.SemesterID != 0 {
 		query = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
+		queryTotal = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
+	}
+	
+	if err := queryTotal.Count(&total).Error; err != nil {
+		return nil, err
 	}
 
 	if err := query.
