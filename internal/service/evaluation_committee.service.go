@@ -1,9 +1,7 @@
 package service
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/api/database/model"
@@ -191,20 +189,30 @@ func (e *evaluationCommitteeService) DeleteEvaluationCommittee(ctx *gin.Context,
 func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error) {
 	var evaluationCommittee model.EvaluationCommittee
 
-	query := global.Db.Model(&model.EvaluationCommittee{}).Where("id = ?", id).First(&evaluationCommittee)
+	queryEvaluationCommittee := global.Db.Model(&model.EvaluationCommittee{}).Where("id = ?", id).First(&evaluationCommittee)
 
-	if err := query.Error; err != nil {
+	if err := queryEvaluationCommittee.Error; err != nil {
 		return nil, err
 	}
 
 	var teachers []model.Teacher
-	var teacherIDs []int64
-	teacherIDsJson, _ := evaluationCommittee.TeacherIDs.Value()
-	if err := json.Unmarshal(teacherIDsJson.([]byte), &teacherIDs); err != nil {
-		return nil, fmt.Errorf("unable to parse TeacherIDs: %w", err)
-	}
-	
-	if err := global.Db.Model(model.Teacher{}).Joins("User").Where("teachers.id IN ?", teacherIDs).Find(&teachers).Error; err != nil {
+
+	queryTeachers := global.Db.Model(model.Teacher{}).
+		Select(`
+			"teachers"."id",
+			"teachers"."sub_major_id",
+			"teachers"."user_id",
+			"User"."id" AS "User__id", 
+  		"User"."name" AS "User__name", 
+  		"User"."user_type" AS "User__user_type", 
+  		"User"."email" AS "User__email", 
+  		"User"."phone_number" AS "User__phone_number"
+		`).
+		Joins(`INNER JOIN "users" "User" ON "User"."id" = "teachers"."user_id"`).
+		Where("teachers.id IN ?", []int64(evaluationCommittee.TeacherIDs)).
+		Find(&teachers)
+
+	if err := queryTeachers.Error; err != nil {
 		return nil, err
 	}
 
