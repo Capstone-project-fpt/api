@@ -1,7 +1,9 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/api/database/model"
@@ -9,6 +11,7 @@ import (
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/evaluation_committee_dto"
+	"github.com/api/internal/dto/user_dto"
 	util "github.com/api/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -19,7 +22,7 @@ type IEvaluationCommitteeService interface {
 	CreateEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.CreateEvaluationCommitteeInput) error
 	UpdateEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.UpdateEvaluationCommitteeInput) error
 	DeleteEvaluationCommittee(ctx *gin.Context, id int64) error
-	GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeOutput, error)
+	GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error)
 	GetListEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.GetListEvaluationCommitteeInput) (*evaluation_committee_dto.ListEvaluationCommitteeOutput, error)
 }
 
@@ -40,6 +43,7 @@ func (e *evaluationCommitteeService) CreateEvaluationCommittee(ctx *gin.Context,
 	}
 
 	var teachers []model.Teacher
+	// teacherIDs :=
 	queryTeachers := global.Db.Model(model.Teacher{}).Joins("User").Where("teachers.id IN ?", input.TeacherIDs).Find(&teachers)
 	if err := queryTeachers.Error; err != nil {
 		return err
@@ -184,7 +188,7 @@ func (e *evaluationCommitteeService) DeleteEvaluationCommittee(ctx *gin.Context,
 	return nil
 }
 
-func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeOutput, error) {
+func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error) {
 	var evaluationCommittee model.EvaluationCommittee
 
 	query := global.Db.Model(&model.EvaluationCommittee{}).Where("id = ?", id).First(&evaluationCommittee)
@@ -193,7 +197,23 @@ func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id
 		return nil, err
 	}
 
-	output := evaluation_committee_dto.ToEvaluationCommitteeOutput(&evaluationCommittee)
+	var teachers []model.Teacher
+	var teacherIDs []int64
+	teacherIDsJson, _ := evaluationCommittee.TeacherIDs.Value()
+	if err := json.Unmarshal(teacherIDsJson.([]byte), &teacherIDs); err != nil {
+		return nil, fmt.Errorf("unable to parse TeacherIDs: %w", err)
+	}
+	
+	if err := global.Db.Model(model.Teacher{}).Joins("User").Where("teachers.id IN ?", teacherIDs).Find(&teachers).Error; err != nil {
+		return nil, err
+	}
+
+	var teacherOutput []*user_dto.TeacherOutput
+	for _, teacher := range teachers {
+		teacherOutput = append(teacherOutput, user_dto.ToTeacherOutput(&teacher))
+	}
+
+	output := evaluation_committee_dto.ToEvaluationCommitteeWithTeacherInfoOutput(&evaluationCommittee, &teacherOutput)
 
 	return output, nil
 }
