@@ -26,6 +26,7 @@ type ICapstoneGroupService interface {
 	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupWithTotalMemberOutput, error)
 	GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error)
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
+	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
 }
 
 type capstoneGroupService struct {
@@ -280,4 +281,22 @@ func (cgs *capstoneGroupService) GetMentorAndListMemberCapstoneGroup(ctx *gin.Co
 	}
 
 	return &output, nil
+}
+
+func (cgs *capstoneGroupService) GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error) {
+	var studentCapstoneGroups []model.StudentCapstoneGroup
+	query := global.Db.Model(model.StudentCapstoneGroup{}).
+		Joins("Student.User").
+		Where("student_capstone_groups.semester_id = ?", semesterID)
+
+	if err := query.Find(&studentCapstoneGroups).Error; err != nil {
+		return nil, err
+	}
+
+	items := make([]*user_dto.StudentOutput, len(studentCapstoneGroups))
+	for i, studentCapstoneGroup := range studentCapstoneGroups {
+		items[i] = user_dto.ToStudentOutput(&studentCapstoneGroup.Student)
+	}
+
+	return &items, nil
 }
