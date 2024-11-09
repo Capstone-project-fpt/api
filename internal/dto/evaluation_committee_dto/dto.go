@@ -5,6 +5,7 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/internal/dto"
+	"github.com/api/internal/dto/user_dto"
 )
 
 type CreateEvaluationCommitteeInput struct {
@@ -36,6 +37,15 @@ type EvaluationCommitteeOutput struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type EvaluationCommitteeWithTeacherInfoOutput struct {
+	ID         int64                      `json:"id"`
+	Name       string                     `json:"name"`
+	Teachers   *[]*user_dto.TeacherOutput `json:"teachers"`
+	SemesterID int64                      `json:"semester_id"`
+	CreatedAt  time.Time                  `json:"created_at"`
+	UpdatedAt  time.Time                  `json:"updated_at"`
+}
+
 func ToEvaluationCommitteeOutput(e *model.EvaluationCommittee) *EvaluationCommitteeOutput {
 	return &EvaluationCommitteeOutput{
 		ID:         e.ID,
@@ -47,8 +57,19 @@ func ToEvaluationCommitteeOutput(e *model.EvaluationCommittee) *EvaluationCommit
 	}
 }
 
+func ToEvaluationCommitteeWithTeacherInfoOutput(e *model.EvaluationCommittee, teachers *[]*user_dto.TeacherOutput) *EvaluationCommitteeWithTeacherInfoOutput {
+	return &EvaluationCommitteeWithTeacherInfoOutput{
+		ID:         e.ID,
+		Name:       e.Name,
+		Teachers:   teachers,
+		SemesterID: e.SemesterID,
+		CreatedAt:  e.CreatedAt,
+		UpdatedAt:  e.UpdatedAt,
+	}
+}
+
 type ListEvaluationCommitteeOutput struct {
-	Meta  dto.MetaPagination          `json:"meta"`
+	Meta  dto.MetaPagination           `json:"meta"`
 	Items []*EvaluationCommitteeOutput `json:"items"`
 }
 
@@ -57,4 +78,10 @@ type EvaluationCommitteeSwaggerOutput struct {
 	Code    int                       `json:"code"`
 	Success bool                      `json:"message"`
 	Data    EvaluationCommitteeOutput `json:"data"`
+}
+
+type EvaluationCommitteeWithTeacherInfoSwaggerOutput struct {
+	Code    int                                      `json:"code"`
+	Success bool                                     `json:"message"`
+	Data    EvaluationCommitteeWithTeacherInfoOutput `json:"data"`
 }

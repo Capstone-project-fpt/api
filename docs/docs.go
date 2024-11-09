@@ -1451,7 +1451,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeSwaggerOutput"
+                            "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput"
                         }
                     },
                     "400": {
@@ -3111,7 +3111,7 @@ const docTemplate = `{
                 }
             }
         },
-        "evaluation_committee_dto.EvaluationCommitteeOutput": {
+        "evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3126,10 +3126,10 @@ const docTemplate = `{
                 "semester_id": {
                     "type": "integer"
                 },
-                "teacher_ids": {
+                "teachers": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "$ref": "#/definitions/user_dto.TeacherOutput"
                     }
                 },
                 "updated_at": {
@@ -3137,14 +3137,14 @@ const docTemplate = `{
                 }
             }
         },
-        "evaluation_committee_dto.EvaluationCommitteeSwaggerOutput": {
+        "evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput": {
             "type": "object",
             "properties": {
                 "code": {
                     "type": "integer"
                 },
                 "data": {
-                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeOutput"
+                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput"
                 },
                 "message": {
                     "type": "boolean"

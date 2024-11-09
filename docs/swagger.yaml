@@ -395,7 +395,7 @@ definitions:
     - semester_id
     - teacher_ids
     type: object
-  evaluation_committee_dto.EvaluationCommitteeOutput:
+  evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput:
     properties:
       created_at:
         type: string
@@ -405,19 +405,19 @@ definitions:
         type: string
       semester_id:
         type: integer
-      teacher_ids:
+      teachers:
         items:
-          type: integer
+          $ref: '#/definitions/user_dto.TeacherOutput'
         type: array
       updated_at:
         type: string
     type: object
-  evaluation_committee_dto.EvaluationCommitteeSwaggerOutput:
+  evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput:
     properties:
       code:
         type: integer
       data:
-        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeOutput'
+        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput'
       message:
         type: boolean
     type: object
@@ -1669,7 +1669,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeSwaggerOutput'
+            $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput'
         "400":
           description: Bad Request
           schema:
