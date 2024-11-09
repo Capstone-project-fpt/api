@@ -295,3 +295,28 @@ func (cgc *CapstoneGroupController) GetListInvitationMentorCapstoneGroups(ctx *g
 	}
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
+
+// @Summary GetListStudentHaveCapstoneGroup
+// @Description Get list student have capstone group
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Router /capstone-groups/semesters/{semester_id}/students [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) GetListStudentHaveCapstoneGroup(ctx *gin.Context) {
+	idParam := ctx.Param("semester_id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	output, err := cgc.capstoneGroupService.GetListStudentHaveCapstoneGroup(ctx, int64(id))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}

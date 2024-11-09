@@ -157,3 +157,9 @@ type MentorAndListMemberCapstoneGroupSwaggerOutput struct {
 	Success bool                                    `json:"message"`
 	Data    *MentorAndListMemberCapstoneGroupOutput `json:"data"`
 }
+
+type ListStudentHaveCapstoneGroupSwaggerOutput struct {
+	Code    int                       `json:"code"`
+	Success bool                      `json:"message"`
+	Data    *[]*user_dto.StudentOutput `json:"data"`
+}
