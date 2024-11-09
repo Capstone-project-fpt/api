@@ -54,6 +54,7 @@ func InitRouter() *gin.Engine {
 	semesterRouter := router.RouterGroupApp.Semester
 	capstoneGroupRouter := router.RouterGroupApp.CapstoneGroup
 	evaluationCommitteeRouter := router.RouterGroupApp.EvaluationCommittee
+	scheduleReviewRouter := router.RouterGroupApp.ScheduleReview
 
 	MainGroup := r.Group("/api/v1")
 	{
@@ -79,6 +80,9 @@ func InitRouter() *gin.Engine {
 	}
 	{
 		evaluationCommitteeRouter.InitEvaluationCommitteeRouter(MainGroup)
+	}
+	{
+		scheduleReviewRouter.InitScheduleReviewRouter(MainGroup)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

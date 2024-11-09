@@ -65,5 +65,14 @@
   "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công.",
   "EvaluationCommitteeNotFound": "Không tìm thấy hội đồng thẩm định.",
   "UpdateEvaluationCommitteeSuccess": "Cập nhật hội đồng thẩm định thành công.",
-  "DeleteEvaluationCommitteeSuccess": "Xoá hội đồng thầm định thành công."
+  "DeleteEvaluationCommitteeSuccess": "Xoá hội đồng thầm định thành công.",
+  "CapstoneGroupAlreadyHadScheduleReview": "Nhóm bảo vệ đã có lịch cho review này trước đó.",
+  "CreateScheduleReviewSuccess": "Tạo lịch review thành công.",
+  "ScheduleReviewNotFound": "không tìm thấy lịch review.",
+  "UpdateScheduleReviewSuccess": "Cập nhật lịch review thành công.",
+  "DeleteScheduleReviewSuccess": "Xoá lịch review thành công.",
+  "ScheduleReviewCapstoneGroupOverlap": "Lịch review này bị trùng lặp với lịch review khác của nhóm bảo vệ đồ án.",
+  "ScheduleReviewEvaluationCommitteeOverlap": "Lịch review này bị trùng lặp với lịch review khác của hội đồng thẩm định.",
+  "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của lịch review bặt buộc phải trước thời gian kết thúc.",
+  "ScheduleReviewTimeNeedToBeInSemesterTime": "Thời gian bắt đầu và kết thúc lịch review bắt buộc phải trong học kỳ."
 }

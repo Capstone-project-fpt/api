@@ -478,6 +478,135 @@ definitions:
       message:
         type: boolean
     type: object
+  schedule_review_dto.CreateScheduleReviewInput:
+    properties:
+      capstone_group_id:
+        type: integer
+      description:
+        type: string
+      end_time:
+        type: string
+      evaluation_committee_id:
+        type: integer
+      semester_id:
+        type: integer
+      start_time:
+        type: string
+      title:
+        type: string
+      type:
+        enum:
+        - first_review
+        - second_review
+        - third_review
+        type: string
+    required:
+    - capstone_group_id
+    - description
+    - end_time
+    - evaluation_committee_id
+    - semester_id
+    - start_time
+    - title
+    - type
+    type: object
+  schedule_review_dto.ListScheduleReviewSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/schedule_review_dto.ScheduleReviewOutput'
+        type: array
+      message:
+        type: boolean
+    type: object
+  schedule_review_dto.ScheduleReviewDetailOutput:
+    properties:
+      capstoneGroup:
+        $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+      description:
+        type: string
+      end_time:
+        type: string
+      evaluation_committee:
+        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput'
+      id:
+        type: integer
+      link_meeting:
+        type: string
+      start_time:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  schedule_review_dto.ScheduleReviewDetailSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/schedule_review_dto.ScheduleReviewDetailOutput'
+      message:
+        type: boolean
+    type: object
+  schedule_review_dto.ScheduleReviewOutput:
+    properties:
+      capstone_group_id:
+        type: integer
+      description:
+        type: string
+      end_time:
+        type: string
+      evaluation_committee_id:
+        type: integer
+      id:
+        type: integer
+      link_meeting:
+        type: string
+      start_time:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+    type: object
+  schedule_review_dto.UpdateScheduleReviewInput:
+    properties:
+      capstone_group_id:
+        type: integer
+      description:
+        type: string
+      end_time:
+        type: string
+      evaluation_committee_id:
+        type: integer
+      id:
+        type: integer
+      semester_id:
+        type: integer
+      start_time:
+        type: string
+      title:
+        type: string
+      type:
+        enum:
+        - first_review
+        - second_review
+        - third_review
+        type: string
+    required:
+    - capstone_group_id
+    - description
+    - end_time
+    - evaluation_committee_id
+    - id
+    - semester_id
+    - start_time
+    - title
+    - type
+    type: object
   semester_dto.CreateSemesterInput:
     properties:
       end_time:
@@ -1850,6 +1979,135 @@ paths:
       summary: ResetPassword
       tags:
       - Auth
+  /schedule-reviews:
+    get:
+      description: Get List Schedule Review
+      parameters:
+      - description: Start Time
+        in: query
+        name: start_time
+        required: true
+        type: string
+      - description: End Time
+        in: query
+        name: end_time
+        required: true
+        type: string
+      - description: Order By
+        in: query
+        name: order_by
+        type: string
+      - description: Evaluation Committee ID
+        in: query
+        name: evaluation_committee_id
+        type: integer
+      - description: Capstone Group ID
+        in: query
+        name: capstone_group_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schedule_review_dto.ListScheduleReviewSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListScheduleReview
+      tags:
+      - Schedule Review
+    post:
+      description: Create Schedule Review
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schedule_review_dto.CreateScheduleReviewInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: CreateScheduleReview
+      tags:
+      - Schedule Review
+    put:
+      description: Update Schedule Review
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schedule_review_dto.UpdateScheduleReviewInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateScheduleReview
+      tags:
+      - Schedule Review
+  /schedule-reviews/{schedule_review_id}:
+    delete:
+      description: Delete Schedule Review
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteScheduleReview
+      tags:
+      - Schedule Review
+    get:
+      description: Get Schedule Review Detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schedule_review_dto.ScheduleReviewDetailSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetScheduleReviewDetail
+      tags:
+      - Schedule Review
   /semesters:
     get:
       consumes:
