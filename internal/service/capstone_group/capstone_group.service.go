@@ -217,11 +217,6 @@ func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *c
 		Group("capstone_groups.id")
 	
 	queryTotal := global.Db.Model(model.CapstoneGroup{})
-
-	if err := global.Db.Model(model.CapstoneGroup{}).Count(&total).Error; err != nil {
-		return nil, err
-	}
-
 	if input.SemesterID != 0 {
 		query = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
 		queryTotal = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
