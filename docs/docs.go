@@ -1757,6 +1757,148 @@ const docTemplate = `{
                 }
             }
         },
+        "/schedule-reviews": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update Schedule Review",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schedule Review"
+                ],
+                "summary": "UpdateScheduleReview",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule_review_dto.UpdateScheduleReviewInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create Schedule Review",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schedule Review"
+                ],
+                "summary": "CreateScheduleReview",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schedule_review_dto.CreateScheduleReviewInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule-reviews/{schedule_review_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Schedule Review Detail",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schedule Review"
+                ],
+                "summary": "GetScheduleReviewDetail",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schedule_review_dto.ScheduleReviewDetailSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Schedule Review",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schedule Review"
+                ],
+                "summary": "DeleteScheduleReview",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/semesters": {
             "get": {
                 "security": [
@@ -3234,6 +3376,144 @@ const docTemplate = `{
                 "error": {},
                 "message": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schedule_review_dto.CreateScheduleReviewInput": {
+            "type": "object",
+            "required": [
+                "capstone_group_id",
+                "description",
+                "end_time",
+                "evaluation_committee_id",
+                "semester_id",
+                "start_time",
+                "title",
+                "type"
+            ],
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "evaluation_committee_id": {
+                    "type": "integer"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "first_review",
+                        "second_review",
+                        "third_review"
+                    ]
+                }
+            }
+        },
+        "schedule_review_dto.ScheduleReviewDetailOutput": {
+            "type": "object",
+            "properties": {
+                "capstoneGroup": {
+                    "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "evaluation_committee": {
+                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "link_meeting": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "schedule_review_dto.ScheduleReviewDetailSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/schedule_review_dto.ScheduleReviewDetailOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schedule_review_dto.UpdateScheduleReviewInput": {
+            "type": "object",
+            "required": [
+                "capstone_group_id",
+                "description",
+                "end_time",
+                "evaluation_committee_id",
+                "id",
+                "semester_id",
+                "start_time",
+                "title",
+                "type"
+            ],
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "evaluation_committee_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "first_review",
+                        "second_review",
+                        "third_review"
+                    ]
                 }
             }
         },

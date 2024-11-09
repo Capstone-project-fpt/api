@@ -1,0 +1,1 @@
+ALTER TABLE "schedule_reviews" ADD COLUMN IF NOT EXISTS "type" VARCHAR(30) NOT NULL;

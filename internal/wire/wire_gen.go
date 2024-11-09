@@ -15,6 +15,7 @@ import (
 	"github.com/api/internal/service/auth"
 	"github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/service/aws"
+	"github.com/api/pkg/service/google"
 )
 
 // Injectors from wire.go:
@@ -86,7 +87,8 @@ func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeCo
 }
 
 func InitializeScheduleReviewController() *controller.ScheduleReviewController {
-	iScheduleReviewService := service.NewScheduleReviewService()
+	iGoogleService := google.NewGoogleService()
+	iScheduleReviewService := service.NewScheduleReviewService(iGoogleService)
 	scheduleReviewController := controller.NewScheduleReviewController(iScheduleReviewService)
 	return scheduleReviewController
 }

@@ -11,6 +11,7 @@ import (
 	auth_service "github.com/api/internal/service/auth"
 	capstone_group_service "github.com/api/internal/service/capstone_group"
 	"github.com/api/pkg/service/aws"
+	"github.com/api/pkg/service/google"
 	"github.com/google/wire"
 )
 
@@ -112,6 +113,7 @@ func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeCo
 
 func InitializeScheduleReviewController() *controller.ScheduleReviewController {
 	wire.Build(
+		google.NewGoogleService,
 		service.NewScheduleReviewService,
 		controller.NewScheduleReviewController,
 	)

@@ -1,0 +1,1 @@
+ALTER TABLE "schedule_reviews" DROP COLUMN IF EXISTS "type";
