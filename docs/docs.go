@@ -491,6 +491,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/capstone-groups/semesters/{semester_id}/students": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list student have capstone group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetListStudentHaveCapstoneGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups/{capstone_group_id}": {
             "get": {
                 "security": [
@@ -2778,6 +2818,23 @@ const docTemplate = `{
                 },
                 "meta": {
                     "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.StudentOutput"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

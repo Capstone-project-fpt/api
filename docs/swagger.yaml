@@ -205,6 +205,17 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/user_dto.StudentOutput'
+        type: array
+      message:
+        type: boolean
+    type: object
   capstone_group_dto.MentorAndListMemberCapstoneGroupOutput:
     properties:
       leader_id:
@@ -1484,6 +1495,31 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: ResponseInviteMentorToCapstoneGroup
+      tags:
+      - Capstone Group
+  /capstone-groups/semesters/{semester_id}/students:
+    get:
+      description: Get list student have capstone group
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListStudentHaveCapstoneGroup
       tags:
       - Capstone Group
   /change-password:
