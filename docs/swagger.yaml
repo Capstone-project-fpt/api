@@ -510,6 +510,17 @@ definitions:
     - title
     - type
     type: object
+  schedule_review_dto.ListScheduleReviewSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/schedule_review_dto.ScheduleReviewOutput'
+        type: array
+      message:
+        type: boolean
+    type: object
   schedule_review_dto.ScheduleReviewDetailOutput:
     properties:
       capstoneGroup:
@@ -539,6 +550,27 @@ definitions:
         $ref: '#/definitions/schedule_review_dto.ScheduleReviewDetailOutput'
       message:
         type: boolean
+    type: object
+  schedule_review_dto.ScheduleReviewOutput:
+    properties:
+      capstone_group_id:
+        type: integer
+      description:
+        type: string
+      end_time:
+        type: string
+      evaluation_committee_id:
+        type: integer
+      id:
+        type: integer
+      link_meeting:
+        type: string
+      start_time:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
     type: object
   schedule_review_dto.UpdateScheduleReviewInput:
     properties:
@@ -1948,6 +1980,47 @@ paths:
       tags:
       - Auth
   /schedule-reviews:
+    get:
+      description: Get List Schedule Review
+      parameters:
+      - description: Start Time
+        in: query
+        name: start_time
+        required: true
+        type: string
+      - description: End Time
+        in: query
+        name: end_time
+        required: true
+        type: string
+      - description: Order By
+        in: query
+        name: order_by
+        type: string
+      - description: Evaluation Committee ID
+        in: query
+        name: evaluation_committee_id
+        type: integer
+      - description: Capstone Group ID
+        in: query
+        name: capstone_group_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schedule_review_dto.ListScheduleReviewSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListScheduleReview
+      tags:
+      - Schedule Review
     post:
       description: Create Schedule Review
       parameters:

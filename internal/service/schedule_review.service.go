@@ -21,6 +21,7 @@ type IScheduleReviewService interface {
 	UpdateScheduleReview(ctx *gin.Context, input *schedule_review_dto.UpdateScheduleReviewInput) error
 	DeleteScheduleReview(ctx *gin.Context, id int64) error
 	GetScheduleReviewDetail(ctx *gin.Context, id int64) (*schedule_review_dto.ScheduleReviewDetailOutput, error)
+	GetListScheduleReview(ctx *gin.Context, input *schedule_review_dto.GetListScheduleReviewInput) (*[]schedule_review_dto.ScheduleReviewOutput, error)
 }
 
 type scheduleReviewService struct {
@@ -270,4 +271,33 @@ func (s *scheduleReviewService) GetScheduleReviewDetail(ctx *gin.Context, id int
 	evaluationCommitteeOutput := evaluation_committee_dto.ToEvaluationCommitteeWithTeacherInfoOutput(&scheduleReview.EvaluationCommittee, &teacherOutput)
 
 	return schedule_review_dto.ToScheduleReviewDetailOutput(&scheduleReview, evaluationCommitteeOutput, &capstoneGroupOutput), nil
+}
+
+func (s *scheduleReviewService) GetListScheduleReview(ctx *gin.Context, input *schedule_review_dto.GetListScheduleReviewInput) (*[]schedule_review_dto.ScheduleReviewOutput, error) {
+	var scheduleReviews []model.ScheduleReview
+	queryScheduleReviews := global.Db.Model(model.ScheduleReview{}).
+		Where("start_time >= ? AND end_time <= ?", input.StartTime, input.EndTime)
+	
+	if input.CapstoneGroupID != nil {
+		queryScheduleReviews = queryScheduleReviews.Where("capstone_group_id = ?", *input.CapstoneGroupID)
+	}
+
+	if input.EvaluationCommitteeID != nil {
+		queryScheduleReviews = queryScheduleReviews.Where("evaluation_committee_id = ?", *input.EvaluationCommitteeID)
+	}
+
+	if input.OrderBy != nil {
+		queryScheduleReviews.Order("start_time " + *input.OrderBy)
+	}
+
+	if err := queryScheduleReviews.Find(&scheduleReviews).Error; err != nil {
+		return nil, err
+	}
+
+	var scheduleReviewOutputs []schedule_review_dto.ScheduleReviewOutput
+	for _, scheduleReview := range scheduleReviews {
+		scheduleReviewOutputs = append(scheduleReviewOutputs, *schedule_review_dto.ToScheduleReviewOutput(&scheduleReview))
+	}
+
+	return &scheduleReviewOutputs, nil
 }

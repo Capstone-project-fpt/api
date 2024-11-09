@@ -1758,6 +1758,69 @@ const docTemplate = `{
             }
         },
         "/schedule-reviews": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get List Schedule Review",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Schedule Review"
+                ],
+                "summary": "GetListScheduleReview",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start Time",
+                        "name": "start_time",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Time",
+                        "name": "end_time",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order By",
+                        "name": "order_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Evaluation Committee ID",
+                        "name": "evaluation_committee_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Capstone Group ID",
+                        "name": "capstone_group_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schedule_review_dto.ListScheduleReviewSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -3423,6 +3486,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schedule_review_dto.ListScheduleReviewSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schedule_review_dto.ScheduleReviewOutput"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
         "schedule_review_dto.ScheduleReviewDetailOutput": {
             "type": "object",
             "properties": {
@@ -3466,6 +3546,38 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schedule_review_dto.ScheduleReviewOutput": {
+            "type": "object",
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "evaluation_committee_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "link_meeting": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },

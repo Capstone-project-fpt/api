@@ -31,6 +31,10 @@ func (s *ScheduleReviewRouter) InitScheduleReviewRouter(group *gin.RouterGroup) 
 			scheduleReviewController.DeleteScheduleReview,
 		)
 		scheduleReviewRouter.GET(
+			"/",
+			scheduleReviewController.GetListScheduleReview,
+		)
+		scheduleReviewRouter.GET(
 			"/:schedule_review_id",
 			scheduleReviewController.GetScheduleReviewDetail,
 		)

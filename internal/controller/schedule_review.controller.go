@@ -147,3 +147,32 @@ func (s *ScheduleReviewController) GetScheduleReviewDetail(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
+
+// @Summary GetListScheduleReview
+// @Description Get List Schedule Review
+// @Tags Schedule Review
+// @Produce json
+// @Param start_time query string true "Start Time"
+// @Param end_time query string true "End Time"
+// @Param order_by query string false "Order By"
+// @Param evaluation_committee_id query int false "Evaluation Committee ID"
+// @Param capstone_group_id query int false "Capstone Group ID"
+// @Router /schedule-reviews [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} schedule_review_dto.ListScheduleReviewSwaggerOutput
+// @Security ApiKeyAuth
+func (s *ScheduleReviewController) GetListScheduleReview(ctx *gin.Context) {
+	var input schedule_review_dto.GetListScheduleReviewInput
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	output, err := s.scheduleReviewService.GetListScheduleReview(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}

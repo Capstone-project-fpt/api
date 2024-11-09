@@ -31,6 +31,14 @@ type UpdateScheduleReviewInput struct {
 	CapstoneGroupID       int64     `json:"capstone_group_id" validate:"required"`
 }
 
+type GetListScheduleReviewInput struct {
+	StartTime             time.Time `form:"start_time" binding:"required" example:"2024-06-01T08:00:00Z"`
+	EndTime               time.Time `form:"end_time" binding:"required" example:"2024-06-01T08:00:00Z"`
+	OrderBy               *string   `form:"order_by" example:"ASC|DESC"`
+	EvaluationCommitteeID *int64    `form:"evaluation_committee_id" example:"1"`
+	CapstoneGroupID       *int64    `form:"capstone_group_id" example:"1"`
+}
+
 type ScheduleReviewOutput struct {
 	ID                    int64     `json:"id"`
 	Title                 string    `json:"title"`
@@ -98,4 +106,10 @@ type ScheduleReviewDetailSwaggerOutput struct {
 	Code    int                        `json:"code"`
 	Success bool                       `json:"message"`
 	Data    ScheduleReviewDetailOutput `json:"data"`
+}
+
+type ListScheduleReviewSwaggerOutput struct {
+	Code    int                          `json:"code"`
+	Success bool                         `json:"message"`
+	Data    []ScheduleReviewOutput `json:"data"`
 }
