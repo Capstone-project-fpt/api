@@ -84,3 +84,9 @@ func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeCo
 	evaluationCommitteeController := controller.NewEvaluationCommitteeController(iEvaluationCommitteeService)
 	return evaluationCommitteeController
 }
+
+func InitializeScheduleReviewController() *controller.ScheduleReviewController {
+	iScheduleReviewService := service.NewScheduleReviewService()
+	scheduleReviewController := controller.NewScheduleReviewController(iScheduleReviewService)
+	return scheduleReviewController
+}

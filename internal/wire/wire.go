@@ -109,3 +109,12 @@ func InitializeEvaluationCommitteeController() *controller.EvaluationCommitteeCo
 
 	return &controller.EvaluationCommitteeController{}
 }
+
+func InitializeScheduleReviewController() *controller.ScheduleReviewController {
+	wire.Build(
+		service.NewScheduleReviewService,
+		controller.NewScheduleReviewController,
+	)
+
+	return &controller.ScheduleReviewController{}
+}
