@@ -67,6 +67,7 @@ func (ac *AdminController) GetUser(ctx *gin.Context) {
 // @Param page query int true "Page"
 // @Param user_types query []string false "UserTypes" collectionFormat(multi)
 // @Param email query string false "Email"
+// @Param order_by query string false "Order By"
 // @Router /admin/users [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} admin_dto.ListUsersOutput
@@ -85,6 +86,7 @@ func (ac *AdminController) GetListUsers(ctx *gin.Context) {
 		Offset:    input.Offset,
 		UserTypes: input.UserTypes,
 		Email:     input.Email,
+		OrderBy:   input.OrderBy,
 	})
 
 	if err != nil {

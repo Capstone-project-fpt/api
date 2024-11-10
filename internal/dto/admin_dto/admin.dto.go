@@ -11,6 +11,7 @@ type GetListUsersInput struct {
 	Offset    int      `swaggerignore:"true"`
 	UserTypes []string `form:"user_types"`
 	Email     string   `form:"email"`
+	OrderBy   string   `form:"order_by" example:"ASC|DESC"`
 }
 
 type AdminCreateStudentAccountInput struct {
