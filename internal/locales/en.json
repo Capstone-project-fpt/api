@@ -74,5 +74,6 @@
   "ScheduleReviewCapstoneGroupOverlap": "Schedule review capstone group overlap.",
   "ScheduleReviewEvaluationCommitteeOverlap": "Schedule review evaluation committee overlap.",
   "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime": "Schedule review start time need to be before semester end time.",
-  "ScheduleReviewTimeNeedToBeInSemesterTime": "Schedule review time need to be in semester time."
+  "ScheduleReviewTimeNeedToBeInSemesterTime": "Schedule review time need to be in semester time.",
+  "UpdateCapstoneGroupReviewSuccess": "Update capstone group review success."
 }

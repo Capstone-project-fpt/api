@@ -65,7 +65,26 @@ func (s *scheduleReviewService) CreateScheduleReview(ctx *gin.Context, input *sc
 
 	linkMeeting := s.googleService.GenerateGoogleMeeting()
 
-	if err := global.Db.Model(model.ScheduleReview{}).Create(&model.ScheduleReview{
+	tx := global.Db.Begin()
+	if tx.Error != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return errors.New(message)
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+
+	internalMessageError := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.InternalServerError,
+	})
+
+	scheduleReview := model.ScheduleReview{
 		Title:                 input.Title,
 		Description:           input.Description,
 		LinkMeeting:           linkMeeting,
@@ -74,8 +93,24 @@ func (s *scheduleReviewService) CreateScheduleReview(ctx *gin.Context, input *sc
 		EndTime:               input.EndTime,
 		EvaluationCommitteeID: input.EvaluationCommitteeID,
 		CapstoneGroupID:       input.CapstoneGroupID,
+	}
+
+	if err := tx.Model(model.ScheduleReview{}).Create(&scheduleReview).Error; err != nil {
+		tx.Rollback()
+		return errors.New(internalMessageError)
+	}
+
+	if err := tx.Model(model.CapstoneGroupReview{}).Create(&model.CapstoneGroupReview{
+		CapstoneGroupID:  input.CapstoneGroupID,
+		ScheduleReviewID: scheduleReview.ID,
 	}).Error; err != nil {
-		return err
+		tx.Rollback()
+		return errors.New(internalMessageError)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		return errors.New(internalMessageError)
 	}
 
 	return nil
@@ -277,7 +312,7 @@ func (s *scheduleReviewService) GetListScheduleReview(ctx *gin.Context, input *s
 	var scheduleReviews []model.ScheduleReview
 	queryScheduleReviews := global.Db.Model(model.ScheduleReview{}).
 		Where("start_time >= ? AND end_time <= ?", input.StartTime, input.EndTime)
-	
+
 	if input.CapstoneGroupID != nil {
 		queryScheduleReviews = queryScheduleReviews.Where("capstone_group_id = ?", *input.CapstoneGroupID)
 	}

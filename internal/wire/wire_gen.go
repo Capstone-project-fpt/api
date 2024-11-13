@@ -76,7 +76,8 @@ func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGrou
 	iBasePublisher := queue.NewEmailInviteMentorToCapstoneGroupPublisher()
 	iCapstoneGroupService := capstone_group_service.NewCapstoneGroupService(iBasePublisher)
 	iCapstoneGroupTopicService := capstone_group_service.NewCapstoneGroupTopicService()
-	capstoneGroupController := capstone_group_controller.NewCapstoneGroupController(iCapstoneGroupService, iCapstoneGroupTopicService)
+	iCapstoneGroupReviewService := capstone_group_service.NewCapstoneGroupReviewService()
+	capstoneGroupController := capstone_group_controller.NewCapstoneGroupController(iCapstoneGroupService, iCapstoneGroupTopicService, iCapstoneGroupReviewService)
 	return capstoneGroupController
 }
 

@@ -77,6 +77,8 @@ type MessageI18n struct {
 	ScheduleReviewEvaluationCommitteeOverlap             string
 	ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime string
 	ScheduleReviewTimeNeedToBeInSemesterTime             string
+	CapstoneGroupReviewNotFound                          string
+	UpdateCapstoneGroupReviewSuccess                     string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -156,4 +158,6 @@ var MessageI18nId MessageI18n = MessageI18n{
 	ScheduleReviewEvaluationCommitteeOverlap:             "ScheduleReviewEvaluationCommitteeOverlap",
 	ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime: "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime",
 	ScheduleReviewTimeNeedToBeInSemesterTime:             "ScheduleReviewTimeNeedToBeInSemesterTime",
+	CapstoneGroupReviewNotFound:                          "CapstoneGroupReviewNotFound",
+	UpdateCapstoneGroupReviewSuccess:                     "UpdateCapstoneGroupReviewSuccess",
 }

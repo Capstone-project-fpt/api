@@ -4,6 +4,7 @@ import "github.com/api/pkg/service/aws"
 
 type IUploadService interface {
 	GenerateUploadPresignUrl(key string) (string, error)
+	GenerateUploadPresignUrls(keys []string) ([]string, error)
 }
 
 type uploadService struct {
@@ -24,4 +25,14 @@ func (s *uploadService) GenerateUploadPresignUrl(key string) (string, error) {
 	}
 
 	return preSignUrl, nil
+}
+
+func (s *uploadService) GenerateUploadPresignUrls(keys []string) ([]string, error) {
+	preSignUrls, err := s.awsS3Service.GenerateUploadPresignUrls(keys)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return preSignUrls, nil
 }

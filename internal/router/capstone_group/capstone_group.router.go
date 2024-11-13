@@ -49,4 +49,11 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 		capstoneGroupTopicTeacherFeedbackRouter.GET("/", capstoneGroupController.GetListCapstoneGroupTopicFeedback)
 		capstoneGroupTopicTeacherFeedbackRouter.GET("/:feedback_id", capstoneGroupController.GetCapstoneGroupTopicFeedback)
 	}
+
+	capstoneGroupReviewRouter := capstoneGroupRouter.Group("/:capstone_group_id/capstone-group-reviews")
+	{
+		capstoneGroupReviewRouter.PATCH("/", capstoneGroupController.UpdateReportFilesCapstoneGroupReview)
+		capstoneGroupReviewRouter.PATCH("/feedback", middleware.UserTypeMiddleware(constant.UserType.Teacher), capstoneGroupController.FeedbackCapstoneGroupReview)
+		capstoneGroupReviewRouter.GET("/:id", capstoneGroupController.GetCapstoneGroupReview)
+	}
 }

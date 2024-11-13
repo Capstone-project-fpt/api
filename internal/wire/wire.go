@@ -96,6 +96,7 @@ func InitializeCapstoneGroupController() *capstone_group_controller.CapstoneGrou
 		queue.NewEmailInviteMentorToCapstoneGroupPublisher,
 		capstone_group_service.NewCapstoneGroupService,
 		capstone_group_service.NewCapstoneGroupTopicService,
+		capstone_group_service.NewCapstoneGroupReviewService,
 		capstone_group_controller.NewCapstoneGroupController,
 	)
 

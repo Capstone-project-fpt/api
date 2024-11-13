@@ -15,5 +15,6 @@ func (u *UploadRouter) InitUploadRouter(group *gin.RouterGroup) {
 	uploadRouter.Use(middleware.AuthMiddleware())
 	{
 		uploadRouter.POST("/presign-url", uploadController.GenerateUploadPresignUrl)
+		uploadRouter.POST("/presign-urls", uploadController.GenerateUploadPresignUrls)
 	}
 }
