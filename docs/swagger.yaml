@@ -131,6 +131,25 @@ definitions:
       updated_at:
         type: string
     type: object
+  capstone_group_dto.CapstoneGroupReviewOutput:
+    properties:
+      capstone_group_id:
+        type: integer
+      created_at:
+        type: string
+      feedback:
+        type: string
+      id:
+        type: integer
+      report_files:
+        items:
+          type: string
+        type: array
+      schedule_review_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   capstone_group_dto.CreateCapstoneGroupInput:
     properties:
       major_id:
@@ -148,6 +167,25 @@ definitions:
     - name_group
     - semester_id
     - student_ids
+    type: object
+  capstone_group_dto.FeedbackCapstoneGroupReviewInput:
+    properties:
+      capstone_group_review_id:
+        type: integer
+      feedback:
+        type: string
+    required:
+    - capstone_group_review_id
+    - feedback
+    type: object
+  capstone_group_dto.GetCapstoneGroupReviewSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/capstone_group_dto.CapstoneGroupReviewOutput'
+      message:
+        type: boolean
     type: object
   capstone_group_dto.GetCapstoneGroupSwaggerOutput:
     properties:
@@ -258,6 +296,18 @@ definitions:
     required:
     - id
     - name_group
+    type: object
+  capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput:
+    properties:
+      capstone_group_review_id:
+        type: integer
+      report_files:
+        items:
+          type: string
+        type: array
+    required:
+    - capstone_group_review_id
+    - report_files
     type: object
   capstone_group_topic_dto.CapstoneGroupTopicFeedbackOutput:
     properties:
@@ -772,6 +822,24 @@ definitions:
       key:
         type: string
     type: object
+  upload_dto.GenerateUploadPresignUrlsInput:
+    properties:
+      key:
+        items:
+          type: string
+        type: array
+    type: object
+  upload_dto.GenerateUploadPresignUrlsSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          type: string
+        type: array
+      message:
+        type: boolean
+    type: object
   user_dto.AdminInfoOutput:
     type: object
   user_dto.ExtraInfo:
@@ -1199,6 +1267,83 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroup
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-reviews:
+    patch:
+      consumes:
+      - application/json
+      description: Update report files capstone group
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateReportFilesCapstoneGroupReview
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-reviews/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get capstone group
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.GetCapstoneGroupReviewSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCapstoneGroupReview
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/capstone-group-reviews/feedback:
+    patch:
+      consumes:
+      - application/json
+      description: Feedback capstone group review
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.FeedbackCapstoneGroupReviewInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: FeedbackCapstoneGroupReview
       tags:
       - Capstone Group
   /capstone-groups/{capstone_group_id}/capstone-group-topics:
@@ -2520,6 +2665,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GenerateUploadPresignUrl
+      tags:
+      - Upload
+  /upload/presign-urls:
+    post:
+      consumes:
+      - application/json
+      description: Generate Upload PresignUrls
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/upload_dto.GenerateUploadPresignUrlsInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/upload_dto.GenerateUploadPresignUrlsSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GenerateUploadPresignUrls
       tags:
       - Upload
   /users:

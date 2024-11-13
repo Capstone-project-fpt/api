@@ -9,6 +9,7 @@ import (
 
 type AwsS3Service interface {
 	GenerateUploadPresignUrl(key string) (string, error)
+	GenerateUploadPresignUrls(keys []string) ([]string, error)
 }
 
 type awsS3Service struct{}
@@ -30,4 +31,20 @@ func (s *awsS3Service) GenerateUploadPresignUrl(key string) (string, error) {
 	}
 
 	return presignUr, nil
+}
+
+func (s *awsS3Service) GenerateUploadPresignUrls(keys []string) ([]string, error) {
+	var presignUrls []string
+
+	for _, key := range keys {
+		presignUrl, err := s.GenerateUploadPresignUrl(key)
+
+		if err != nil {
+			return nil, err
+		}
+
+		presignUrls = append(presignUrls, presignUrl)
+	}
+
+	return presignUrls, nil
 }

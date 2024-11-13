@@ -52,3 +52,34 @@ func (uc *UploadController) GenerateUploadPresignUrl(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusOK, preSignUrl)
 }
+
+// @Summary GenerateUploadPresignUrls
+// @Description Generate Upload PresignUrls
+// @Tags Upload
+// @Accept json
+// @Produce json
+// @Param data body upload_dto.GenerateUploadPresignUrlsInput true "data"
+// @Router /upload/presign-urls [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} upload_dto.GenerateUploadPresignUrlsSwaggerOutput
+// @Security ApiKeyAuth
+func (uc *UploadController) GenerateUploadPresignUrls(ctx *gin.Context) {
+	var input upload_dto.GenerateUploadPresignUrlsInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	preSignUrls, err := uc.uploadService.GenerateUploadPresignUrls(input.Key)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, preSignUrls)
+}

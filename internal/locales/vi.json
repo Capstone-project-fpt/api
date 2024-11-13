@@ -74,5 +74,6 @@
   "ScheduleReviewCapstoneGroupOverlap": "Lịch review này bị trùng lặp với lịch review khác của nhóm bảo vệ đồ án.",
   "ScheduleReviewEvaluationCommitteeOverlap": "Lịch review này bị trùng lặp với lịch review khác của hội đồng thẩm định.",
   "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của lịch review bặt buộc phải trước thời gian kết thúc.",
-  "ScheduleReviewTimeNeedToBeInSemesterTime": "Thời gian bắt đầu và kết thúc lịch review bắt buộc phải trong học kỳ."
+  "ScheduleReviewTimeNeedToBeInSemesterTime": "Thời gian bắt đầu và kết thúc lịch review bắt buộc phải trong học kỳ.",
+  "UpdateCapstoneGroupReviewSuccess": "Cập nhật thông tin review nhóm bảo vệ đồ án thành công."
 }

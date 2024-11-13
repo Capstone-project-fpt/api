@@ -571,6 +571,130 @@ const docTemplate = `{
                 }
             }
         },
+        "/capstone-groups/{capstone_group_id}/capstone-group-reviews": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update report files capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "UpdateReportFilesCapstoneGroupReview",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/capstone-group-reviews/feedback": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Feedback capstone group review",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "FeedbackCapstoneGroupReview",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.FeedbackCapstoneGroupReviewInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/capstone-group-reviews/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get capstone group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetCapstoneGroupReview",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.GetCapstoneGroupReviewSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups/{capstone_group_id}/capstone-group-topics": {
             "get": {
                 "security": [
@@ -2618,6 +2742,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/upload/presign-urls": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Generate Upload PresignUrls",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "GenerateUploadPresignUrls",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/upload_dto.GenerateUploadPresignUrlsInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/upload_dto.GenerateUploadPresignUrlsSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "security": [
@@ -2914,6 +3083,35 @@ const docTemplate = `{
                 }
             }
         },
+        "capstone_group_dto.CapstoneGroupReviewOutput": {
+            "type": "object",
+            "properties": {
+                "capstone_group_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "feedback": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "report_files": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "schedule_review_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "capstone_group_dto.CreateCapstoneGroupInput": {
             "type": "object",
             "required": [
@@ -2937,6 +3135,35 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "capstone_group_dto.FeedbackCapstoneGroupReviewInput": {
+            "type": "object",
+            "required": [
+                "capstone_group_review_id",
+                "feedback"
+            ],
+            "properties": {
+                "capstone_group_review_id": {
+                    "type": "integer"
+                },
+                "feedback": {
+                    "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.GetCapstoneGroupReviewSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/capstone_group_dto.CapstoneGroupReviewOutput"
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },
@@ -3105,6 +3332,24 @@ const docTemplate = `{
                 },
                 "name_group": {
                     "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput": {
+            "type": "object",
+            "required": [
+                "capstone_group_review_id",
+                "report_files"
+            ],
+            "properties": {
+                "capstone_group_review_id": {
+                    "type": "integer"
+                },
+                "report_files": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -3874,6 +4119,34 @@ const docTemplate = `{
             "properties": {
                 "key": {
                     "type": "string"
+                }
+            }
+        },
+        "upload_dto.GenerateUploadPresignUrlsInput": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "upload_dto.GenerateUploadPresignUrlsSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

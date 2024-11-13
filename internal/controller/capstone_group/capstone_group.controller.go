@@ -18,15 +18,18 @@ import (
 type CapstoneGroupController struct {
 	capstoneGroupService      capstone_group_service.ICapstoneGroupService
 	capstoneGroupTopicService capstone_group_service.ICapstoneGroupTopicService
+	capstoneGroupReview       capstone_group_service.ICapstoneGroupReviewService
 }
 
 func NewCapstoneGroupController(
 	capstoneGroupService capstone_group_service.ICapstoneGroupService,
 	capstoneGroupTopicService capstone_group_service.ICapstoneGroupTopicService,
+	capstoneGroupReview capstone_group_service.ICapstoneGroupReviewService,
 ) *CapstoneGroupController {
 	return &CapstoneGroupController{
 		capstoneGroupService:      capstoneGroupService,
 		capstoneGroupTopicService: capstoneGroupTopicService,
+		capstoneGroupReview:       capstoneGroupReview,
 	}
 }
 
