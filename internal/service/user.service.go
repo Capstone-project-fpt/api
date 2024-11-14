@@ -32,6 +32,7 @@ type GetListUsersInput struct {
 	Offset    int
 	UserTypes []string
 	Email     string
+	OrderBy   string
 }
 
 func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (interface{}, error) {
@@ -62,6 +63,10 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 		getUsersQuery.Where("email LIKE ?", "%"+input.Email+"%")
 	}
 
+	if input.OrderBy != "" {
+		getUsersQuery.Order("users.created_at " + input.OrderBy)
+	}
+
 	if err := getTotalQuery.Count(&total).Error; err != nil {
 		return nil, err
 	}
@@ -88,10 +93,10 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 		}
 		if item.StudentID != 0 && item.UserType == constant.UserType.Student {
 			studentInfo := user_dto.StudentInfoOutput{
-				StudentID:       int(item.StudentID),
-				Code:            item.StudentCode,
-				SubMajorId:      int(item.StudentSubMajorID),
-				CreatedAt:       item.StudentCreatedAt,
+				StudentID:  int(item.StudentID),
+				Code:       item.StudentCode,
+				SubMajorId: int(item.StudentSubMajorID),
+				CreatedAt:  item.StudentCreatedAt,
 			}
 			userExtraInfo.Student = &studentInfo
 		}
@@ -120,7 +125,6 @@ func (us *userService) GetListUsers(ctx *gin.Context, input GetListUsersInput) (
 	}, nil
 }
 
-
 func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOutput, error) {
 	messageUserNotfound := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 		MessageID: constant.MessageI18nId.UserNotFound,
@@ -147,10 +151,10 @@ func (u *userService) GetUser(ctx *gin.Context, userID int) (*user_dto.GetUserOu
 		}
 
 		extraInfo.Student = &user_dto.StudentInfoOutput{
-			StudentID:       int(student.ID),
-			Code:            student.Code,
-			SubMajorId:      int(student.SubMajorID),
-			CreatedAt:       student.CreatedAt,
+			StudentID:  int(student.ID),
+			Code:       student.Code,
+			SubMajorId: int(student.SubMajorID),
+			CreatedAt:  student.CreatedAt,
 		}
 	case constant.UserType.Teacher:
 		var teacher model.Teacher
