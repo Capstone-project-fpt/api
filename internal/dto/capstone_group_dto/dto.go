@@ -40,7 +40,7 @@ type UpdateReportFilesCapstoneGroupReviewInput struct {
 
 type FeedbackCapstoneGroupReviewInput struct {
 	CapstoneGroupReviewID int64  `json:"capstone_group_review_id" binding:"required"`
-	Feedback              string `json:"feedback" binding:"required"`
+	Feedback              string `json:"feedback"`
 	CapstoneGroupID       int64  `swaggerignore:"true"`
 }
 
