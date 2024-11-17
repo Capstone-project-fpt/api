@@ -241,6 +241,12 @@ const docTemplate = `{
                         "description": "Email",
                         "name": "email",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order By",
+                        "name": "order_by",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1934,7 +1940,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schedule_review_dto.ListScheduleReviewSwaggerOutput"
+                            "$ref": "#/definitions/schedule_review_dto.ListScheduleReviewDetailSwaggerOutput"
                         }
                     },
                     "400": {
@@ -3731,7 +3737,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schedule_review_dto.ListScheduleReviewSwaggerOutput": {
+        "schedule_review_dto.ListScheduleReviewDetailSwaggerOutput": {
             "type": "object",
             "properties": {
                 "code": {
@@ -3740,7 +3746,7 @@ const docTemplate = `{
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schedule_review_dto.ScheduleReviewOutput"
+                        "$ref": "#/definitions/schedule_review_dto.ScheduleReviewDetailOutput"
                     }
                 },
                 "message": {
@@ -3751,8 +3757,11 @@ const docTemplate = `{
         "schedule_review_dto.ScheduleReviewDetailOutput": {
             "type": "object",
             "properties": {
-                "capstoneGroup": {
+                "capstone_group": {
                     "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                },
+                "capstone_group_review": {
+                    "$ref": "#/definitions/capstone_group_dto.CapstoneGroupReviewOutput"
                 },
                 "description": {
                     "type": "string"
@@ -3791,38 +3800,6 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "boolean"
-                }
-            }
-        },
-        "schedule_review_dto.ScheduleReviewOutput": {
-            "type": "object",
-            "properties": {
-                "capstone_group_id": {
-                    "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "end_time": {
-                    "type": "string"
-                },
-                "evaluation_committee_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "link_meeting": {
-                    "type": "string"
-                },
-                "start_time": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
                 }
             }
         },
