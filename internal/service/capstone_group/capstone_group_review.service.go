@@ -59,9 +59,12 @@ func (c *capstoneGroupReviewService) FeedbackCapstoneGroupReview(ctx *gin.Contex
 		}))
 	}
 
-	if err := global.Db.Model(model.CapstoneGroupReview{}).Where("id = ?", input.CapstoneGroupReviewID).Updates(&model.CapstoneGroupReview{
-		Feedback: input.Feedback,
-	}).Error; err != nil {
+	if err := global.Db.Model(model.CapstoneGroupReview{}).
+		Where("id = ?", input.CapstoneGroupReviewID).
+		Select("Feedback").
+		Updates(&model.CapstoneGroupReview{
+			Feedback: input.Feedback,
+		}).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		}))
