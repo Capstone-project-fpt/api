@@ -241,6 +241,12 @@ const docTemplate = `{
                         "description": "Email",
                         "name": "email",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order By",
+                        "name": "order_by",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1536,6 +1542,49 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/evaluation-committees/semesters/{semester_id}/teachers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list teachers have evaluation commitee group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Evaluation Committee"
+                ],
+                "summary": "GetListTeachersHaveEvaluationCommiteeGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "evaluation_committee_id",
+                        "name": "evaluation_committee_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput"
                         }
                     },
                     "400": {
@@ -3595,6 +3644,23 @@ const docTemplate = `{
                 },
                 "data": {
                     "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.TeacherOutput"
+                    }
                 },
                 "message": {
                     "type": "boolean"

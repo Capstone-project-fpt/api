@@ -22,6 +22,7 @@ type IEvaluationCommitteeService interface {
 	DeleteEvaluationCommittee(ctx *gin.Context, id int64) error
 	GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error)
 	GetListEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.GetListEvaluationCommitteeInput) (*evaluation_committee_dto.ListEvaluationCommitteeOutput, error)
+	GetListTeachersHaveEvaluationCommitteeGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.TeacherOutput, error)
 }
 
 type evaluationCommitteeService struct{}
@@ -261,4 +262,49 @@ func (e *evaluationCommitteeService) GetListEvaluationCommittee(ctx *gin.Context
 		},
 		Items: itemsEvaluationCommitteeOutput,
 	}, nil
+}
+
+func (e *evaluationCommitteeService) GetListTeachersHaveEvaluationCommitteeGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.TeacherOutput, error) {
+	var evaluationCommittees []model.EvaluationCommittee
+	queryEvaluationCommittees := global.Db.Model(&model.EvaluationCommittee{}).Where("semester_id = ?", semesterID).First(&evaluationCommittees)
+	if err := queryEvaluationCommittees.Error; err != nil {
+		return nil, err
+	}
+
+	teacherIDs := make([]int64, 0)
+	for _, evaluationCommittee := range evaluationCommittees {
+		for _, teacherID := range evaluationCommittee.TeacherIDs {
+			if !funk.Contains(teacherIDs, teacherID) {
+				teacherIDs = append(teacherIDs, teacherID)
+			}
+		}
+	}
+
+	var teachers []model.Teacher
+
+	queryTeachers := global.Db.Model(model.Teacher{}).
+		Select(`
+			"teachers"."id",
+			"teachers"."sub_major_id",
+			"teachers"."user_id",
+			"User"."id" AS "User__id", 
+  			"User"."name" AS "User__name", 
+  			"User"."user_type" AS "User__user_type", 
+  			"User"."email" AS "User__email", 
+  			"User"."phone_number" AS "User__phone_number"
+		`).
+		Joins(`INNER JOIN "users" "User" ON "User"."id" = "teachers"."user_id"`).
+		Where("teachers.id IN ?", []int64(teacherIDs)).
+		Find(&teachers)
+
+	if err := queryTeachers.Error; err != nil {
+		return nil, err
+	}
+
+	var teachersHaveEvaluationCommitteeGroup []*user_dto.TeacherOutput
+	for _, teacher := range teachers {
+		teachersHaveEvaluationCommitteeGroup = append(teachersHaveEvaluationCommitteeGroup, user_dto.ToTeacherOutput(&teacher))
+	}
+	return &teachersHaveEvaluationCommitteeGroup, nil
+
 }

@@ -85,3 +85,8 @@ type EvaluationCommitteeWithTeacherInfoSwaggerOutput struct {
 	Success bool                                     `json:"message"`
 	Data    EvaluationCommitteeWithTeacherInfoOutput `json:"data"`
 }
+type ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput struct {
+	Code    int                        `json:"code"`
+	Success bool                       `json:"message"`
+	Data    *[]*user_dto.TeacherOutput `json:"data"`
+}
