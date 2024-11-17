@@ -1553,6 +1553,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/evaluation-committees/semesters/{semester_id}/teachers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get list teachers have evaluation committee group",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Evaluation Committee"
+                ],
+                "summary": "GetListTeachersHaveEvaluationCommitteeGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "semester_id",
+                        "name": "semester_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/evaluation-committees/{id}": {
             "get": {
                 "security": [
@@ -3601,6 +3644,23 @@ const docTemplate = `{
                 },
                 "data": {
                     "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.TeacherOutput"
+                    }
                 },
                 "message": {
                     "type": "boolean"

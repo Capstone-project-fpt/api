@@ -471,6 +471,17 @@ definitions:
       message:
         type: boolean
     type: object
+  evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/user_dto.TeacherOutput'
+        type: array
+      message:
+        type: boolean
+    type: object
   evaluation_committee_dto.UpdateEvaluationCommitteeInput:
     properties:
       id:
@@ -1936,6 +1947,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetEvaluationCommittee
+      tags:
+      - Evaluation Committee
+  /evaluation-committees/semesters/{semester_id}/teachers:
+    get:
+      consumes:
+      - application/json
+      description: Get list teachers have evaluation committee group
+      parameters:
+      - description: semester_id
+        in: path
+        name: semester_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListTeachersHaveEvaluationCommitteeGroup
       tags:
       - Evaluation Committee
   /forgot-password:

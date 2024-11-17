@@ -12,6 +12,7 @@ FROM scratch
 
 COPY --from=builder /app/build /build
 COPY ./config.yaml /config.yaml
+COPY ./internal/locales /internal/locales
 
 # Set the entry point to the binary
 ENTRYPOINT [ "/build" ]

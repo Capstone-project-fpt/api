@@ -184,3 +184,30 @@ func (ecc *EvaluationCommitteeController) GetListEvaluationCommittee(ctx *gin.Co
 
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
+
+// @Summary GetListTeachersHaveEvaluationCommitteeGroup
+// @Description Get list teachers have evaluation committee group
+// @Tags Evaluation Committee
+// @Accept json
+// @Produce json
+// @Router /evaluation-committees/semesters/{semester_id}/teachers [get]
+// @Param semester_id path int true "semester_id"
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput
+// @Security ApiKeyAuth
+func (ecc *EvaluationCommitteeController) GetListTeachersHaveEvaluationCommitteeGroup(ctx *gin.Context) {
+	idParam := ctx.Param("semester_id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+
+	output, err := ecc.evaluationCommitteeService.GetListTeachersHaveEvaluationCommitteeGroup(ctx, int64(id))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+	
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}

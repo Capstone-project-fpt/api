@@ -20,5 +20,6 @@ func (e *EvaluationCommitteeRouter) InitEvaluationCommitteeRouter(group *gin.Rou
 		evaluationCommitteeRouter.DELETE("/:id", middleware.UserTypeMiddleware(constant.UserType.Admin), evaluationCommitteeController.DeleteEvaluationCommittee)
 		evaluationCommitteeRouter.GET("/", evaluationCommitteeController.GetListEvaluationCommittee)
 		evaluationCommitteeRouter.GET("/:id", evaluationCommitteeController.GetEvaluationCommittee)
+		evaluationCommitteeRouter.GET("/semesters/:semester_id/teachers", evaluationCommitteeController.GetListTeachersHaveEvaluationCommitteeGroup)
 	}
 }
