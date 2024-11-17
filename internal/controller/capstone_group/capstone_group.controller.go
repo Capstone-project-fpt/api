@@ -325,12 +325,13 @@ func (cgc *CapstoneGroupController) GetListStudentHaveCapstoneGroup(ctx *gin.Con
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
 
-// @Summary UpdateCapstoneGroupMember
+// @Summary UpdateCapstoneGroupStudent
 // @Description Update Capstone Group Member
-// @Tags Evaluation Committee
+// @Tags Capstone Group
 // @Produce json
-// @Param data body capstone_group_dto.UpdateCapstoneGroupMember true "data"
-// @Router /capstone-groups/{capstone_group_id}/students [put]
+// @Param id path int true "capstone_group_id"
+// @Param data body capstone_group_dto.UpdateCapstoneGroupStudentInput true "data"
+// @Router /capstone-groups/{capstone_group_id}/members [put]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 // @Security ApiKeyAuth

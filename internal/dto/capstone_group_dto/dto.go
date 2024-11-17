@@ -205,6 +205,6 @@ type ListStudentHaveCapstoneGroupSwaggerOutput struct {
 }
 
 type UpdateCapstoneGroupStudentInput struct {
-	ID        int64 `json:"id" binding:"required" validate:"required"`
+	ID        int64 `swaggerignore:"true"`
 	StudentID int64 `json:"student_id" binding:"required"`
 }
