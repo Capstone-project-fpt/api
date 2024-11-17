@@ -19,6 +19,7 @@ type ServerSetting struct {
 	Mode      string `mapstructure:"mode"`
 	WebURL    string `mapstructure:"webURL"`
 	ServerURL string `mapstructure:"serverURL"`
+	ServerIP  string `mapstructure:"serverIP"`
 }
 
 type JwtSetting struct {

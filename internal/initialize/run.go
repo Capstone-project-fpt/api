@@ -21,10 +21,10 @@ func Run() {
 	InitI18n()
 	r := InitRouter()
 
-	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
+	serverAddr := fmt.Sprintf("%s:%v", global.Config.Server.ServerIP, global.Config.Server.Port)
 
 	if global.Config.Server.Mode != "release" {
-		fmt.Printf("Swagger API Docs: http://localhost:%v/swagger/index.html\n", global.Config.Server.Port)
+		fmt.Printf("Swagger API Docs: http://%v/swagger/index.html\n", serverAddr)
 	}
 
 	go func() {
@@ -40,5 +40,5 @@ func Run() {
 	global.S3Client = s3.New(global.AwsSession)
 	global.Validator = validator.New(validator.WithRequiredStructEnabled())
 
-	r.Run("localhost" + serverAddr)
+	r.Run(serverAddr)
 }
