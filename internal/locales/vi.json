@@ -75,5 +75,9 @@
   "ScheduleReviewEvaluationCommitteeOverlap": "Lịch review này bị trùng lặp với lịch review khác của hội đồng thẩm định.",
   "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime": "Thời gian bắt đầu của lịch review bặt buộc phải trước thời gian kết thúc.",
   "ScheduleReviewTimeNeedToBeInSemesterTime": "Thời gian bắt đầu và kết thúc lịch review bắt buộc phải trong học kỳ.",
-  "UpdateCapstoneGroupReviewSuccess": "Cập nhật thông tin review nhóm bảo vệ đồ án thành công."
+  "UpdateCapstoneGroupReviewSuccess": "Cập nhật thông tin review nhóm bảo vệ đồ án thành công.",
+  "UpdateCapstoneGroupStudentSuccess": "Cập nhập thành viên trong nhóm bảo vệ đồ án thành công.",
+  "FailedToRemoveStudent": "Xóa thành viên trong nhóm bảo vệ đồ án thất bại",
+  "FailedToAddStudent": "Thêm thành viên trong nhóm bảo vệ đồ án thất bại",
+  "StudentAlreadyInAnotherGroup": "Thành viên đã tồn tại ở trong nhóm đồ án khác."
 }

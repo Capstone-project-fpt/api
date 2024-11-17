@@ -1,6 +1,7 @@
 package capstone_group_controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -322,4 +323,49 @@ func (cgc *CapstoneGroupController) GetListStudentHaveCapstoneGroup(ctx *gin.Con
 		return
 	}
 	response.SuccessResponse(ctx, http.StatusOK, output)
+}
+
+// @Summary UpdateCapstoneGroupMember
+// @Description Update Capstone Group Member
+// @Tags Evaluation Committee
+// @Produce json
+// @Param data body capstone_group_dto.UpdateCapstoneGroupMember true "data"
+// @Router /capstone-groups/{capstone_group_id}/students [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (ecc *CapstoneGroupController) UpdateCapstoneGroupStudent(ctx *gin.Context) {
+	idParam := ctx.Param("capstone_group_id")
+	capstoneGroupID, err := strconv.ParseInt(idParam, 10, 64)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	var input capstone_group_dto.UpdateCapstoneGroupStudentInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidFile,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, errors.New(message))
+		return
+	}
+
+	input.ID = capstoneGroupID
+
+	if err := global.Validator.Struct(input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := ecc.capstoneGroupService.UpdateCapstoneGroupStudent(ctx, &input); err != nil {
+		response.ErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.UpdateCapstoneGroupStudentSuccess,
+	}))
 }

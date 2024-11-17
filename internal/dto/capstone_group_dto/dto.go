@@ -203,3 +203,8 @@ type ListStudentHaveCapstoneGroupSwaggerOutput struct {
 	Success bool                       `json:"message"`
 	Data    *[]*user_dto.StudentOutput `json:"data"`
 }
+
+type UpdateCapstoneGroupStudentInput struct {
+	ID        int64 `json:"id" binding:"required" validate:"required"`
+	StudentID int64 `json:"student_id" binding:"required"`
+}
