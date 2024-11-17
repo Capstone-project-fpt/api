@@ -1972,11 +1972,11 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get list teachers have evaluation commitee group
+      description: Get list teachers have evaluation committee group
       parameters:
-      - description: evaluation_committee_id
+      - description: semester_id
         in: path
-        name: evaluation_committee_id
+        name: semester_id
         required: true
         type: integer
       produces:
@@ -1992,7 +1992,7 @@ paths:
             $ref: '#/definitions/response.ResponseErr'
       security:
       - ApiKeyAuth: []
-      summary: GetListTeachersHaveEvaluationCommiteeGroup
+      summary: GetListTeachersHaveEvaluationCommitteeGroup
       tags:
       - Evaluation Committee
   /forgot-password:

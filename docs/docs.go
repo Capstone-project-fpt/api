@@ -1560,7 +1560,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get list teachers have evaluation commitee group",
+                "description": "Get list teachers have evaluation committee group",
                 "consumes": [
                     "application/json"
                 ],
@@ -1570,12 +1570,12 @@ const docTemplate = `{
                 "tags": [
                     "Evaluation Committee"
                 ],
-                "summary": "GetListTeachersHaveEvaluationCommiteeGroup",
+                "summary": "GetListTeachersHaveEvaluationCommitteeGroup",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "evaluation_committee_id",
-                        "name": "evaluation_committee_id",
+                        "description": "semester_id",
+                        "name": "semester_id",
                         "in": "path",
                         "required": true
                     }

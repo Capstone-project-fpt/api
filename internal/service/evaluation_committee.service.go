@@ -266,7 +266,7 @@ func (e *evaluationCommitteeService) GetListEvaluationCommittee(ctx *gin.Context
 
 func (e *evaluationCommitteeService) GetListTeachersHaveEvaluationCommitteeGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.TeacherOutput, error) {
 	var evaluationCommittees []model.EvaluationCommittee
-	queryEvaluationCommittees := global.Db.Model(&model.EvaluationCommittee{}).Where("semester_id = ?", semesterID).First(&evaluationCommittees)
+	queryEvaluationCommittees := global.Db.Model(&model.EvaluationCommittee{}).Where("semester_id = ?", semesterID).Find(&evaluationCommittees)
 	if err := queryEvaluationCommittees.Error; err != nil {
 		return nil, err
 	}
@@ -305,6 +305,6 @@ func (e *evaluationCommitteeService) GetListTeachersHaveEvaluationCommitteeGroup
 	for _, teacher := range teachers {
 		teachersHaveEvaluationCommitteeGroup = append(teachersHaveEvaluationCommitteeGroup, user_dto.ToTeacherOutput(&teacher))
 	}
-	return &teachersHaveEvaluationCommitteeGroup, nil
 
+	return &teachersHaveEvaluationCommitteeGroup, nil
 }
