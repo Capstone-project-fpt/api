@@ -1,7 +1,6 @@
 package main
 
 import (
-	 _ "github.com/lib/pq"
 	"github.com/api/global"
 	"github.com/api/internal/initialize"
 )
