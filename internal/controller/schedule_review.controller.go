@@ -159,7 +159,7 @@ func (s *ScheduleReviewController) GetScheduleReviewDetail(ctx *gin.Context) {
 // @Param capstone_group_id query int false "Capstone Group ID"
 // @Router /schedule-reviews [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} schedule_review_dto.ListScheduleReviewSwaggerOutput
+// @Success 200 {object} schedule_review_dto.ListScheduleReviewDetailSwaggerOutput
 // @Security ApiKeyAuth
 func (s *ScheduleReviewController) GetListScheduleReview(ctx *gin.Context) {
 	var input schedule_review_dto.GetListScheduleReviewInput

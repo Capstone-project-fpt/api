@@ -560,21 +560,23 @@ definitions:
     - title
     - type
     type: object
-  schedule_review_dto.ListScheduleReviewSwaggerOutput:
+  schedule_review_dto.ListScheduleReviewDetailSwaggerOutput:
     properties:
       code:
         type: integer
       data:
         items:
-          $ref: '#/definitions/schedule_review_dto.ScheduleReviewOutput'
+          $ref: '#/definitions/schedule_review_dto.ScheduleReviewDetailOutput'
         type: array
       message:
         type: boolean
     type: object
   schedule_review_dto.ScheduleReviewDetailOutput:
     properties:
-      capstoneGroup:
+      capstone_group:
         $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+      capstone_group_review:
+        $ref: '#/definitions/capstone_group_dto.CapstoneGroupReviewOutput'
       description:
         type: string
       end_time:
@@ -600,27 +602,6 @@ definitions:
         $ref: '#/definitions/schedule_review_dto.ScheduleReviewDetailOutput'
       message:
         type: boolean
-    type: object
-  schedule_review_dto.ScheduleReviewOutput:
-    properties:
-      capstone_group_id:
-        type: integer
-      description:
-        type: string
-      end_time:
-        type: string
-      evaluation_committee_id:
-        type: integer
-      id:
-        type: integer
-      link_meeting:
-        type: string
-      start_time:
-        type: string
-      title:
-        type: string
-      type:
-        type: string
     type: object
   schedule_review_dto.UpdateScheduleReviewInput:
     properties:
@@ -1080,6 +1061,10 @@ paths:
       - description: Email
         in: query
         name: email
+        type: string
+      - description: Order By
+        in: query
+        name: order_by
         type: string
       produces:
       - application/json
@@ -2156,7 +2141,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schedule_review_dto.ListScheduleReviewSwaggerOutput'
+            $ref: '#/definitions/schedule_review_dto.ListScheduleReviewDetailSwaggerOutput'
         "400":
           description: Bad Request
           schema:

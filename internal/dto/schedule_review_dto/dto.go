@@ -60,13 +60,15 @@ type ScheduleReviewDetailOutput struct {
 	StartTime           time.Time                                                          `json:"start_time"`
 	EndTime             time.Time                                                          `json:"end_time"`
 	EvaluationCommittee *evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput `json:"evaluation_committee"`
-	CapstoneGroup       *capstone_group_dto.CapstoneGroupOutput
+	CapstoneGroup       *capstone_group_dto.CapstoneGroupOutput                            `json:"capstone_group"`
+	CapstoneGroupReview *capstone_group_dto.CapstoneGroupReviewOutput                      `json:"capstone_group_review"`
 }
 
 func ToScheduleReviewDetailOutput(
 	scheduleReview *model.ScheduleReview,
 	evaluationCommittee *evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput,
 	capstoneGroup *capstone_group_dto.CapstoneGroupOutput,
+	capstoneGroupReview *capstone_group_dto.CapstoneGroupReviewOutput,
 ) *ScheduleReviewDetailOutput {
 	return &ScheduleReviewDetailOutput{
 		ID:                  scheduleReview.ID,
@@ -78,6 +80,7 @@ func ToScheduleReviewDetailOutput(
 		EndTime:             scheduleReview.EndTime,
 		EvaluationCommittee: evaluationCommittee,
 		CapstoneGroup:       capstoneGroup,
+		CapstoneGroupReview: capstoneGroupReview,
 	}
 }
 
@@ -109,7 +112,13 @@ type ScheduleReviewDetailSwaggerOutput struct {
 }
 
 type ListScheduleReviewSwaggerOutput struct {
+	Code    int                    `json:"code"`
+	Success bool                   `json:"message"`
+	Data    []ScheduleReviewOutput `json:"data"`
+}
+
+type ListScheduleReviewDetailSwaggerOutput struct {
 	Code    int                          `json:"code"`
 	Success bool                         `json:"message"`
-	Data    []ScheduleReviewOutput `json:"data"`
+	Data    []ScheduleReviewDetailOutput `json:"data"`
 }
