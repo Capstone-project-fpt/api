@@ -36,7 +36,7 @@ func InitRouter() *gin.Engine {
 	// Configure CORS
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{global.Config.Server.WebURL}, // TODO: Use config variable
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
