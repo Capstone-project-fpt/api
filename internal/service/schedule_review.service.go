@@ -362,11 +362,11 @@ func (s *scheduleReviewService) GetListScheduleReview(ctx *gin.Context, input *s
 		Where("start_time >= ? AND end_time <= ?", input.StartTime, input.EndTime)
 
 	if input.CapstoneGroupID != nil {
-		queryScheduleReviews = queryScheduleReviews.Where("capstone_group_id = ?", *input.CapstoneGroupID)
+		queryScheduleReviews = queryScheduleReviews.Where("schedule_reviews.capstone_group_id = ?", *input.CapstoneGroupID)
 	}
 
 	if input.EvaluationCommitteeID != nil {
-		queryScheduleReviews = queryScheduleReviews.Where("evaluation_committee_id = ?", *input.EvaluationCommitteeID)
+		queryScheduleReviews = queryScheduleReviews.Where("schedule_reviews.evaluation_committee_id = ?", *input.EvaluationCommitteeID)
 	}
 
 	if input.OrderBy != nil {
