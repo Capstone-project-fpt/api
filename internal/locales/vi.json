@@ -77,7 +77,9 @@
   "ScheduleReviewTimeNeedToBeInSemesterTime": "Thời gian bắt đầu và kết thúc lịch review bắt buộc phải trong học kỳ.",
   "UpdateCapstoneGroupReviewSuccess": "Cập nhật thông tin review nhóm bảo vệ đồ án thành công.",
   "UpdateCapstoneGroupStudentSuccess": "Cập nhập thành viên trong nhóm bảo vệ đồ án thành công.",
-  "FailedToRemoveStudent": "Xóa thành viên trong nhóm bảo vệ đồ án thất bại",
-  "FailedToAddStudent": "Thêm thành viên trong nhóm bảo vệ đồ án thất bại",
-  "StudentAlreadyInAnotherGroup": "Thành viên đã tồn tại ở trong nhóm đồ án khác."
+  "FailedToRemoveStudent": "Xóa thành viên trong nhóm bảo vệ đồ án thất bại.",
+  "FailedToAddStudent": "Thêm thành viên trong nhóm bảo vệ đồ án thất bại.",
+  "StudentAlreadyInAnotherGroup": "Thành viên đã tồn tại ở trong nhóm đồ án khác.",
+  "FailedToReplaceLeader": "Thay thế nhóm trưởng khác thất bại.",
+  "FailedToUpdateNewLeader": "Cập nhập nhóm trưởng mới thất bại."
 }

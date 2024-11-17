@@ -327,6 +327,26 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 		Where("capstone_group_id = ? AND student_id = ?", input.ID, input.StudentID).
 		First(&studentCapstoneGroup).Error
 	if err == nil {
+		if input.StudentID == capstoneGroup.LeaderID {
+			var otherMembers []model.StudentCapstoneGroup
+			if err := global.Db.Model(model.StudentCapstoneGroup{}).
+				Where("capstone_group_id = ? AND student_id != ?", input.ID, input.StudentID).
+				Find(&otherMembers).Error; err != nil || len(otherMembers) == 0 {
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToReplaceLeader,
+				}))
+			}
+
+			randomLeaderID := otherMembers[0].StudentID
+			if err := global.Db.Model(&capstoneGroup).
+				Where("id = ?", input.ID).
+				Update("leader_id", randomLeaderID).Error; err != nil {
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToUpdateNewLeader,
+				}))
+			}
+		}
+
 		if err := global.Db.Delete(&studentCapstoneGroup).Error; err != nil {
 			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				MessageID: constant.MessageI18nId.FailedToRemoveStudent,
