@@ -312,59 +312,62 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 		}))
 	}
 
-	var existingStudentGroup model.StudentCapstoneGroup
-	err := global.Db.Model(model.StudentCapstoneGroup{}).
-		Where("student_id = ? AND semester_id = ? AND capstone_group_id != ?", input.StudentID, capstoneGroup.SemesterID, input.ID).
-		First(&existingStudentGroup).Error
-	if err == nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.StudentAlreadyInAnotherGroup,
-		}))
-	}
-
-	var studentCapstoneGroup model.StudentCapstoneGroup
-	err = global.Db.Model(model.StudentCapstoneGroup{}).
-		Where("capstone_group_id = ? AND student_id = ?", input.ID, input.StudentID).
-		First(&studentCapstoneGroup).Error
-	if err == nil {
-		if input.StudentID == capstoneGroup.LeaderID {
-			var otherMembers []model.StudentCapstoneGroup
-			if err := global.Db.Model(model.StudentCapstoneGroup{}).
-				Where("capstone_group_id = ? AND student_id != ?", input.ID, input.StudentID).
-				Find(&otherMembers).Error; err != nil || len(otherMembers) == 0 {
-				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					MessageID: constant.MessageI18nId.FailedToReplaceLeader,
-				}))
-			}
-
-			randomLeaderID := otherMembers[0].StudentID
-			if err := global.Db.Model(&capstoneGroup).
-				Where("id = ?", input.ID).
-				Update("leader_id", randomLeaderID).Error; err != nil {
-				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					MessageID: constant.MessageI18nId.FailedToUpdateNewLeader,
-				}))
-			}
+	tx := global.Db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
 		}
+	}()
 
-		if err := global.Db.Delete(&studentCapstoneGroup).Error; err != nil {
+	for _, studentID := range input.StudentIDs {
+		var existingStudentGroup model.StudentCapstoneGroup
+		err := tx.Model(model.StudentCapstoneGroup{}).
+			Where("student_id = ? AND semester_id = ? AND capstone_group_id != ?", studentID, capstoneGroup.SemesterID, input.ID).
+			First(&existingStudentGroup).Error
+		if err == nil {
+			tx.Rollback()
 			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-				MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+				MessageID: constant.MessageI18nId.StudentAlreadyInAnotherGroup,
 			}))
 		}
-		return nil
+
+		var studentCapstoneGroup model.StudentCapstoneGroup
+		err = tx.Model(model.StudentCapstoneGroup{}).
+			Where("capstone_group_id = ? AND student_id = ?", input.ID, studentID).
+			First(&studentCapstoneGroup).Error
+		if err == nil {
+			if studentID == capstoneGroup.LeaderID {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.CannotRemoveLeader,
+				}))
+			}
+
+			if err := tx.Delete(&studentCapstoneGroup).Error; err != nil {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+				}))
+			}
+			continue
+		}
+
+		newStudentCapstoneGroup := model.StudentCapstoneGroup{
+			CapstoneGroupID: input.ID,
+			StudentID:       studentID,
+			SemesterID:      capstoneGroup.SemesterID,
+		}
+
+		if err := tx.Create(&newStudentCapstoneGroup).Error; err != nil {
+			tx.Rollback()
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.FailedToAddStudent,
+			}))
+		}
 	}
 
-	newStudentCapstoneGroup := model.StudentCapstoneGroup{
-		CapstoneGroupID: input.ID,
-		StudentID:       input.StudentID,
-		SemesterID:      capstoneGroup.SemesterID,
-	}
-
-	if err := global.Db.Create(&newStudentCapstoneGroup).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.FailedToAddStudent,
-		}))
+	if err := tx.Commit().Error; err != nil {
+		return err
 	}
 
 	return nil

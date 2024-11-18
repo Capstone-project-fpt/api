@@ -333,11 +333,11 @@ func (cgc *CapstoneGroupController) GetListStudentHaveCapstoneGroup(ctx *gin.Con
 // @Param data body capstone_group_dto.UpdateCapstoneGroupStudentInput true "data"
 // @Router /capstone-groups/{capstone_group_id}/members [put]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} response.ResponseDataSuccess
+// @Success 200 {object} capstone_group_dto.UpdateCapstoneGroupStudentInput
 // @Security ApiKeyAuth
 func (ecc *CapstoneGroupController) UpdateCapstoneGroupStudent(ctx *gin.Context) {
 	idParam := ctx.Param("capstone_group_id")
-	capstoneGroupID, err := strconv.ParseInt(idParam, 10, 64)
+	capstoneGroupID, err := strconv.Atoi(idParam)
 	if err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidParams,
@@ -354,7 +354,7 @@ func (ecc *CapstoneGroupController) UpdateCapstoneGroupStudent(ctx *gin.Context)
 		return
 	}
 
-	input.ID = capstoneGroupID
+	input.ID = int64(capstoneGroupID)
 
 	if err := global.Validator.Struct(input); err != nil {
 		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())

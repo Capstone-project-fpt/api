@@ -80,6 +80,5 @@
   "FailedToRemoveStudent": "Remove member in capstone group fail.",
   "FailedToAddStudent": "Add member in capstone group fail.",
   "StudentAlreadyInAnotherGroup": "Member already in another group.",
-  "FailedToReplaceLeader": "Replace leader in capstone group fail",
-  "FailedToUpdateNewLeader": "Update new leader in capstone group fail."
+  "CannotRemoveLeader": "Can not remove leader."
 }

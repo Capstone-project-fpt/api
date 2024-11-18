@@ -83,8 +83,7 @@ type MessageI18n struct {
 	FailedToRemoveStudent                                string
 	FailedToAddStudent                                   string
 	StudentAlreadyInAnotherGroup                         string
-	FailedToReplaceLeader                                string
-	FailedToUpdateNewLeader                              string
+	CannotRemoveLeader                                   string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -170,6 +169,5 @@ var MessageI18nId MessageI18n = MessageI18n{
 	FailedToRemoveStudent:                                "FailedToRemoveStudent",
 	FailedToAddStudent:                                   "FailedToAddStudent",
 	StudentAlreadyInAnotherGroup:                         "StudentAlreadyInAnotherGroup",
-	FailedToReplaceLeader:                                "FailedToReplaceLeader",
-	FailedToUpdateNewLeader:                              "FailedToUpdateLeader",
+	CannotRemoveLeader:                                   "CannotRemoveLeader",
 }

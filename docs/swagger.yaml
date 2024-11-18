@@ -299,10 +299,12 @@ definitions:
     type: object
   capstone_group_dto.UpdateCapstoneGroupStudentInput:
     properties:
-      student_id:
-        type: integer
+      student_ids:
+        items:
+          type: integer
+        type: array
     required:
-    - student_id
+    - student_ids
     type: object
   capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput:
     properties:
@@ -1712,7 +1714,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.ResponseDataSuccess'
+            $ref: '#/definitions/capstone_group_dto.UpdateCapstoneGroupStudentInput'
         "400":
           description: Bad Request
           schema:

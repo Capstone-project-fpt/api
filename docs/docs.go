@@ -1269,7 +1269,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                            "$ref": "#/definitions/capstone_group_dto.UpdateCapstoneGroupStudentInput"
                         }
                     },
                     "400": {
@@ -3391,11 +3391,14 @@ const docTemplate = `{
         "capstone_group_dto.UpdateCapstoneGroupStudentInput": {
             "type": "object",
             "required": [
-                "student_id"
+                "student_ids"
             ],
             "properties": {
-                "student_id": {
-                    "type": "integer"
+                "student_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
