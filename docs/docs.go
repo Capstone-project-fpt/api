@@ -515,8 +515,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "capstone_group_id",
-                        "name": "capstone_group_id",
+                        "description": "semester_id",
+                        "name": "semester_id",
                         "in": "path",
                         "required": true
                     }
