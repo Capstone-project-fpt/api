@@ -5,6 +5,7 @@ import (
 
 	"github.com/api/database/model"
 	"github.com/api/internal/dto"
+	"github.com/api/internal/dto/capstone_group_dto"
 	"github.com/api/internal/dto/user_dto"
 )
 
@@ -15,9 +16,10 @@ type CreateEvaluationCommitteeInput struct {
 }
 
 type UpdateEvaluationCommitteeInput struct {
-	ID         int64   `json:"id" binding:"required" validate:"required"`
-	Name       string  `json:"name" binding:"required" validate:"required"`
-	TeacherIDs []int64 `json:"teacher_ids" binding:"required" validate:"required,min=1"`
+	ID             int64   `json:"id" binding:"required" validate:"required"`
+	Name           string  `json:"name" binding:"required" validate:"required"`
+	TeacherIDs     []int64 `json:"teacher_ids" binding:"required" validate:"required,min=1"`
+	AssignGroupIDs []int64 `json:"assign_group_ids" binding:"required" validate:"required"`
 }
 
 type GetListEvaluationCommitteeInput struct {
@@ -29,12 +31,13 @@ type GetListEvaluationCommitteeInput struct {
 }
 
 type EvaluationCommitteeOutput struct {
-	ID         int64     `json:"id"`
-	Name       string    `json:"name"`
-	TeacherIDs []int64   `json:"teacher_ids"`
-	SemesterID int64     `json:"semester_id"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID             int64     `json:"id"`
+	Name           string    `json:"name"`
+	TeacherIDs     []int64   `json:"teacher_ids"`
+	AssignGroupIDs []int64   `json:"assign_group_ids"`
+	SemesterID     int64     `json:"semester_id"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
 }
 
 type EvaluationCommitteeWithTeacherInfoOutput struct {
@@ -46,14 +49,25 @@ type EvaluationCommitteeWithTeacherInfoOutput struct {
 	UpdatedAt  time.Time                  `json:"updated_at"`
 }
 
+type EvaluationCommitteeWithFullInfoOutput struct {
+	ID           int64                                      `json:"id"`
+	Name         string                                     `json:"name"`
+	Teachers     *[]*user_dto.TeacherOutput                 `json:"teachers"`
+	AssignGroups *[]*capstone_group_dto.CapstoneGroupOutput `json:"assign_groups"`
+	SemesterID   int64                                      `json:"semester_id"`
+	CreatedAt    time.Time                                  `json:"created_at"`
+	UpdatedAt    time.Time                                  `json:"updated_at"`
+}
+
 func ToEvaluationCommitteeOutput(e *model.EvaluationCommittee) *EvaluationCommitteeOutput {
 	return &EvaluationCommitteeOutput{
-		ID:         e.ID,
-		Name:       e.Name,
-		TeacherIDs: e.TeacherIDs,
-		SemesterID: e.SemesterID,
-		CreatedAt:  e.CreatedAt,
-		UpdatedAt:  e.UpdatedAt,
+		ID:             e.ID,
+		Name:           e.Name,
+		TeacherIDs:     e.TeacherIDs,
+		AssignGroupIDs: e.AssignGroupIDs,
+		SemesterID:     e.SemesterID,
+		CreatedAt:      e.CreatedAt,
+		UpdatedAt:      e.UpdatedAt,
 	}
 }
 
@@ -65,6 +79,18 @@ func ToEvaluationCommitteeWithTeacherInfoOutput(e *model.EvaluationCommittee, te
 		SemesterID: e.SemesterID,
 		CreatedAt:  e.CreatedAt,
 		UpdatedAt:  e.UpdatedAt,
+	}
+}
+
+func ToEvaluationCommitteeWithFullInfoOutput(e *model.EvaluationCommittee, teachers *[]*user_dto.TeacherOutput, assignGroups *[]*capstone_group_dto.CapstoneGroupOutput) *EvaluationCommitteeWithFullInfoOutput {
+	return &EvaluationCommitteeWithFullInfoOutput{
+		ID:           e.ID,
+		Name:         e.Name,
+		Teachers:     teachers,
+		AssignGroups: assignGroups,
+		SemesterID:   e.SemesterID,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
 	}
 }
 
@@ -85,6 +111,13 @@ type EvaluationCommitteeWithTeacherInfoSwaggerOutput struct {
 	Success bool                                     `json:"message"`
 	Data    EvaluationCommitteeWithTeacherInfoOutput `json:"data"`
 }
+
+type EvaluationCommitteeWithFullInfoSwaggerOutput struct {
+	Code    int                                   `json:"code"`
+	Success bool                                  `json:"message"`
+	Data    EvaluationCommitteeWithFullInfoOutput `json:"data"`
+}
+
 type ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput struct {
 	Code    int                        `json:"code"`
 	Success bool                       `json:"message"`
