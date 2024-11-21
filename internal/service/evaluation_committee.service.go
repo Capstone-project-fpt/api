@@ -274,9 +274,7 @@ func (e *evaluationCommitteeService) GetListTeachersHaveEvaluationCommitteeGroup
 	teacherIDs := make([]int64, 0)
 	for _, evaluationCommittee := range evaluationCommittees {
 		for _, teacherID := range evaluationCommittee.TeacherIDs {
-			if !funk.Contains(teacherIDs, teacherID) {
-				teacherIDs = append(teacherIDs, teacherID)
-			}
+			teacherIDs = append(teacherIDs, teacherID)
 		}
 	}
 

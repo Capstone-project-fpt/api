@@ -1771,9 +1771,9 @@ paths:
     get:
       description: Get list student have capstone group
       parameters:
-      - description: capstone_group_id
+      - description: semester_id
         in: path
-        name: capstone_group_id
+        name: semester_id
         required: true
         type: integer
       produces:

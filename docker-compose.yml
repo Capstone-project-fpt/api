@@ -15,7 +15,7 @@ services:
     image: redis:7.0
     container_name: redis
     ports:
-      - 6380:6379
+      - "6380:6379"
     volumes:
       - redis_data:/data
   api:
@@ -28,7 +28,7 @@ services:
       - redis
     restart: always
     ports:
-      - 8000:8080
+      - "8080:8080"
 
 volumes:
   db_data:

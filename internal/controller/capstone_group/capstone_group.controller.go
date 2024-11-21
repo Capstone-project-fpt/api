@@ -303,7 +303,7 @@ func (cgc *CapstoneGroupController) GetListInvitationMentorCapstoneGroups(ctx *g
 // @Description Get list student have capstone group
 // @Tags Capstone Group
 // @Produce json
-// @Param capstone_group_id path int true "capstone_group_id"
+// @Param semester_id path int true "semester_id"
 // @Router /capstone-groups/semesters/{semester_id}/students [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} capstone_group_dto.ListStudentHaveCapstoneGroupSwaggerOutput
