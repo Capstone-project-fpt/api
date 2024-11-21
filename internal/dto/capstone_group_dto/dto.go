@@ -44,6 +44,46 @@ type FeedbackCapstoneGroupReviewInput struct {
 	CapstoneGroupID       int64  `swaggerignore:"true"`
 }
 
+type CreateCapstoneGroupReportDocumentInput struct {
+	Name            string   `json:"name" binding:"required"`
+	CapstoneGroupID int64    `swaggerignore:"true"`
+	FileIDs         []string `json:"file_ids" binding:"required"`
+	TypeReport      string   `json:"type_report" binding:"required" validate:"required,oneof=first_report second_report third_report fourth_report fifth_report sixth_report seventh_report"`
+}
+
+type UpdateCapstoneGroupReportDocumentInput struct {
+	ID              int64    `json:"id" binding:"required"`
+	Name            string   `json:"name" binding:"required"`
+	CapstoneGroupID int64    `swaggerignore:"true"`
+	FileIDs         []string `json:"file_ids" binding:"required"`
+}
+
+type ReportDocumentOutput struct {
+	ID                 int64     `json:"id"`
+	Name               string    `json:"name"`
+	FileIDs            []string  `json:"file_ids"`
+	CapstoneGroupID    int64     `json:"capstone_group_id"`
+	MentorReviewStatus string    `json:"mentor_review_status"`
+	TypeReport         string    `json:"type_report"`
+	Conclusion         *string   `json:"conclusion"`
+	CreatedAt          time.Time `json:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}
+
+func ToReportDocumentOutput(reportDocument *model.ReportDocument) *ReportDocumentOutput {
+	return &ReportDocumentOutput{
+		ID:                 reportDocument.ID,
+		Name:               reportDocument.Name,
+		FileIDs:            reportDocument.FileIDs,
+		CapstoneGroupID:    reportDocument.CapstoneGroupID,
+		MentorReviewStatus: reportDocument.MentorReviewStatus,
+		TypeReport:         reportDocument.TypeReport,
+		Conclusion:         reportDocument.Conclusion,
+		CreatedAt:          reportDocument.CreatedAt,
+		UpdatedAt:          reportDocument.UpdatedAt,
+	}
+}
+
 type GetListCapstoneGroupInput struct {
 	Limit      int `form:"limit" binding:"required" example:"10"`
 	Page       int `form:"page" binding:"required" example:"1"`
@@ -202,6 +242,18 @@ type ListStudentHaveCapstoneGroupSwaggerOutput struct {
 	Code    int                        `json:"code"`
 	Success bool                       `json:"message"`
 	Data    *[]*user_dto.StudentOutput `json:"data"`
+}
+
+type ReportDocumentSwaggerOutput struct {
+	Code    int                  `json:"code"`
+	Success bool                 `json:"message"`
+	Data    ReportDocumentOutput `json:"data"`
+}
+
+type ReportDocumentsSwaggerOutput struct {
+	Code    int                    `json:"code"`
+	Success bool                   `json:"message"`
+	Data    []ReportDocumentOutput `json:"data"`
 }
 
 type UpdateCapstoneGroupStudentInput struct {

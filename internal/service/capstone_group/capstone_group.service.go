@@ -28,6 +28,11 @@ type ICapstoneGroupService interface {
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
 	UpdateCapstoneGroupStudent(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupStudentInput) error
+	CreateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupReportDocumentInput) error
+	UpdateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupReportDocumentInput) error
+	DeleteCapstoneGroupReportDocument(ctx *gin.Context, reportID int64, capstoneGroupID int64) error
+	GetCapstoneGroupReportDocument(ctx *gin.Context, id int64) (*capstone_group_dto.ReportDocumentOutput, error)
+	GetCapstoneGroupReportDocuments(ctx *gin.Context, capstoneGroupID int64) ([]capstone_group_dto.ReportDocumentOutput, error)
 }
 
 type capstoneGroupService struct {
@@ -371,4 +376,29 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 	}
 
 	return nil
+}
+
+func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Student, error) {
+	currentUser := context_util.GetUserContext(ctx)
+	if currentUser == nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	var currentStudent model.Student
+	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	currentStudent.User = model.User{
+		ID:       currentUser.ID,
+		Email:    currentUser.Email,
+		Name:     currentUser.Name,
+		UserType: currentUser.UserType,
+	}
+
+	return &currentStudent, nil
 }

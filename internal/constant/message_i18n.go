@@ -84,6 +84,11 @@ type MessageI18n struct {
 	FailedToAddStudent                                   string
 	StudentAlreadyInAnotherGroup                         string
 	CannotRemoveLeader                                   string
+	AlreadyExitDocumentReport                            string
+	ReportDocumentNotFound                               string
+	CreateCapstoneGroupReportDocumentSuccess             string
+	UpdateCapstoneGroupReportDocumentSuccess             string
+	DeleteCapstoneGroupReportDocumentSuccess             string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -170,4 +175,9 @@ var MessageI18nId MessageI18n = MessageI18n{
 	FailedToAddStudent:                                   "FailedToAddStudent",
 	StudentAlreadyInAnotherGroup:                         "StudentAlreadyInAnotherGroup",
 	CannotRemoveLeader:                                   "CannotRemoveLeader",
+	AlreadyExitDocumentReport:                            "AlreadyExitDocumentReport",
+	ReportDocumentNotFound:                               "ReportDocumentNotFound",
+	CreateCapstoneGroupReportDocumentSuccess:             "CreateCapstoneGroupReportDocumentSuccess",
+	UpdateCapstoneGroupReportDocumentSuccess:             "UpdateCapstoneGroupReportDocumentSuccess",
+	DeleteCapstoneGroupReportDocumentSuccess:             "DeleteCapstoneGroupReportDocumentSuccess",
 }

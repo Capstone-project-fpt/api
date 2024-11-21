@@ -155,3 +155,33 @@ var ScheduleReview scheduleReviewType = scheduleReviewType{
 	SecondReview: "second_review",
 	ThirdReview:  "third_review",
 }
+
+type reportDocumentType struct {
+	FIRST_REPORT   string
+	SECOND_REPORT  string
+	THIRD_REPORT   string
+	FOURTH_REPORT  string
+	FIFTH_REPORT   string
+	SIXTH_REPORT   string
+	SEVENTH_REPORT string
+}
+
+var ReportDocument reportDocumentType = reportDocumentType{
+	FIRST_REPORT:   "first_report",
+	SECOND_REPORT:  "second_report",
+	THIRD_REPORT:   "third_report",
+	FOURTH_REPORT:  "fourth_report",
+	FIFTH_REPORT:   "fifth_report",
+	SIXTH_REPORT:   "sixth_report",
+	SEVENTH_REPORT: "seventh_report",
+}
+
+type mentorReviewStatusReportType struct {
+	Reviewing string
+	Done      string
+}
+
+var MentorReviewStatusReport mentorReviewStatusReportType = mentorReviewStatusReportType{
+	Reviewing: "reviewing",
+	Done:      "done",
+}

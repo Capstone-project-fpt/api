@@ -80,5 +80,10 @@
   "FailedToRemoveStudent": "Xóa thành viên trong nhóm bảo vệ đồ án thất bại.",
   "FailedToAddStudent": "Thêm thành viên trong nhóm bảo vệ đồ án thất bại.",
   "StudentAlreadyInAnotherGroup": "Thành viên đã tồn tại ở trong nhóm đồ án khác.",
-  "CannotRemoveLeader": "Không thể xóa nhóm trưởng."
+  "CannotRemoveLeader": "Không thể xóa nhóm trưởng.",
+  "AlreadyExitDocumentReport": "Đã tồn tại report của nhóm bảo vệ đồ án.",
+  "ReportDocumentNotFound": "Không tìm thấy report.",
+  "CreateCapstoneGroupReportDocumentSuccess": "Tạo report thành công.",
+  "UpdateCapstoneGroupReportDocumentSuccess": "Cập nhật thành công report nhóm bảo vệ đồ án.",
+  "DeleteCapstoneGroupReportDocumentSuccess": "Xoá thành công report nhóm bảo vệ đồ án."
 }
