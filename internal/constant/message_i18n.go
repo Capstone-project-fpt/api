@@ -89,6 +89,9 @@ type MessageI18n struct {
 	CreateCapstoneGroupReportDocumentSuccess             string
 	UpdateCapstoneGroupReportDocumentSuccess             string
 	DeleteCapstoneGroupReportDocumentSuccess             string
+	CapstoneGroupInReviewingTopicProcess                 string
+	MentorUpdateStudentScoreForReportDocumentSuccess     string
+	AdminUpdateStudentScoreForReportDocumentSuccess      string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -180,4 +183,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CreateCapstoneGroupReportDocumentSuccess:             "CreateCapstoneGroupReportDocumentSuccess",
 	UpdateCapstoneGroupReportDocumentSuccess:             "UpdateCapstoneGroupReportDocumentSuccess",
 	DeleteCapstoneGroupReportDocumentSuccess:             "DeleteCapstoneGroupReportDocumentSuccess",
+	CapstoneGroupInReviewingTopicProcess:                 "CapstoneGroupInReviewingTopicProcess",
+	MentorUpdateStudentScoreForReportDocumentSuccess:     "MentorUpdateStudentScoreForReportDocumentSuccess",
+	AdminUpdateStudentScoreForReportDocumentSuccess:      "AdminUpdateStudentScoreForReportDocumentSuccess",
 }

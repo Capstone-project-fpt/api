@@ -85,5 +85,8 @@
   "ReportDocumentNotFound": "Không tìm thấy report.",
   "CreateCapstoneGroupReportDocumentSuccess": "Tạo report thành công.",
   "UpdateCapstoneGroupReportDocumentSuccess": "Cập nhật thành công report nhóm bảo vệ đồ án.",
-  "DeleteCapstoneGroupReportDocumentSuccess": "Xoá thành công report nhóm bảo vệ đồ án."
+  "DeleteCapstoneGroupReportDocumentSuccess": "Xoá thành công report nhóm bảo vệ đồ án.",
+  "CapstoneGroupInReviewingTopicProcess": "Nhóm đồ án đang trong quá trình thẩm định đề tài.",
+  "MentorUpdateStudentScoreForReportDocumentSuccess": "Mentor cập nhập điểm cho các thành viên trong nhóm đề tài thành công.",
+  "AdminUpdateStudentScoreForReportDocumentSuccess": "Cập nhập điểm thành công."
 }

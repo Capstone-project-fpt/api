@@ -33,6 +33,9 @@ type ICapstoneGroupService interface {
 	DeleteCapstoneGroupReportDocument(ctx *gin.Context, reportID int64, capstoneGroupID int64) error
 	GetCapstoneGroupReportDocument(ctx *gin.Context, id int64) (*capstone_group_dto.ReportDocumentOutput, error)
 	GetCapstoneGroupReportDocuments(ctx *gin.Context, capstoneGroupID int64) ([]capstone_group_dto.ReportDocumentOutput, error)
+	MentorUpdateStudentScoreForReportDocument(ctx *gin.Context, input *capstone_group_dto.MentorUpdateStudentScoreForReportDocument) error
+	GetReportDocumentStudentsScore(ctx *gin.Context, reportDocumentID int64) ([]capstone_group_dto.ReportDocumentStudentScoreOutput, error)
+	AdminUpdateStudentScoreForReportDocument(ctx *gin.Context, input *capstone_group_dto.AdminUpdateStudentScoreForReportDocument) error
 }
 
 type capstoneGroupService struct {
@@ -401,4 +404,30 @@ func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Stu
 	}
 
 	return &currentStudent, nil
+}
+
+
+func (cgs *capstoneGroupService) getCurrentTeacher(ctx *gin.Context) (*model.Teacher, error) {
+	currentUser := context_util.GetUserContext(ctx)
+	if currentUser == nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	var currentTeacher model.Teacher
+	if err := global.Db.Model(model.Teacher{}).Where("user_id = ?", currentUser.ID).First(&currentTeacher).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	currentTeacher.User = model.User{
+		ID:       currentUser.ID,
+		Email:    currentUser.Email,
+		Name:     currentUser.Name,
+		UserType: currentUser.UserType,
+	}
+
+	return &currentTeacher, nil
 }

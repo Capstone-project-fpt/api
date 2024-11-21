@@ -110,6 +110,16 @@ definitions:
     - password
     - token
     type: object
+  capstone_group_dto.AdminUpdateStudentScoreForReportDocument:
+    properties:
+      id:
+        type: integer
+      score:
+        type: number
+    required:
+    - id
+    - score
+    type: object
   capstone_group_dto.CapstoneGroupOutput:
     properties:
       created_at:
@@ -296,6 +306,18 @@ definitions:
       message:
         type: boolean
     type: object
+  capstone_group_dto.MentorUpdateStudentScoreForReportDocument:
+    properties:
+      report_document_id:
+        type: integer
+      student_score_data:
+        items:
+          $ref: '#/definitions/capstone_group_dto.StudentScoreReportDocumentInput'
+        type: array
+    required:
+    - report_document_id
+    - student_score_data
+    type: object
   capstone_group_dto.ReportDocumentOutput:
     properties:
       capstone_group_id:
@@ -318,6 +340,34 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  capstone_group_dto.ReportDocumentStudentScoreOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      report_document_id:
+        type: integer
+      score:
+        type: number
+      student:
+        $ref: '#/definitions/user_dto.StudentOutput'
+      student_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  capstone_group_dto.ReportDocumentStudentsScoreSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/capstone_group_dto.ReportDocumentStudentScoreOutput'
+        type: array
+      message:
+        type: boolean
     type: object
   capstone_group_dto.ReportDocumentSwaggerOutput:
     properties:
@@ -351,6 +401,16 @@ definitions:
     required:
     - status
     - token
+    type: object
+  capstone_group_dto.StudentScoreReportDocumentInput:
+    properties:
+      score:
+        type: number
+      student_id:
+        type: integer
+    required:
+    - score
+    - student_id
     type: object
   capstone_group_dto.UpdateCapstoneGroupInput:
     properties:
@@ -2033,6 +2093,97 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroupReportDocument
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/report-documents/scores:
+    patch:
+      description: AdminUpdateStudentScoreForReportDocument
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.AdminUpdateStudentScoreForReportDocument'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminUpdateStudentScoreForReportDocument
+      tags:
+      - Capstone Group
+    put:
+      description: MentorUpdateStudentScoreForReportDocument
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.MentorUpdateStudentScoreForReportDocument'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: MentorUpdateStudentScoreForReportDocument
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/report-documents/scores/{report_document_id}:
+    put:
+      description: GetReportDocumentStudentsScore
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: report_document_id
+        in: path
+        name: report_document_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.ReportDocumentStudentsScoreSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetReportDocumentStudentsScore
       tags:
       - Capstone Group
   /capstone-groups/semesters/{semester_id}/students:

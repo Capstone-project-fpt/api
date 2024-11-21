@@ -58,6 +58,46 @@ type UpdateCapstoneGroupReportDocumentInput struct {
 	FileIDs         []string `json:"file_ids" binding:"required"`
 }
 
+type StudentScoreReportDocumentInput struct {
+	Score     float64 `json:"score" binding:"required"`
+	StudentID int64   `json:"student_id" binding:"required"`
+}
+
+type MentorUpdateStudentScoreForReportDocument struct {
+	ReportDocumentID int64                             `json:"report_document_id" binding:"required"`
+	StudentScoreData []StudentScoreReportDocumentInput `json:"student_score_data" binding:"required"`
+	CapstoneGroupID  int64                             `swaggerignore:"true"`
+}
+
+type AdminUpdateStudentScoreForReportDocument struct {
+	ID    int64   `json:"id" binding:"required"`
+	Score float64 `json:"score" binding:"required"`
+}
+
+type ReportDocumentStudentScoreOutput struct {
+	ID               int64                   `json:"id"`
+	StudentID        int64                   `json:"student_id"`
+	Student          *user_dto.StudentOutput `json:"student"`
+	Score            *float64                `json:"score"`
+	ReportDocumentID int64                   `json:"report_document_id"`
+	CreatedAt        time.Time               `json:"created_at"`
+	UpdatedAt        time.Time               `json:"updated_at"`
+}
+
+func ToReportDocumentStudentScoreOutput(studentScore *model.ReportDocumentStudentScore) *ReportDocumentStudentScoreOutput {
+	student := user_dto.ToStudentOutput(&studentScore.Student)
+
+	return &ReportDocumentStudentScoreOutput{
+		ID:               studentScore.ID,
+		StudentID:        studentScore.StudentID,
+		Student:          student,
+		Score:            studentScore.Score,
+		ReportDocumentID: studentScore.ReportDocumentID,
+		CreatedAt:        studentScore.CreatedAt,
+		UpdatedAt:        studentScore.UpdatedAt,
+	}
+}
+
 type ReportDocumentOutput struct {
 	ID                 int64     `json:"id"`
 	Name               string    `json:"name"`
@@ -254,6 +294,12 @@ type ReportDocumentsSwaggerOutput struct {
 	Code    int                    `json:"code"`
 	Success bool                   `json:"message"`
 	Data    []ReportDocumentOutput `json:"data"`
+}
+
+type ReportDocumentStudentsScoreSwaggerOutput struct {
+	Code    int                                `json:"code"`
+	Success bool                               `json:"message"`
+	Data    []ReportDocumentStudentScoreOutput `json:"data"`
 }
 
 type UpdateCapstoneGroupStudentInput struct {

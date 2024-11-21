@@ -1562,6 +1562,149 @@
                 }
             }
         },
+        "/capstone-groups/{capstone_group_id}/report-documents/scores": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "MentorUpdateStudentScoreForReportDocument",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "MentorUpdateStudentScoreForReportDocument",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.MentorUpdateStudentScoreForReportDocument"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "AdminUpdateStudentScoreForReportDocument",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "AdminUpdateStudentScoreForReportDocument",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.AdminUpdateStudentScoreForReportDocument"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/capstone-groups/{capstone_group_id}/report-documents/scores/{report_document_id}": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetReportDocumentStudentsScore",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetReportDocumentStudentsScore",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "report_document_id",
+                        "name": "report_document_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.ReportDocumentStudentsScoreSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups/{capstone_group_id}/report-documents/{report_document_id}": {
             "get": {
                 "security": [
@@ -3378,6 +3521,21 @@
                 }
             }
         },
+        "capstone_group_dto.AdminUpdateStudentScoreForReportDocument": {
+            "type": "object",
+            "required": [
+                "id",
+                "score"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "score": {
+                    "type": "number"
+                }
+            }
+        },
         "capstone_group_dto.CapstoneGroupOutput": {
             "type": "object",
             "properties": {
@@ -3658,6 +3816,24 @@
                 }
             }
         },
+        "capstone_group_dto.MentorUpdateStudentScoreForReportDocument": {
+            "type": "object",
+            "required": [
+                "report_document_id",
+                "student_score_data"
+            ],
+            "properties": {
+                "report_document_id": {
+                    "type": "integer"
+                },
+                "student_score_data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.StudentScoreReportDocumentInput"
+                    }
+                }
+            }
+        },
         "capstone_group_dto.ReportDocumentOutput": {
             "type": "object",
             "properties": {
@@ -3690,6 +3866,49 @@
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.ReportDocumentStudentScoreOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "report_document_id": {
+                    "type": "integer"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "student": {
+                    "$ref": "#/definitions/user_dto.StudentOutput"
+                },
+                "student_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.ReportDocumentStudentsScoreSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.ReportDocumentStudentScoreOutput"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },
@@ -3740,6 +3959,21 @@
                 },
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "capstone_group_dto.StudentScoreReportDocumentInput": {
+            "type": "object",
+            "required": [
+                "score",
+                "student_id"
+            ],
+            "properties": {
+                "score": {
+                    "type": "number"
+                },
+                "student_id": {
+                    "type": "integer"
                 }
             }
         },

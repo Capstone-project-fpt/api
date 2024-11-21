@@ -554,3 +554,102 @@ func (cgc *CapstoneGroupController) GetCapstoneGroupReportDocuments(ctx *gin.Con
 
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }
+
+// @Summary MentorUpdateStudentScoreForReportDocument
+// @Description MentorUpdateStudentScoreForReportDocument
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Param data body capstone_group_dto.MentorUpdateStudentScoreForReportDocument true "data"
+// @Router /capstone-groups/{capstone_group_id}/report-documents/scores [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) MentorUpdateStudentScoreForReportDocument(ctx *gin.Context) {
+	capstoneGroupIDParam := ctx.Param("capstone_group_id")
+	capstoneGroupID, err := strconv.Atoi(capstoneGroupIDParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	var input capstone_group_dto.MentorUpdateStudentScoreForReportDocument
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	input.CapstoneGroupID = int64(capstoneGroupID)
+
+	if err := cgc.capstoneGroupService.MentorUpdateStudentScoreForReportDocument(ctx, &input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.MentorUpdateStudentScoreForReportDocumentSuccess,
+	}))
+}
+
+// @Summary GetReportDocumentStudentsScore
+// @Description GetReportDocumentStudentsScore
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Param report_document_id path int true "report_document_id"
+// @Router /capstone-groups/{capstone_group_id}/report-documents/scores/{report_document_id} [put]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} capstone_group_dto.ReportDocumentStudentsScoreSwaggerOutput
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) GetReportDocumentStudentsScore(ctx *gin.Context) {
+	idParam := ctx.Param("report_document_id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	output, err := cgc.capstoneGroupService.GetReportDocumentStudentsScore(ctx, int64(id))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}
+
+// @Summary AdminUpdateStudentScoreForReportDocument
+// @Description AdminUpdateStudentScoreForReportDocument
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Param data body capstone_group_dto.AdminUpdateStudentScoreForReportDocument true "data"
+// @Router /capstone-groups/{capstone_group_id}/report-documents/scores [patch]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) AdminUpdateStudentScoreForReportDocument(ctx *gin.Context) {
+	var input capstone_group_dto.AdminUpdateStudentScoreForReportDocument
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	err := cgc.capstoneGroupService.AdminUpdateStudentScoreForReportDocument(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.AdminUpdateStudentScoreForReportDocumentSuccess,
+	}))
+}
