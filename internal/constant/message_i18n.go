@@ -79,6 +79,11 @@ type MessageI18n struct {
 	ScheduleReviewTimeNeedToBeInSemesterTime             string
 	CapstoneGroupReviewNotFound                          string
 	UpdateCapstoneGroupReviewSuccess                     string
+	UpdateCapstoneGroupStudentSuccess                    string
+	FailedToRemoveStudent                                string
+	FailedToAddStudent                                   string
+	StudentAlreadyInAnotherGroup                         string
+	CannotRemoveLeader                                   string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -160,4 +165,9 @@ var MessageI18nId MessageI18n = MessageI18n{
 	ScheduleReviewTimeNeedToBeInSemesterTime:             "ScheduleReviewTimeNeedToBeInSemesterTime",
 	CapstoneGroupReviewNotFound:                          "CapstoneGroupReviewNotFound",
 	UpdateCapstoneGroupReviewSuccess:                     "UpdateCapstoneGroupReviewSuccess",
+	UpdateCapstoneGroupStudentSuccess:                    "UpdateCapstoneGroupStudentSuccess",
+	FailedToRemoveStudent:                                "FailedToRemoveStudent",
+	FailedToAddStudent:                                   "FailedToAddStudent",
+	StudentAlreadyInAnotherGroup:                         "StudentAlreadyInAnotherGroup",
+	CannotRemoveLeader:                                   "CannotRemoveLeader",
 }

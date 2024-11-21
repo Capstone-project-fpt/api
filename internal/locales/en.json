@@ -75,5 +75,10 @@
   "ScheduleReviewEvaluationCommitteeOverlap": "Schedule review evaluation committee overlap.",
   "ScheduleReviewStartTimeNeedToBeBeforeSemesterEndTime": "Schedule review start time need to be before semester end time.",
   "ScheduleReviewTimeNeedToBeInSemesterTime": "Schedule review time need to be in semester time.",
-  "UpdateCapstoneGroupReviewSuccess": "Update capstone group review success."
+  "UpdateCapstoneGroupReviewSuccess": "Update capstone group review success.",
+  "UpdateCapstoneGroupStudentSuccess": "Update member in capstone group success.",
+  "FailedToRemoveStudent": "Remove member in capstone group fail.",
+  "FailedToAddStudent": "Add member in capstone group fail.",
+  "StudentAlreadyInAnotherGroup": "Member already in another group.",
+  "CannotRemoveLeader": "Can not remove leader."
 }

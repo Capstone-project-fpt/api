@@ -297,6 +297,15 @@ definitions:
     - id
     - name_group
     type: object
+  capstone_group_dto.UpdateCapstoneGroupStudentInput:
+    properties:
+      student_ids:
+        items:
+          type: integer
+        type: array
+    required:
+    - student_ids
+    type: object
   capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput:
     properties:
       capstone_group_review_id:
@@ -1675,6 +1684,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetMentorAndListMemberCapstoneGroup
+      tags:
+      - Capstone Group
+    put:
+      description: Update Capstone Group Member
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.UpdateCapstoneGroupStudentInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.UpdateCapstoneGroupStudentInput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateCapstoneGroupStudent
       tags:
       - Capstone Group
   /capstone-groups/{capstone_group_id}/mentors:

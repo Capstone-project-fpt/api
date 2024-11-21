@@ -27,6 +27,7 @@ type ICapstoneGroupService interface {
 	GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error)
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
+	UpdateCapstoneGroupStudent(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupStudentInput) error
 }
 
 type capstoneGroupService struct {
@@ -216,13 +217,13 @@ func (cgs *capstoneGroupService) GetListCapstoneGroup(ctx *gin.Context, input *c
 		Select("capstone_groups.*, COUNT(sg.student_id) AS total_members").
 		Joins("LEFT JOIN student_capstone_groups AS sg ON sg.capstone_group_id = capstone_groups.id").
 		Group("capstone_groups.id")
-	
+
 	queryTotal := global.Db.Model(model.CapstoneGroup{})
 	if input.SemesterID != 0 {
 		query = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
 		queryTotal = query.Where("capstone_groups.semester_id = ?", input.SemesterID)
 	}
-	
+
 	if err := queryTotal.Count(&total).Error; err != nil {
 		return nil, err
 	}
@@ -301,4 +302,73 @@ func (cgs *capstoneGroupService) GetListStudentHaveCapstoneGroup(ctx *gin.Contex
 	}
 
 	return &items, nil
+}
+
+func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupStudentInput) error {
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.ID).First(&capstoneGroup).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	tx := global.Db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	for _, studentID := range input.StudentIDs {
+		var existingStudentGroup model.StudentCapstoneGroup
+		err := tx.Model(model.StudentCapstoneGroup{}).
+			Where("student_id = ? AND semester_id = ? AND capstone_group_id != ?", studentID, capstoneGroup.SemesterID, input.ID).
+			First(&existingStudentGroup).Error
+		if err == nil {
+			tx.Rollback()
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.StudentAlreadyInAnotherGroup,
+			}))
+		}
+
+		var studentCapstoneGroup model.StudentCapstoneGroup
+		err = tx.Model(model.StudentCapstoneGroup{}).
+			Where("capstone_group_id = ? AND student_id = ?", input.ID, studentID).
+			First(&studentCapstoneGroup).Error
+		if err == nil {
+			if studentID == capstoneGroup.LeaderID {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.CannotRemoveLeader,
+				}))
+			}
+
+			if err := tx.Delete(&studentCapstoneGroup).Error; err != nil {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+				}))
+			}
+			continue
+		}
+
+		newStudentCapstoneGroup := model.StudentCapstoneGroup{
+			CapstoneGroupID: input.ID,
+			StudentID:       studentID,
+			SemesterID:      capstoneGroup.SemesterID,
+		}
+
+		if err := tx.Create(&newStudentCapstoneGroup).Error; err != nil {
+			tx.Rollback()
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.FailedToAddStudent,
+			}))
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return err
+	}
+
+	return nil
 }

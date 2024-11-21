@@ -24,6 +24,7 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 		capstoneGroupRouter.GET("/:capstone_group_id", capstoneGroupController.GetCapstoneGroup)
 		capstoneGroupRouter.GET("/:capstone_group_id/members", capstoneGroupController.GetMentorAndListMemberCapstoneGroup)
 		capstoneGroupRouter.GET("/:capstone_group_id/mentors/invitations", capstoneGroupController.GetListInvitationMentorCapstoneGroups)
+		capstoneGroupRouter.PUT("/:capstone_group_id/members", middleware.UserTypeMiddleware(constant.UserType.Admin), capstoneGroupController.UpdateCapstoneGroupStudent)
 	}
 
 	capstoneGroupTopicRouter := capstoneGroupRouter.Group("/:capstone_group_id/capstone-group-topics")
