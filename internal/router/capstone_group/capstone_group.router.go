@@ -57,4 +57,16 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 		capstoneGroupReviewRouter.PATCH("/feedback", middleware.UserTypeMiddleware(constant.UserType.Teacher), capstoneGroupController.FeedbackCapstoneGroupReview)
 		capstoneGroupReviewRouter.GET("/:id", capstoneGroupController.GetCapstoneGroupReview)
 	}
+
+	capstoneGroupReportDocumentRouter := capstoneGroupRouter.Group("/:capstone_group_id/report-documents")
+	{
+		capstoneGroupReportDocumentRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.CreateCapstoneGroupReportDocument)
+		capstoneGroupReportDocumentRouter.PUT("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.UpdateCapstoneGroupReportDocument)
+		capstoneGroupReportDocumentRouter.DELETE("/:report_document_id", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.DeleteCapstoneGroupReportDocument)
+		capstoneGroupReportDocumentRouter.GET("/", capstoneGroupController.GetCapstoneGroupReportDocuments)
+		capstoneGroupReportDocumentRouter.GET("/:report_document_id", capstoneGroupController.GetCapstoneGroupReportDocument)
+		capstoneGroupReportDocumentRouter.PUT("/scores", middleware.UserTypeMiddleware(constant.UserType.Teacher), capstoneGroupController.MentorUpdateStudentScoreForReportDocument)
+		capstoneGroupReportDocumentRouter.PATCH("/scores", middleware.UserTypeMiddleware(constant.UserType.Admin), capstoneGroupController.AdminUpdateStudentScoreForReportDocument)
+		capstoneGroupReportDocumentRouter.GET("/scores/:report_document_id", capstoneGroupController.GetReportDocumentStudentsScore)
+	}
 }

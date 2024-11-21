@@ -80,5 +80,13 @@
   "FailedToRemoveStudent": "Remove member in capstone group fail.",
   "FailedToAddStudent": "Add member in capstone group fail.",
   "StudentAlreadyInAnotherGroup": "Member already in another group.",
-  "CannotRemoveLeader": "Can not remove leader."
+  "CannotRemoveLeader": "Can not remove leader.",
+  "AlreadyExitDocumentReport": "Already exit document report.",
+  "ReportDocumentNotFound": "Report document not found.",
+  "CreateCapstoneGroupReportDocumentSuccess": "Create capstone group report document success.",
+  "UpdateCapstoneGroupReportDocumentSuccess": "Update capstone group report document success.",
+  "DeleteCapstoneGroupReportDocumentSuccess": "Delete capstone group report document success.",
+  "CapstoneGroupInReviewingTopicProcess": "Capstone group in reviewing topic process.",
+  "MentorUpdateStudentScoreForReportDocumentSuccess": "Mentor update student score for report document success.",
+  "AdminUpdateStudentScoreForReportDocumentSuccess": "Update student score for report document success."
 }
