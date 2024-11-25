@@ -189,3 +189,31 @@ func (sc *SemesterController) AdminDeleteSemester(ctx *gin.Context) {
 
 	response.SuccessResponse(ctx, http.StatusOK, dto.OutputCommon{Message: message})
 }
+
+// @Summary GetListSemestersWithCountGroup
+// @Description Get List Semesters With Count Group
+// @Tags Semester
+// @Produce json
+// @Param limit query int true "Limit"
+// @Param page query int true "Page"
+// @Router /semesters/count  [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} semester_dto.ListSemestersOutputCount
+// @Security ApiKeyAuth
+func (sc *SemesterController) GetListSemestersWithCountGroup(ctx *gin.Context) {
+	var input semester_dto.GetListSemestersInput
+    if err := ctx.ShouldBindQuery(&input); err != nil {
+        response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+        return
+    }
+
+    input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
+    result, err := sc.semesterService.GetListSemestersWithCountGroup(ctx, &input)
+
+    if err != nil {
+        response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+        return
+    }
+
+    response.SuccessResponse(ctx, http.StatusOK, result)
+}

@@ -176,7 +176,6 @@ definitions:
         type: string
     required:
     - capstone_group_review_id
-    - feedback
     type: object
   capstone_group_dto.GetCapstoneGroupReviewSwaggerOutput:
     properties:
@@ -682,6 +681,15 @@ definitions:
       meta:
         $ref: '#/definitions/dto.MetaPagination'
     type: object
+  semester_dto.ListSemestersOutputCount:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/semester_dto.SemesterOutputCount'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   semester_dto.SemesterOutput:
     properties:
       created_at:
@@ -695,6 +703,21 @@ definitions:
       start_time:
         type: string
       updated_at:
+        type: string
+    type: object
+  semester_dto.SemesterOutputCount:
+    properties:
+      capstone_groups:
+        type: integer
+      end_time:
+        type: string
+      evaluation_committees:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      start_time:
         type: string
     type: object
   semester_dto.UpdateSemesterInput:
@@ -2411,6 +2434,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetSemester
+      tags:
+      - Semester
+  /semesters/count:
+    get:
+      description: Get List Semesters With Count Group
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.ListSemestersOutputCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListSemestersWithCountGroup
       tags:
       - Semester
   /semesters/current:

@@ -20,6 +20,7 @@ type ISemesterService interface {
 	GetSemester(ctx *gin.Context, id int) (*semester_dto.SemesterOutput, error)
 	GetCurrentSemester(ctx *gin.Context) (*semester_dto.SemesterOutput, error)
 	GetListSemester(ctx *gin.Context, input *semester_dto.GetListSemestersInput) (*semester_dto.ListSemestersOutput, error)
+	GetListSemestersWithCountGroup(ctx *gin.Context, input *semester_dto.GetListSemestersInput) (*semester_dto.ListSemestersOutputCount, error)
 }
 
 type semesterService struct{}
@@ -183,4 +184,42 @@ func (s *semesterService) GetListSemester(ctx *gin.Context, input *semester_dto.
 		},
 		Items: itemsSemesterOutput,
 	}, nil
+}
+func (s *semesterService) GetListSemestersWithCountGroup(ctx *gin.Context, input *semester_dto.GetListSemestersInput) (*semester_dto.ListSemestersOutputCount, error) {
+    var items []semester_dto.SemesterOutputCount
+    var total int64
+
+    err := global.Db.Model(&model.Semester{}).
+        Select(`
+            "semesters"."id",
+            "semesters"."name",
+            "semesters"."start_time",
+            "semesters"."end_time",
+            COUNT(DISTINCT "capstone_groups"."id") AS "capstone_groups",
+            COUNT(DISTINCT "evaluation_committees"."id") AS "evaluation_committees"
+        `).
+        Joins(`LEFT JOIN "capstone_groups" ON "capstone_groups"."semester_id" = "semesters"."id"`).
+        Joins(`LEFT JOIN "evaluation_committees" ON "evaluation_committees"."semester_id" = "semesters"."id"`).
+        Group(`"semesters"."id"`).
+        Order(`"semesters"."start_time" DESC`).
+		Limit (int(input.Limit)).
+		Offset(int(input.Offset)).
+        Find(&items).Error
+
+    if err != nil {
+        return nil, err
+    }
+
+    err = global.Db.Model(&model.Semester{}).Count(&total).Error
+    if err != nil {
+        return nil, err
+    }
+
+    return &semester_dto.ListSemestersOutputCount{
+        Meta: dto.MetaPagination{
+			CurrentPage: int(input.Page),
+            Total:       int(total),
+        },
+        Items: items,
+    }, nil
 }

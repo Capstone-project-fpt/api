@@ -2271,6 +2271,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/semesters/count": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get List Semesters With Count Group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Semester"
+                ],
+                "summary": "GetListSemestersWithCountGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/semester_dto.ListSemestersOutputCount"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/semesters/current": {
             "get": {
                 "security": [
@@ -3190,8 +3237,7 @@ const docTemplate = `{
         "capstone_group_dto.FeedbackCapstoneGroupReviewInput": {
             "type": "object",
             "required": [
-                "capstone_group_review_id",
-                "feedback"
+                "capstone_group_review_id"
             ],
             "properties": {
                 "capstone_group_review_id": {
@@ -3960,6 +4006,20 @@ const docTemplate = `{
                 }
             }
         },
+        "semester_dto.ListSemestersOutputCount": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/semester_dto.SemesterOutputCount"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
         "semester_dto.SemesterOutput": {
             "type": "object",
             "properties": {
@@ -3979,6 +4039,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "semester_dto.SemesterOutputCount": {
+            "type": "object",
+            "properties": {
+                "capstone_groups": {
+                    "type": "integer"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "evaluation_committees": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_time": {
                     "type": "string"
                 }
             }
