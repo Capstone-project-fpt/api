@@ -196,8 +196,8 @@ func (s *semesterService) GetListSemestersWithCountGroup(ctx *gin.Context, input
             "semesters"."name",
             "semesters"."start_time",
             "semesters"."end_time",
-            COUNT(DISTINCT "capstone_groups"."id") AS "capstone_groups",
-            COUNT(DISTINCT "evaluation_committees"."id") AS "evaluation_committees"
+            COUNT(DISTINCT "capstone_groups"."id") AS "total_capstone_groups",
+            COUNT(DISTINCT "evaluation_committees"."id") AS "total_evaluation_committees"
         `).
 		Joins(`LEFT JOIN "capstone_groups" ON "capstone_groups"."semester_id" = "semesters"."id"`).
 		Joins(`LEFT JOIN "evaluation_committees" ON "evaluation_committees"."semester_id" = "semesters"."id"`).
