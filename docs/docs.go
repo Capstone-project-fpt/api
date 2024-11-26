@@ -2725,6 +2725,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/semesters/statistics": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get List Semesters With Count Group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Semester"
+                ],
+                "summary": "GetListSemestersWithCountGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/semester_dto.ListSemesterStatisticsOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/semesters/{id}": {
             "get": {
                 "security": [
@@ -4592,6 +4639,20 @@ const docTemplate = `{
                 }
             }
         },
+        "semester_dto.ListSemesterStatisticsOutput": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/semester_dto.SemesterStatisticsOutput"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
         "semester_dto.ListSemestersOutput": {
             "type": "object",
             "properties": {
@@ -4626,6 +4687,29 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "semester_dto.SemesterStatisticsOutput": {
+            "type": "object",
+            "properties": {
+                "end_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "total_capstone_groups": {
+                    "type": "integer"
+                },
+                "total_evaluation_committees": {
+                    "type": "integer"
                 }
             }
         },
