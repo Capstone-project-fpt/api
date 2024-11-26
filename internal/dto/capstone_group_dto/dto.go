@@ -145,6 +145,7 @@ type CapstoneGroupOutput struct {
 	MajorID    int64     `json:"major_id"`
 	SemesterID int64     `json:"semester_id"`
 	LeaderID   int64     `json:"leader_id"`
+	MentorID   *int64    `json:"mentor_id"`
 	Status     string    `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
@@ -157,6 +158,7 @@ type CapstoneGroupWithTotalMemberOutput struct {
 	MajorID      int64     `json:"major_id"`
 	SemesterID   int64     `json:"semester_id"`
 	LeaderID     int64     `json:"leader_id"`
+	MentorID     *int64    `json:"mentor_id"`
 	Status       string    `json:"status"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
@@ -171,6 +173,7 @@ func ToCapstoneGroupOutput(capstoneGroup *model.CapstoneGroup) CapstoneGroupOutp
 		MajorID:    capstoneGroup.MajorID,
 		SemesterID: capstoneGroup.SemesterID,
 		LeaderID:   capstoneGroup.LeaderID,
+		MentorID:   capstoneGroup.MentorID,
 		Status:     capstoneGroup.Status,
 		CreatedAt:  capstoneGroup.CreatedAt,
 		UpdatedAt:  capstoneGroup.UpdatedAt,
@@ -185,6 +188,7 @@ func ToCapstoneGroupWithTotalMemberOutput(capstoneGroup *model.CapstoneGroupWith
 		MajorID:      capstoneGroup.MajorID,
 		SemesterID:   capstoneGroup.SemesterID,
 		LeaderID:     capstoneGroup.LeaderID,
+		MentorID:     capstoneGroup.MentorID,
 		Status:       capstoneGroup.Status,
 		CreatedAt:    capstoneGroup.CreatedAt,
 		UpdatedAt:    capstoneGroup.UpdatedAt,
