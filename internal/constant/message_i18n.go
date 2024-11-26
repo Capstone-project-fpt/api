@@ -93,6 +93,7 @@ type MessageI18n struct {
 	CapstoneGroupInReviewingTopicProcess                 string
 	MentorUpdateStudentScoreForReportDocumentSuccess     string
 	AdminUpdateStudentScoreForReportDocumentSuccess      string
+	MentorAlreadyUpdateScore                             string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -188,4 +189,5 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CapstoneGroupInReviewingTopicProcess:                 "CapstoneGroupInReviewingTopicProcess",
 	MentorUpdateStudentScoreForReportDocumentSuccess:     "MentorUpdateStudentScoreForReportDocumentSuccess",
 	AdminUpdateStudentScoreForReportDocumentSuccess:      "AdminUpdateStudentScoreForReportDocumentSuccess",
+	MentorAlreadyUpdateScore:                             "MentorAlreadyUpdateScore",
 }

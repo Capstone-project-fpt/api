@@ -89,5 +89,6 @@
   "DeleteCapstoneGroupReportDocumentSuccess": "Delete capstone group report document success.",
   "CapstoneGroupInReviewingTopicProcess": "Capstone group in reviewing topic process.",
   "MentorUpdateStudentScoreForReportDocumentSuccess": "Mentor update student score for report document success.",
-  "AdminUpdateStudentScoreForReportDocumentSuccess": "Update student score for report document success."
+  "AdminUpdateStudentScoreForReportDocumentSuccess": "Update student score for report document success.",
+  "MentorAlreadyUpdateScore": "Mentor already update score."
 }

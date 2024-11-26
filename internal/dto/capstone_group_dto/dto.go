@@ -66,6 +66,7 @@ type StudentScoreReportDocumentInput struct {
 type MentorUpdateStudentScoreForReportDocument struct {
 	ReportDocumentID int64                             `json:"report_document_id" binding:"required"`
 	StudentScoreData []StudentScoreReportDocumentInput `json:"student_score_data" binding:"required"`
+	Conclusion       *string                           `json:"conclusion"`
 	CapstoneGroupID  int64                             `swaggerignore:"true"`
 }
 

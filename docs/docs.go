@@ -2047,7 +2047,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput"
+                            "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithFullInfoSwaggerOutput"
                         }
                     },
                     "400": {
@@ -3600,6 +3600,9 @@ const docTemplate = `{
                 "major_id": {
                     "type": "integer"
                 },
+                "mentor_id": {
+                    "type": "integer"
+                },
                 "name_group": {
                     "type": "string"
                 },
@@ -3872,6 +3875,9 @@ const docTemplate = `{
                 "student_score_data"
             ],
             "properties": {
+                "conclusion": {
+                    "type": "string"
+                },
                 "report_document_id": {
                     "type": "integer"
                 },
@@ -4303,6 +4309,52 @@ const docTemplate = `{
                 }
             }
         },
+        "evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput": {
+            "type": "object",
+            "properties": {
+                "assign_groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.CapstoneGroupOutput"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teachers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.TeacherOutput"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "evaluation_committee_dto.EvaluationCommitteeWithFullInfoSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput"
+                },
+                "message": {
+                    "type": "boolean"
+                }
+            }
+        },
         "evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput": {
             "type": "object",
             "properties": {
@@ -4329,20 +4381,6 @@ const docTemplate = `{
                 }
             }
         },
-        "evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {
-                    "$ref": "#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput"
-                },
-                "message": {
-                    "type": "boolean"
-                }
-            }
-        },
         "evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput": {
             "type": "object",
             "properties": {
@@ -4363,11 +4401,18 @@ const docTemplate = `{
         "evaluation_committee_dto.UpdateEvaluationCommitteeInput": {
             "type": "object",
             "required": [
+                "assign_group_ids",
                 "id",
                 "name",
                 "teacher_ids"
             ],
             "properties": {
+                "assign_group_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
                 "id": {
                     "type": "integer"
                 },

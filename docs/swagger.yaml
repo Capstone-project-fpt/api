@@ -130,6 +130,8 @@ definitions:
         type: integer
       major_id:
         type: integer
+      mentor_id:
+        type: integer
       name_group:
         type: string
       semester_id:
@@ -308,6 +310,8 @@ definitions:
     type: object
   capstone_group_dto.MentorUpdateStudentScoreForReportDocument:
     properties:
+      conclusion:
+        type: string
       report_document_id:
         type: integer
       student_score_data:
@@ -594,6 +598,36 @@ definitions:
     - semester_id
     - teacher_ids
     type: object
+  evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput:
+    properties:
+      assign_groups:
+        items:
+          $ref: '#/definitions/capstone_group_dto.CapstoneGroupOutput'
+        type: array
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      semester_id:
+        type: integer
+      teachers:
+        items:
+          $ref: '#/definitions/user_dto.TeacherOutput'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  evaluation_committee_dto.EvaluationCommitteeWithFullInfoSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput'
+      message:
+        type: boolean
+    type: object
   evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput:
     properties:
       created_at:
@@ -611,15 +645,6 @@ definitions:
       updated_at:
         type: string
     type: object
-  evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput:
-    properties:
-      code:
-        type: integer
-      data:
-        $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput'
-      message:
-        type: boolean
-    type: object
   evaluation_committee_dto.ListTeachersHaveEvaluationCommitteeGroupSwaggerOutput:
     properties:
       code:
@@ -633,6 +658,10 @@ definitions:
     type: object
   evaluation_committee_dto.UpdateEvaluationCommitteeInput:
     properties:
+      assign_group_ids:
+        items:
+          type: integer
+        type: array
       id:
         type: integer
       name:
@@ -643,6 +672,7 @@ definitions:
         minItems: 1
         type: array
     required:
+    - assign_group_ids
     - id
     - name
     - teacher_ids
@@ -2382,7 +2412,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput'
+            $ref: '#/definitions/evaluation_committee_dto.EvaluationCommitteeWithFullInfoSwaggerOutput'
         "400":
           description: Bad Request
           schema:

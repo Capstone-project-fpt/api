@@ -161,6 +161,19 @@ func (cgs *capstoneGroupService) MentorUpdateStudentScoreForReportDocument(ctx *
 		}))
 	}
 
+	var reportDocument model.ReportDocument
+	if err := global.Db.Model(model.ReportDocument{}).Where("id = ?", input.ReportDocumentID).First(&reportDocument).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.ReportDocumentNotFound,
+		}))
+	}
+
+	if reportDocument.MentorReviewStatus == constant.MentorReviewStatusReport.Done {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.MentorAlreadyUpdateScore,
+		}))
+	}
+
 	var allStudentInCapstoneGroup []model.StudentCapstoneGroup
 	if err := global.Db.Model(model.StudentCapstoneGroup{}).Where("capstone_group_id = ?", input.CapstoneGroupID).Find(&allStudentInCapstoneGroup).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -216,7 +229,15 @@ func (cgs *capstoneGroupService) MentorUpdateStudentScoreForReportDocument(ctx *
 		}
 	}
 
-	if err := global.Db.Model(model.ReportDocument{}).Where("id = ?", input.ReportDocumentID).Update("status", constant.MentorReviewStatusReport.Done).Error; err != nil {
+	updateReportDocument := model.ReportDocument{
+		MentorReviewStatus: constant.MentorReviewStatusReport.Done,
+		Conclusion:         input.Conclusion,
+	}
+
+	if err := global.Db.Model(model.ReportDocument{}).
+		Where("id = ?", input.ReportDocumentID).
+		Updates(&updateReportDocument).
+		Error; err != nil {
 		return err
 	}
 

@@ -89,5 +89,6 @@
   "DeleteCapstoneGroupReportDocumentSuccess": "Xoá thành công report nhóm bảo vệ đồ án.",
   "CapstoneGroupInReviewingTopicProcess": "Nhóm đồ án đang trong quá trình thẩm định đề tài.",
   "MentorUpdateStudentScoreForReportDocumentSuccess": "Mentor cập nhập điểm cho các thành viên trong nhóm đề tài thành công.",
-  "AdminUpdateStudentScoreForReportDocumentSuccess": "Cập nhập điểm thành công."
+  "AdminUpdateStudentScoreForReportDocumentSuccess": "Cập nhập điểm thành công.",
+  "MentorAlreadyUpdateScore": "Mentor đã cập nhật điểm trước đó."
 }
