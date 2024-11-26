@@ -131,7 +131,7 @@ func (ecc *EvaluationCommitteeController) DeleteEvaluationCommittee(ctx *gin.Con
 // @Param id path int true "id"
 // @Router /evaluation-committees/{id} [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoSwaggerOutput
+// @Success 200 {object} evaluation_committee_dto.EvaluationCommitteeWithFullInfoSwaggerOutput
 // @Security ApiKeyAuth
 func (ecc *EvaluationCommitteeController) GetEvaluationCommittee(ctx *gin.Context) {
 	idParam := ctx.Param("id")
@@ -208,6 +208,6 @@ func (ecc *EvaluationCommitteeController) GetListTeachersHaveEvaluationCommittee
 		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
 		return
 	}
-	
+
 	response.SuccessResponse(ctx, http.StatusOK, output)
 }

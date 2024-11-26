@@ -58,6 +58,7 @@ type MessageI18n struct {
 	PasswordChangedSuccess                               string
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime       string
 	EvaluationCommitteeTeacherHadAssigned                string
+	EvaluationCommitteeGroupHadAssigned                  string
 	CreateEvaluationCommitteeSuccess                     string
 	EvaluationCommitteeNotFound                          string
 	UpdateEvaluationCommitteeSuccess                     string
@@ -152,6 +153,7 @@ var MessageI18nId MessageI18n = MessageI18n{
 	PasswordChangedSuccess:                               "PasswordChangedSuccess",
 	SemesterStartTimeNeedToBeBeforeSemesterEndTime:       "SemesterStartTimeNeedToBeBeforeSemesterEndTime",
 	EvaluationCommitteeTeacherHadAssigned:                "EvaluationCommitteeTeacherHadAssigned",
+	EvaluationCommitteeGroupHadAssigned:                  "EvaluationCommitteeGroupHadAssigned",
 	CreateEvaluationCommitteeSuccess:                     "CreateEvaluationCommitteeSuccess",
 	EvaluationCommitteeNotFound:                          "EvaluationCommitteeNotFound",
 	UpdateEvaluationCommitteeSuccess:                     "UpdateEvaluationCommitteeSuccess",

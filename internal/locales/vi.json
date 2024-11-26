@@ -62,6 +62,7 @@
   "StudentNotFound": "Không tìm thấy sinh viên.",
   "TeacherNotFound": "Không tìm thấy giáo viên.",
   "EvaluationCommitteeTeacherHadAssigned": "Giảng viên {{.TeacherNames}} đã ở trong hội đồng thẩm định khác.",
+  "EvaluationCommitteeGroupHadAssigned": "Nhóm đồ án {{.GroupNames}} đã ở trong hội đồng thẩm định khác.",
   "CreateEvaluationCommitteeSuccess": "Tạo hội đồng thầm định thành công.",
   "EvaluationCommitteeNotFound": "Không tìm thấy hội đồng thẩm định.",
   "UpdateEvaluationCommitteeSuccess": "Cập nhật hội đồng thẩm định thành công.",

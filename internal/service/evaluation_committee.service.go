@@ -8,6 +8,7 @@ import (
 	"github.com/api/global"
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto"
+	"github.com/api/internal/dto/capstone_group_dto"
 	"github.com/api/internal/dto/evaluation_committee_dto"
 	"github.com/api/internal/dto/user_dto"
 	util "github.com/api/pkg/utils"
@@ -20,7 +21,7 @@ type IEvaluationCommitteeService interface {
 	CreateEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.CreateEvaluationCommitteeInput) error
 	UpdateEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.UpdateEvaluationCommitteeInput) error
 	DeleteEvaluationCommittee(ctx *gin.Context, id int64) error
-	GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error)
+	GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput, error)
 	GetListEvaluationCommittee(ctx *gin.Context, input *evaluation_committee_dto.GetListEvaluationCommitteeInput) (*evaluation_committee_dto.ListEvaluationCommitteeOutput, error)
 	GetListTeachersHaveEvaluationCommitteeGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.TeacherOutput, error)
 }
@@ -117,6 +118,7 @@ func (e *evaluationCommitteeService) UpdateEvaluationCommittee(ctx *gin.Context,
 		return errors.New(message)
 	}
 
+	// Check if the teacher has been assigned to another evaluation committee
 	if !util.IsSameElementTwoArray(input.TeacherIDs, evaluationCommittee.TeacherIDs) {
 		var teachers []model.Teacher
 		queryTeachers := global.Db.Model(model.Teacher{}).Joins("User").Where("teachers.id IN ?", input.TeacherIDs).Find(&teachers)
@@ -161,8 +163,54 @@ func (e *evaluationCommitteeService) UpdateEvaluationCommittee(ctx *gin.Context,
 		}
 	}
 
+	// Check if the group has been assigned to another evaluation committee
+	if !util.IsSameElementTwoArray(input.AssignGroupIDs, evaluationCommittee.AssignGroupIDs) {
+		var capstoneGroups []model.CapstoneGroup
+		queryGroups := global.Db.Model(model.CapstoneGroup{}).Where("id IN ?", input.AssignGroupIDs).Find(&capstoneGroups)
+		if err := queryGroups.Error; err != nil {
+			return err
+		}
+
+		if len(capstoneGroups) != len(input.AssignGroupIDs) {
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+			})
+			return errors.New(message)
+		}
+
+		var allEvaluationCommitteesInSemester []model.EvaluationCommittee
+
+		if err := global.Db.Model(model.EvaluationCommittee{}).Where("semester_id = ? AND id != ?", evaluationCommittee.SemesterID, evaluationCommittee.ID).Find(&allEvaluationCommitteesInSemester).Error; err != nil {
+			return err
+		}
+
+		allGroupsInEvaluationCommittee := make([]int64, 0)
+		for _, evaluationCommittee := range allEvaluationCommitteesInSemester {
+			allGroupsInEvaluationCommittee = append(allGroupsInEvaluationCommittee, evaluationCommittee.AssignGroupIDs...)
+		}
+
+		assignedGroupNames := make([]string, 0)
+		for _, group := range capstoneGroups {
+			if funk.Contains(allGroupsInEvaluationCommittee, group.ID) {
+				assignedGroupNames = append(assignedGroupNames, group.NameGroup)
+			}
+		}
+
+		if len(assignedGroupNames) > 0 {
+			groupNamesStr := strings.Join(assignedGroupNames, ", ")
+			message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.EvaluationCommitteeGroupHadAssigned,
+				TemplateData: map[string]interface{}{
+					"GroupNames": groupNamesStr,
+				},
+			})
+			return errors.New(message)
+		}
+	}
+
 	evaluationCommittee.Name = input.Name
 	evaluationCommittee.TeacherIDs = input.TeacherIDs
+	evaluationCommittee.AssignGroupIDs = input.AssignGroupIDs
 
 	if err := global.Db.Model(model.EvaluationCommittee{}).Where("id = ?", input.ID).Save(&evaluationCommittee).Error; err != nil {
 		return err
@@ -187,7 +235,7 @@ func (e *evaluationCommitteeService) DeleteEvaluationCommittee(ctx *gin.Context,
 	return nil
 }
 
-func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithTeacherInfoOutput, error) {
+func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id int64) (*evaluation_committee_dto.EvaluationCommitteeWithFullInfoOutput, error) {
 	var evaluationCommittee model.EvaluationCommittee
 
 	queryEvaluationCommittee := global.Db.Model(&model.EvaluationCommittee{}).Where("id = ?", id).First(&evaluationCommittee)
@@ -203,10 +251,10 @@ func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id
 			"teachers"."id",
 			"teachers"."sub_major_id",
 			"teachers"."user_id",
-			"User"."id" AS "User__id", 
-  		"User"."name" AS "User__name", 
-  		"User"."user_type" AS "User__user_type", 
-  		"User"."email" AS "User__email", 
+			"User"."id" AS "User__id",
+  		"User"."name" AS "User__name",
+  		"User"."user_type" AS "User__user_type",
+  		"User"."email" AS "User__email",
   		"User"."phone_number" AS "User__phone_number"
 		`).
 		Joins(`INNER JOIN "users" "User" ON "User"."id" = "teachers"."user_id"`).
@@ -222,7 +270,19 @@ func (e *evaluationCommitteeService) GetEvaluationCommittee(ctx *gin.Context, id
 		teacherOutput = append(teacherOutput, user_dto.ToTeacherOutput(&teacher))
 	}
 
-	output := evaluation_committee_dto.ToEvaluationCommitteeWithTeacherInfoOutput(&evaluationCommittee, &teacherOutput)
+	var capstoneGroups []model.CapstoneGroup
+	queryGroups := global.Db.Model(&model.CapstoneGroup{}).Where("id IN ?", []int64(evaluationCommittee.AssignGroupIDs)).Find(&capstoneGroups)
+	if err := queryGroups.Error; err != nil {
+		return nil, err
+	}
+
+	var groupOutput []*capstone_group_dto.CapstoneGroupOutput
+	for _, group := range capstoneGroups {
+		output := capstone_group_dto.ToCapstoneGroupOutput(&group)
+		groupOutput = append(groupOutput, &output)
+	}
+
+	output := evaluation_committee_dto.ToEvaluationCommitteeWithFullInfoOutput(&evaluationCommittee, &teacherOutput, &groupOutput)
 
 	return output, nil
 }
@@ -285,10 +345,10 @@ func (e *evaluationCommitteeService) GetListTeachersHaveEvaluationCommitteeGroup
 			"teachers"."id",
 			"teachers"."sub_major_id",
 			"teachers"."user_id",
-			"User"."id" AS "User__id", 
-  			"User"."name" AS "User__name", 
-  			"User"."user_type" AS "User__user_type", 
-  			"User"."email" AS "User__email", 
+			"User"."id" AS "User__id",
+  			"User"."name" AS "User__name",
+  			"User"."user_type" AS "User__user_type",
+  			"User"."email" AS "User__email",
   			"User"."phone_number" AS "User__phone_number"
 		`).
 		Joins(`INNER JOIN "users" "User" ON "User"."id" = "teachers"."user_id"`).
