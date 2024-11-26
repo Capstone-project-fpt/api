@@ -59,12 +59,12 @@ type GetSemesterSwaggerOutput struct {
 }
 
 type SemesterStatisticsOutput struct {
-	ID                   int64     `json:"id"`
-	Name                 string    `json:"name"`
-	StartTime            time.Time `json:"start_time"`
-	EndTime              time.Time `json:"end_time"`
-	CapstoneGroups       int64     `json:"total_capstone_groups"`
-	EvaluationCommittees int64     `json:"total_evaluation_committees"`
+	ID                        int64     `json:"id"`
+	Name                      string    `json:"name"`
+	StartTime                 time.Time `json:"start_time"`
+	EndTime                   time.Time `json:"end_time"`
+	TotalCapstoneGroups       int64     `json:"total_capstone_groups"`
+	TotalEvaluationCommittees int64     `json:"total_evaluation_committees"`
 }
 
 type ListSemesterStatisticsOutput struct {
