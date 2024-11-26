@@ -822,6 +822,15 @@ definitions:
       message:
         type: boolean
     type: object
+  semester_dto.ListSemesterStatisticsOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/semester_dto.SemesterStatisticsOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   semester_dto.ListSemestersOutput:
     properties:
       items:
@@ -845,6 +854,21 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  semester_dto.SemesterStatisticsOutput:
+    properties:
+      end_time:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      start_time:
+        type: string
+      total_capstone_groups:
+        type: integer
+      total_evaluation_committees:
+        type: integer
     type: object
   semester_dto.UpdateSemesterInput:
     properties:
@@ -2849,6 +2873,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCurrentSemester
+      tags:
+      - Semester
+  /semesters/statistics:
+    get:
+      description: Get List Semesters With Count Group
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.ListSemesterStatisticsOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListSemestersWithCountGroup
       tags:
       - Semester
   /sub-majors:

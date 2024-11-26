@@ -52,9 +52,22 @@ type ListSemestersOutput struct {
 	Items []SemesterOutput   `json:"items"`
 }
 
-// This used for swagger
 type GetSemesterSwaggerOutput struct {
 	Code    int             `json:"code"`
 	Success bool            `json:"message"`
 	Data    *SemesterOutput `json:"data"`
+}
+
+type SemesterStatisticsOutput struct {
+	ID                        int64     `json:"id"`
+	Name                      string    `json:"name"`
+	StartTime                 time.Time `json:"start_time"`
+	EndTime                   time.Time `json:"end_time"`
+	TotalCapstoneGroups       int64     `json:"total_capstone_groups"`
+	TotalEvaluationCommittees int64     `json:"total_evaluation_committees"`
+}
+
+type ListSemesterStatisticsOutput struct {
+	Meta  dto.MetaPagination         `json:"meta"`
+	Items []SemesterStatisticsOutput `json:"items"`
 }
