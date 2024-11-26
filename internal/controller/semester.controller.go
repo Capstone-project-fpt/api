@@ -196,24 +196,24 @@ func (sc *SemesterController) AdminDeleteSemester(ctx *gin.Context) {
 // @Produce json
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
-// @Router /semesters/count  [get]
+// @Router /semesters/statistics [get]
 // @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} semester_dto.ListSemestersOutputCount
+// @Success 200 {object} semester_dto.ListSemesterStatisticsOutput
 // @Security ApiKeyAuth
 func (sc *SemesterController) GetListSemestersWithCountGroup(ctx *gin.Context) {
 	var input semester_dto.GetListSemestersInput
-    if err := ctx.ShouldBindQuery(&input); err != nil {
-        response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-        return
-    }
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
 
-    input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
-    result, err := sc.semesterService.GetListSemestersWithCountGroup(ctx, &input)
+	input.Offset, _ = util.GetPagination(int(input.Page), int(input.Limit))
+	result, err := sc.semesterService.GetListSemestersWithCountGroup(ctx, &input)
 
-    if err != nil {
-        response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-        return
-    }
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
 
-    response.SuccessResponse(ctx, http.StatusOK, result)
+	response.SuccessResponse(ctx, http.StatusOK, result)
 }

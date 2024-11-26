@@ -20,7 +20,7 @@ func (ur *SemesterRouter) InitSemesterRouter(r *gin.RouterGroup) {
 		semesterCommonRouter.GET("/", semesterController.GetListSemesters)
 		semesterCommonRouter.GET("/current", semesterController.GetCurrentSemester)
 		semesterCommonRouter.GET("/:id", semesterController.GetSemester)
-		semesterCommonRouter.GET("/count", semesterController.GetListSemestersWithCountGroup)
+		semesterCommonRouter.GET("/statistics", semesterController.GetListSemestersWithCountGroup)
 	}
 
 	semesterAdminRouter := semesterRouter.Group("")

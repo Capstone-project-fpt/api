@@ -2271,7 +2271,38 @@ const docTemplate = `{
                 }
             }
         },
-        "/semesters/count": {
+        "/semesters/current": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get Current Semester",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Semester"
+                ],
+                "summary": "GetCurrentSemester",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/semester_dto.GetSemesterSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/semesters/statistics": {
             "get": {
                 "security": [
                     {
@@ -2306,38 +2337,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/semester_dto.ListSemestersOutputCount"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseErr"
-                        }
-                    }
-                }
-            }
-        },
-        "/semesters/current": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get Current Semester",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Semester"
-                ],
-                "summary": "GetCurrentSemester",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/semester_dto.GetSemesterSwaggerOutput"
+                            "$ref": "#/definitions/semester_dto.ListSemesterStatisticsOutput"
                         }
                     },
                     "400": {
@@ -3992,13 +3992,13 @@ const docTemplate = `{
                 }
             }
         },
-        "semester_dto.ListSemestersOutput": {
+        "semester_dto.ListSemesterStatisticsOutput": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/semester_dto.SemesterOutput"
+                        "$ref": "#/definitions/semester_dto.SemesterStatisticsOutput"
                     }
                 },
                 "meta": {
@@ -4006,13 +4006,13 @@ const docTemplate = `{
                 }
             }
         },
-        "semester_dto.ListSemestersOutputCount": {
+        "semester_dto.ListSemestersOutput": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/semester_dto.SemesterOutputCount"
+                        "$ref": "#/definitions/semester_dto.SemesterOutput"
                     }
                 },
                 "meta": {
@@ -4043,17 +4043,11 @@ const docTemplate = `{
                 }
             }
         },
-        "semester_dto.SemesterOutputCount": {
+        "semester_dto.SemesterStatisticsOutput": {
             "type": "object",
             "properties": {
-                "capstone_groups": {
-                    "type": "integer"
-                },
                 "end_time": {
                     "type": "string"
-                },
-                "evaluation_committees": {
-                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
@@ -4063,6 +4057,12 @@ const docTemplate = `{
                 },
                 "start_time": {
                     "type": "string"
+                },
+                "total_capstone_groups": {
+                    "type": "integer"
+                },
+                "total_evaluation_committees": {
+                    "type": "integer"
                 }
             }
         },

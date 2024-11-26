@@ -672,20 +672,20 @@ definitions:
       message:
         type: boolean
     type: object
+  semester_dto.ListSemesterStatisticsOutput:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/semester_dto.SemesterStatisticsOutput'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
+    type: object
   semester_dto.ListSemestersOutput:
     properties:
       items:
         items:
           $ref: '#/definitions/semester_dto.SemesterOutput'
-        type: array
-      meta:
-        $ref: '#/definitions/dto.MetaPagination'
-    type: object
-  semester_dto.ListSemestersOutputCount:
-    properties:
-      items:
-        items:
-          $ref: '#/definitions/semester_dto.SemesterOutputCount'
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
@@ -705,20 +705,20 @@ definitions:
       updated_at:
         type: string
     type: object
-  semester_dto.SemesterOutputCount:
+  semester_dto.SemesterStatisticsOutput:
     properties:
-      capstone_groups:
-        type: integer
       end_time:
         type: string
-      evaluation_committees:
-        type: integer
       id:
         type: integer
       name:
         type: string
       start_time:
         type: string
+      total_capstone_groups:
+        type: integer
+      total_evaluation_committees:
+        type: integer
     type: object
   semester_dto.UpdateSemesterInput:
     properties:
@@ -2436,7 +2436,26 @@ paths:
       summary: GetSemester
       tags:
       - Semester
-  /semesters/count:
+  /semesters/current:
+    get:
+      description: Get Current Semester
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCurrentSemester
+      tags:
+      - Semester
+  /semesters/statistics:
     get:
       description: Get List Semesters With Count Group
       parameters:
@@ -2456,7 +2475,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/semester_dto.ListSemestersOutputCount'
+            $ref: '#/definitions/semester_dto.ListSemesterStatisticsOutput'
         "400":
           description: Bad Request
           schema:
@@ -2464,25 +2483,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetListSemestersWithCountGroup
-      tags:
-      - Semester
-  /semesters/current:
-    get:
-      description: Get Current Semester
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/semester_dto.GetSemesterSwaggerOutput'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: GetCurrentSemester
       tags:
       - Semester
   /sub-majors:
