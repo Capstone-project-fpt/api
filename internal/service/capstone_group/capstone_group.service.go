@@ -36,6 +36,10 @@ type ICapstoneGroupService interface {
 	MentorUpdateStudentScoreForReportDocument(ctx *gin.Context, input *capstone_group_dto.MentorUpdateStudentScoreForReportDocument) error
 	GetReportDocumentStudentsScore(ctx *gin.Context, reportDocumentID int64) ([]capstone_group_dto.ReportDocumentStudentScoreOutput, error)
 	AdminUpdateStudentScoreForReportDocument(ctx *gin.Context, input *capstone_group_dto.AdminUpdateStudentScoreForReportDocument) error
+	CommentReport(ctx *gin.Context, input *capstone_group_dto.CommentReportInput) error
+	UpdateCommentReport(ctx *gin.Context, input *capstone_group_dto.UpdateCommentReportInput) error
+	DeleteCommentReport(ctx *gin.Context, input *capstone_group_dto.DeleteCommentReportInput) error
+	GetListReportComments(ctx *gin.Context, input *capstone_group_dto.GetListCommentReportInput) (*[]*capstone_group_dto.ReportCommentWithUserInfoOutput, error)
 }
 
 type capstoneGroupService struct {
@@ -405,7 +409,6 @@ func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Stu
 
 	return &currentStudent, nil
 }
-
 
 func (cgs *capstoneGroupService) getCurrentTeacher(ctx *gin.Context) (*model.Teacher, error) {
 	currentUser := context_util.GetUserContext(ctx)

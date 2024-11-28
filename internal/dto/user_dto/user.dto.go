@@ -14,6 +14,16 @@ type UserOutput struct {
 	UserType    string `json:"user_type"`
 }
 
+func ToUserOutput(user *model.User) *UserOutput {
+	return &UserOutput{
+		ID:          int(user.ID),
+		Name:        user.Name,
+		Email:       user.Email,
+		PhoneNumber: user.PhoneNumber,
+		UserType:    user.UserType,
+	}
+}
+
 type StudentInfoOutput struct {
 	StudentID  int       `json:"student_id"`
 	Code       string    `json:"code"`
