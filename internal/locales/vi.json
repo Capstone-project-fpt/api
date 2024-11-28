@@ -90,5 +90,9 @@
   "CapstoneGroupInReviewingTopicProcess": "Nhóm đồ án đang trong quá trình thẩm định đề tài.",
   "MentorUpdateStudentScoreForReportDocumentSuccess": "Mentor cập nhập điểm cho các thành viên trong nhóm đề tài thành công.",
   "AdminUpdateStudentScoreForReportDocumentSuccess": "Cập nhập điểm thành công.",
-  "MentorAlreadyUpdateScore": "Mentor đã cập nhật điểm trước đó."
+  "MentorAlreadyUpdateScore": "Mentor đã cập nhật điểm trước đó.",
+  "CommentSuccess": "Comment thành công.",
+  "ReportCommentNotFound": "Không tìm thấy comment.",
+  "UpdateCommentSuccess": "Cập nhật thành công comment.",
+  "DeleteCommentSuccess": "Xoá comment thành công."
 }

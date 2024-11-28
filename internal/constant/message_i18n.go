@@ -94,6 +94,10 @@ type MessageI18n struct {
 	MentorUpdateStudentScoreForReportDocumentSuccess     string
 	AdminUpdateStudentScoreForReportDocumentSuccess      string
 	MentorAlreadyUpdateScore                             string
+	CommentSuccess                                       string
+	ReportCommentNotFound                                string
+	UpdateCommentSuccess                                 string
+	DeleteCommentSuccess                                 string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -190,4 +194,8 @@ var MessageI18nId MessageI18n = MessageI18n{
 	MentorUpdateStudentScoreForReportDocumentSuccess:     "MentorUpdateStudentScoreForReportDocumentSuccess",
 	AdminUpdateStudentScoreForReportDocumentSuccess:      "AdminUpdateStudentScoreForReportDocumentSuccess",
 	MentorAlreadyUpdateScore:                             "MentorAlreadyUpdateScore",
+	CommentSuccess:                                       "CommentSuccess",
+	ReportCommentNotFound:                                "ReportCommentNotFound",
+	UpdateCommentSuccess:                                 "UpdateCommentSuccess",
+	DeleteCommentSuccess:                                 "DeleteCommentSuccess",
 }

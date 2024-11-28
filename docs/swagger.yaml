@@ -162,6 +162,13 @@ definitions:
       updated_at:
         type: string
     type: object
+  capstone_group_dto.CommentReportInput:
+    properties:
+      message:
+        type: string
+    required:
+    - message
+    type: object
   capstone_group_dto.CreateCapstoneGroupInput:
     properties:
       major_id:
@@ -202,6 +209,13 @@ definitions:
     - file_ids
     - name
     - type_report
+    type: object
+  capstone_group_dto.DeleteCommentReportInput:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
     type: object
   capstone_group_dto.FeedbackCapstoneGroupReviewInput:
     properties:
@@ -321,6 +335,36 @@ definitions:
     required:
     - report_document_id
     - student_score_data
+    type: object
+  capstone_group_dto.ReportCommentWithUserInfoOutput:
+    properties:
+      created_at:
+        type: string
+      group_comment:
+        type: integer
+      id:
+        type: integer
+      message:
+        type: string
+      report_document_id:
+        type: integer
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/user_dto.UserOutput'
+      user_id:
+        type: integer
+    type: object
+  capstone_group_dto.ReportCommentsSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/capstone_group_dto.ReportCommentWithUserInfoOutput'
+        type: array
+      message:
+        type: boolean
     type: object
   capstone_group_dto.ReportDocumentOutput:
     properties:
@@ -449,6 +493,16 @@ definitions:
         type: array
     required:
     - student_ids
+    type: object
+  capstone_group_dto.UpdateCommentReportInput:
+    properties:
+      id:
+        type: integer
+      message:
+        type: string
+    required:
+    - id
+    - message
     type: object
   capstone_group_dto.UpdateReportFilesCapstoneGroupReviewInput:
     properties:
@@ -2147,6 +2201,145 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroupReportDocument
+      tags:
+      - Capstone Group
+  /capstone-groups/{capstone_group_id}/report-documents/{report_document_id}/comments:
+    delete:
+      description: Student or Mentor of capstone group delete comment on report
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: report_document_id
+        in: path
+        name: report_document_id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.DeleteCommentReportInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteCommentReport
+      tags:
+      - Capstone Group
+    get:
+      description: Get list report comments
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: report_document_id
+        in: path
+        name: report_document_id
+        required: true
+        type: integer
+      - description: order
+        in: query
+        name: order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.ReportCommentsSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListReportComments
+      tags:
+      - Capstone Group
+    patch:
+      description: Student or Mentor of capstone group update comment on report
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: report_document_id
+        in: path
+        name: report_document_id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.UpdateCommentReportInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdateCommentReport
+      tags:
+      - Capstone Group
+    post:
+      description: Student or Mentor of capstone group comment on report
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      - description: report_document_id
+        in: path
+        name: report_document_id
+        required: true
+        type: integer
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/capstone_group_dto.CommentReportInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: CommentReport
       tags:
       - Capstone Group
   /capstone-groups/{capstone_group_id}/report-documents/scores:
