@@ -54,3 +54,18 @@ func (input AdminCreateStudentAccountInput) GetEmail() string {
 func (input AdminCreateTeacherAccountInput) GetEmail() string {
 	return input.Email
 }
+
+type AdminAssignVerifierTopicInput struct {
+	TeacherID  int64 `json:"teacher_id" binding:"required"`
+	SemesterID int64 `json:"semester_id" binding:"required"`
+}
+
+type AdminUnassignVerifierTopicInput struct {
+	ID int64 `json:"id" binding:"required"`
+}
+
+type ListVerifiersTopicSwaggerOutput struct {
+	Code    int                      `json:"code"`
+	Success bool                     `json:"message"`
+	Data    []user_dto.TeacherOutput `json:"data"`
+}

@@ -1,5 +1,15 @@
 basePath: /api/v1
 definitions:
+  admin_dto.AdminAssignVerifierTopicInput:
+    properties:
+      semester_id:
+        type: integer
+      teacher_id:
+        type: integer
+    required:
+    - semester_id
+    - teacher_id
+    type: object
   admin_dto.AdminCreateStudentAccountInput:
     properties:
       code:
@@ -35,6 +45,13 @@ definitions:
     - phone_number
     - sub_major_id
     type: object
+  admin_dto.AdminUnassignVerifierTopicInput:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   admin_dto.ListUsersOutput:
     properties:
       items:
@@ -43,6 +60,17 @@ definitions:
         type: array
       meta:
         $ref: '#/definitions/dto.MetaPagination'
+    type: object
+  admin_dto.ListVerifiersTopicSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/user_dto.TeacherOutput'
+        type: array
+      message:
+        type: boolean
     type: object
   admin_dto.UpdateAccountInput:
     properties:
@@ -1405,6 +1433,88 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UpdateAccount
+      tags:
+      - Admin
+  /admin/verifiers-topic:
+    delete:
+      consumes:
+      - application/json
+      description: Admin unassign verifier topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin_dto.AdminUnassignVerifierTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: UnassignVerifierTopic
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Admin assign verifier topic
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin_dto.AdminAssignVerifierTopicInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: AssignVerifierTopic
+      tags:
+      - Admin
+  /admin/verifiers-topic/semesters/{semester_id}:
+    get:
+      consumes:
+      - application/json
+      description: Admin get list verifier topic
+      parameters:
+      - description: Semester ID
+        in: path
+        name: semester_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListVerifiersTopic
       tags:
       - Admin
   /capstone-groups:

@@ -72,4 +72,11 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 			adminController.UploadFileTeacherData,
 		)
 	}
+
+	adminVerifierTopicRouter := adminRouter.Group("/verifiers-topic")
+	{
+		adminVerifierTopicRouter.POST("/", adminController.AssignVerifierTopic)
+		adminVerifierTopicRouter.DELETE("/", adminController.UnassignVerifierTopic)
+		adminVerifierTopicRouter.GET("/semesters/:semester_id", adminController.GetListVerifiersTopic)
+	}
 }

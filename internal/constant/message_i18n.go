@@ -98,6 +98,10 @@ type MessageI18n struct {
 	ReportCommentNotFound                                string
 	UpdateCommentSuccess                                 string
 	DeleteCommentSuccess                                 string
+	VerifierTopicAlreadyExist                            string
+	AssignVerifierTopicSuccess                           string
+	VerifierTopicNotFound                                string
+	UnassignVerifierTopicSuccess                         string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -198,4 +202,8 @@ var MessageI18nId MessageI18n = MessageI18n{
 	ReportCommentNotFound:                                "ReportCommentNotFound",
 	UpdateCommentSuccess:                                 "UpdateCommentSuccess",
 	DeleteCommentSuccess:                                 "DeleteCommentSuccess",
+	VerifierTopicAlreadyExist:                            "VerifierTopicAlreadyExist",
+	AssignVerifierTopicSuccess:                           "AssignVerifierTopicSuccess",
+	VerifierTopicNotFound:                                "VerifierTopicNotFound",
+	UnassignVerifierTopicSuccess:                         "UnassignVerifierTopicSuccess",
 }
