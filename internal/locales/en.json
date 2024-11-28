@@ -94,5 +94,9 @@
   "CommentSuccess": "Comment success.",
   "ReportCommentNotFound": "Report comment not found.",
   "UpdateCommentSuccess": "Update comment success.",
-  "DeleteCommentSuccess": "Delete comment success."
+  "DeleteCommentSuccess": "Delete comment success.",
+  "VerifierTopicAlreadyExist": "Verifier topic already exist.",
+  "AssignVerifierTopicSuccess": "Assign verifier topic success.",
+  "VerifierTopicNotFound": "Verifier topic not found.",
+  "UnassignVerifierTopicSuccess": "Unassign verifier topic success."
 }

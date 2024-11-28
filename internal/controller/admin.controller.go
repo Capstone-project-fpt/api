@@ -319,3 +319,95 @@ func (ac *AdminController) UpdateAccount(ctx *gin.Context) {
 	})
 	response.SuccessResponse(ctx, http.StatusOK, successMessage)
 }
+
+// @Summary AssignVerifierTopic
+// @Description Admin assign verifier topic
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param data body admin_dto.AdminAssignVerifierTopicInput true "data"
+// @Router /admin/verifiers-topic [post]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (ac *AdminController) AssignVerifierTopic(ctx *gin.Context) {
+	var input admin_dto.AdminAssignVerifierTopicInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	err := ac.adminService.AssignVerifierTopic(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.AssignVerifierTopicSuccess,
+	}))
+}
+
+// @Summary UnassignVerifierTopic
+// @Description Admin unassign verifier topic
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param data body admin_dto.AdminUnassignVerifierTopicInput true "data"
+// @Router /admin/verifiers-topic [delete]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (ac *AdminController) UnassignVerifierTopic(ctx *gin.Context) {
+	var input admin_dto.AdminUnassignVerifierTopicInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	err := ac.adminService.UnassignVerifierTopic(ctx, &input)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+		MessageID: constant.MessageI18nId.UnassignVerifierTopicSuccess,
+	}))
+}
+
+// @Summary GetListVerifiersTopic
+// @Description Admin get list verifier topic
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Param semester_id path int true "Semester ID"
+// @Router /admin/verifiers-topic/semesters/{semester_id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} admin_dto.ListVerifiersTopicSwaggerOutput
+// @Security ApiKeyAuth
+func (ac *AdminController) GetListVerifiersTopic(ctx *gin.Context) {
+	semesterIDParam := ctx.Param("semester_id")
+	semesterID, err := strconv.Atoi(semesterIDParam)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	output, err := ac.adminService.GetListVerifiersTopic(ctx, int64(semesterID))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}

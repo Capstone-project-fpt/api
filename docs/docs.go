@@ -355,6 +355,137 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/verifiers-topic": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin assign verifier topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "AssignVerifierTopic",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.AdminAssignVerifierTopicInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin unassign verifier topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "UnassignVerifierTopic",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.AdminUnassignVerifierTopicInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/verifiers-topic/semesters/{semester_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Admin get list verifier topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "GetListVerifiersTopic",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Semester ID",
+                        "name": "semester_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups": {
             "get": {
                 "security": [
@@ -3620,6 +3751,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "admin_dto.AdminAssignVerifierTopicInput": {
+            "type": "object",
+            "required": [
+                "semester_id",
+                "teacher_id"
+            ],
+            "properties": {
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "admin_dto.AdminCreateStudentAccountInput": {
             "type": "object",
             "required": [
@@ -3670,6 +3816,17 @@ const docTemplate = `{
                 }
             }
         },
+        "admin_dto.AdminUnassignVerifierTopicInput": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "admin_dto.ListUsersOutput": {
             "type": "object",
             "properties": {
@@ -3681,6 +3838,23 @@ const docTemplate = `{
                 },
                 "meta": {
                     "$ref": "#/definitions/dto.MetaPagination"
+                }
+            }
+        },
+        "admin_dto.ListVerifiersTopicSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user_dto.TeacherOutput"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

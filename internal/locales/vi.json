@@ -94,5 +94,9 @@
   "CommentSuccess": "Comment thành công.",
   "ReportCommentNotFound": "Không tìm thấy comment.",
   "UpdateCommentSuccess": "Cập nhật thành công comment.",
-  "DeleteCommentSuccess": "Xoá comment thành công."
+  "DeleteCommentSuccess": "Xoá comment thành công.",
+  "VerifierTopicAlreadyExist": "Giáo viên thẩm định đề tại đã được tạo trước đó.",
+  "AssignVerifierTopicSuccess": "Chỉ định giáo viên thẩm định đề tài thành công.",
+  "VerifierTopicNotFound": "Không tìm thấy giáo viên thẩm định đề tài.",
+  "UnassignVerifierTopicSuccess": "Huỷ chỉ định giáo viên thẩm định đề tài thành công."
 }
