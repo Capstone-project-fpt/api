@@ -11,6 +11,7 @@ import (
 	context_util "github.com/api/pkg/utils/context"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/thoas/go-funk"
 )
 
 func (cgs *capstoneGroupService) CommentReport(ctx *gin.Context, input *capstone_group_dto.CommentReportInput) error {
@@ -140,12 +141,14 @@ func (cgs *capstoneGroupService) validatePermissionActionInReportDocumentAndRetu
 			return 0, nil, nil, err
 		}
 
-		for _, studentCapstoneGroup := range studentCapstoneGroups {
-			if studentCapstoneGroup.SemesterID != currentStudent.ID {
-				return 0, nil, nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-					MessageID: constant.MessageI18nId.PermissionDenied,
-				}))
-			}
+		studentCapstoneGroupIDs := funk.Map(studentCapstoneGroups, func(studentCapstoneGroup model.StudentCapstoneGroup) int64 {
+			return studentCapstoneGroup.StudentID
+		}).([]int64)
+
+		if !funk.Contains(studentCapstoneGroupIDs, currentStudent.ID) {
+			return 0, nil, nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.PermissionDenied,
+			}))
 		}
 	}
 
