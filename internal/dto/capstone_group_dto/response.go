@@ -58,20 +58,6 @@ func ToReportDocumentOutput(reportDocument *model.ReportDocument) *ReportDocumen
 	}
 }
 
-type GetListCapstoneGroupInput struct {
-	Limit      int `form:"limit" binding:"required" example:"10"`
-	Page       int `form:"page" binding:"required" example:"1"`
-	SemesterID int `form:"semester_id"`
-	Offset     int `swaggerignore:"true"`
-}
-
-type GetListInviteMentorToCapstoneGroupInput struct {
-	Limit           int   `form:"limit" binding:"required" example:"10"`
-	Page            int   `form:"page" binding:"required" example:"1"`
-	Offset          int   `swaggerignore:"true"`
-	CapstoneGroupID int64 `swaggerignore:"true"`
-}
-
 type CapstoneGroupOutput struct {
 	ID         int64     `json:"id"`
 	NameGroup  string    `json:"name_group"`
@@ -268,4 +254,10 @@ type ReportCommentsSwaggerOutput struct {
 	Code    int                               `json:"code"`
 	Success bool                              `json:"message"`
 	Data    []ReportCommentWithUserInfoOutput `json:"data"`
+}
+
+type CurrentListCapstoneGroupSwaggerOutput struct {
+	Code    int                                  `json:"code"`
+	Success bool                                 `json:"message"`
+	Data    []CapstoneGroupWithTotalMemberOutput `json:"data"`
 }
