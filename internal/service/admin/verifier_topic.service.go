@@ -58,7 +58,7 @@ func (as *adminService) AssignVerifierTopic(ctx *gin.Context, input *admin_dto.A
 
 func (as *adminService) UnassignVerifierTopic(ctx *gin.Context, input *admin_dto.AdminUnassignVerifierTopicInput) error {
 	var verifierTopic model.VerifierTopic
-	if err := global.Db.Model(model.VerifierTopic{}).Select("id").Where("id = ?", input.ID).First(&verifierTopic).Error; err != nil {
+	if err := global.Db.Model(model.VerifierTopic{}).Select("id").Where("teacher_id = ? AND semester_id = ?", input.TeacherID, input.SemesterID).First(&verifierTopic).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.VerifierTopicNotFound,
 		})
