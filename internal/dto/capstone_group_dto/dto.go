@@ -96,3 +96,21 @@ type GetListCommentReportInput struct {
 	ReportDocumentID int64   `swaggerignore:"true"`
 	CapstoneGroupID  int64   `swaggerignore:"true"`
 }
+
+type GetListCapstoneGroupInput struct {
+	Limit      int `form:"limit" binding:"required" example:"10"`
+	Page       int `form:"page" binding:"required" example:"1"`
+	SemesterID int `form:"semester_id"`
+	Offset     int `swaggerignore:"true"`
+}
+
+type GetListInviteMentorToCapstoneGroupInput struct {
+	Limit           int   `form:"limit" binding:"required" example:"10"`
+	Page            int   `form:"page" binding:"required" example:"1"`
+	Offset          int   `swaggerignore:"true"`
+	CapstoneGroupID int64 `swaggerignore:"true"`
+}
+
+type GetCurrentListCapstoneGroupInput struct {
+	SemesterID int `form:"semester_id" binding:"required" example:"1"`
+}

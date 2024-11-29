@@ -24,6 +24,7 @@ type ICapstoneGroupService interface {
 	ResponseInviteMentorToCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.ResponseInviteMentorToCapstoneGroupInput) error
 	GetCapstoneGroup(ctx *gin.Context, id int) (*capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error)
 	GetListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetListCapstoneGroupInput) (*capstone_group_dto.ListCapstoneGroupWithTotalMemberOutput, error)
+	GetCurrentListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetCurrentListCapstoneGroupInput) (*[]capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error)
 	GetMentorAndListMemberCapstoneGroup(ctx *gin.Context, id int64) (*capstone_group_dto.MentorAndListMemberCapstoneGroupOutput, error)
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
@@ -408,6 +409,40 @@ func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Stu
 	}
 
 	return &currentStudent, nil
+}
+
+func (cgs *capstoneGroupService) GetCurrentListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetCurrentListCapstoneGroupInput) (*[]capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error) {
+	currentStudent, currentTeacher, err := cgs.getCurrentStudentOrTeacher(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+	var items []model.CapstoneGroupWithTotalMember
+
+	query := global.Db.Model(model.CapstoneGroup{}).
+		Select("capstone_groups.*, COUNT(sg.student_id) AS total_members").
+		Joins("LEFT JOIN student_capstone_groups AS sg ON sg.capstone_group_id = capstone_groups.id").
+		Group("capstone_groups.id").
+		Where("capstone_groups.semester_id = ?", input.SemesterID)
+
+	if currentTeacher != nil {
+		query.Where("capstone_groups.mentor_id = ?", currentTeacher.ID)
+	}
+
+	if currentStudent != nil {
+		query.Where("sg.student_id = ?", currentStudent.ID)
+	}
+
+	if err := query.Find(&items).Error; err != nil {
+		return nil, err
+	}
+
+	output := make([]capstone_group_dto.CapstoneGroupWithTotalMemberOutput, len(items))
+	for i, item := range items {
+		output[i] = capstone_group_dto.ToCapstoneGroupWithTotalMemberOutput(&item)
+	}
+
+	return &output, nil
 }
 
 func (cgs *capstoneGroupService) getCurrentTeacher(ctx *gin.Context) (*model.Teacher, error) {

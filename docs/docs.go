@@ -628,6 +628,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/capstone-groups/current-semester": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get current list capstone group for student or teacher",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "GetCurrentListCapstoneGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "SemesterID",
+                        "name": "semester_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups/semesters/{semester_id}/students": {
             "get": {
                 "security": [
@@ -4042,6 +4085,44 @@ const docTemplate = `{
                 }
             }
         },
+        "capstone_group_dto.CapstoneGroupWithTotalMemberOutput": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "leader_id": {
+                    "type": "integer"
+                },
+                "major_id": {
+                    "type": "integer"
+                },
+                "mentor_id": {
+                    "type": "integer"
+                },
+                "name_group": {
+                    "type": "string"
+                },
+                "semester_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "topic_id": {
+                    "type": "integer"
+                },
+                "total_members": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "capstone_group_dto.CommentReportInput": {
             "type": "object",
             "required": [
@@ -4107,6 +4188,23 @@ const docTemplate = `{
                         "sixth_report",
                         "seventh_report"
                     ]
+                }
+            }
+        },
+        "capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/capstone_group_dto.CapstoneGroupWithTotalMemberOutput"
+                    }
+                },
+                "message": {
+                    "type": "boolean"
                 }
             }
         },

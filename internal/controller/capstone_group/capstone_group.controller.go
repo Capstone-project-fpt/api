@@ -214,6 +214,33 @@ func (cgc *CapstoneGroupController) GetListCapstoneGroups(ctx *gin.Context) {
 	response.SuccessResponse(ctx, http.StatusOK, result)
 }
 
+// @Summary GetCurrentListCapstoneGroup
+// @Description Get current list capstone group for student or teacher
+// @Tags Capstone Group
+// @Accept json
+// @Produce json
+// @Param semester_id query int true "SemesterID"
+// @Router /capstone-groups/current-semester [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) GetCurrentListCapstoneGroup(ctx *gin.Context) {
+	var input capstone_group_dto.GetCurrentListCapstoneGroupInput
+	if err := ctx.ShouldBindQuery(&input); err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	result, err := cgc.capstoneGroupService.GetCurrentListCapstoneGroup(ctx, &input)
+
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, result)
+}
+
 // @Summary GetCapstoneGroup
 // @Description Get capstone group
 // @Tags Capstone Group

@@ -193,6 +193,31 @@ definitions:
       updated_at:
         type: string
     type: object
+  capstone_group_dto.CapstoneGroupWithTotalMemberOutput:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      leader_id:
+        type: integer
+      major_id:
+        type: integer
+      mentor_id:
+        type: integer
+      name_group:
+        type: string
+      semester_id:
+        type: integer
+      status:
+        type: string
+      topic_id:
+        type: integer
+      total_members:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   capstone_group_dto.CommentReportInput:
     properties:
       message:
@@ -240,6 +265,17 @@ definitions:
     - file_ids
     - name
     - type_report
+    type: object
+  capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/capstone_group_dto.CapstoneGroupWithTotalMemberOutput'
+        type: array
+      message:
+        type: boolean
     type: object
   capstone_group_dto.DeleteCommentReportInput:
     properties:
@@ -2544,6 +2580,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetReportDocumentStudentsScore
+      tags:
+      - Capstone Group
+  /capstone-groups/current-semester:
+    get:
+      consumes:
+      - application/json
+      description: Get current list capstone group for student or teacher
+      parameters:
+      - description: SemesterID
+        in: query
+        name: semester_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetCurrentListCapstoneGroup
       tags:
       - Capstone Group
   /capstone-groups/semesters/{semester_id}/students:
