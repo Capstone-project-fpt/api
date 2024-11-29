@@ -47,10 +47,13 @@ definitions:
     type: object
   admin_dto.AdminUnassignVerifierTopicInput:
     properties:
-      id:
+      semester_id:
+        type: integer
+      teacher_id:
         type: integer
     required:
-    - id
+    - semester_id
+    - teacher_id
     type: object
   admin_dto.ListUsersOutput:
     properties:

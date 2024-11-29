@@ -3819,10 +3819,14 @@ const docTemplate = `{
         "admin_dto.AdminUnassignVerifierTopicInput": {
             "type": "object",
             "required": [
-                "id"
+                "semester_id",
+                "teacher_id"
             ],
             "properties": {
-                "id": {
+                "semester_id": {
+                    "type": "integer"
+                },
+                "teacher_id": {
                     "type": "integer"
                 }
             }

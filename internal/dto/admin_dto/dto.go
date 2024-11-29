@@ -61,7 +61,8 @@ type AdminAssignVerifierTopicInput struct {
 }
 
 type AdminUnassignVerifierTopicInput struct {
-	ID int64 `json:"id" binding:"required"`
+	TeacherID  int64 `json:"teacher_id" binding:"required"`
+	SemesterID int64 `json:"semester_id" binding:"required"`
 }
 
 type ListVerifiersTopicSwaggerOutput struct {
