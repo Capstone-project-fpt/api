@@ -207,10 +207,24 @@ func (cgts *capstoneGroupTopicService) ReviewCapstoneGroupTopic(ctx *gin.Context
 		return err
 	}
 
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).First(&capstoneGroup).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
 	var capstoneGroupTopic model.CapstoneGroupTopic
 	if err := global.Db.Model(model.CapstoneGroupTopic{}).Where("id = ? AND capstone_group_id = ?", input.CapstoneGroupTopicID, input.CapstoneGroupID).First(&capstoneGroupTopic).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.CapstoneGroupTopicNotFound,
+		}))
+	}
+
+	var verifierTopic model.VerifierTopic
+	if err := global.Db.Model(model.VerifierTopic{}).Where("teacher_id = ? AND semester_id = ?", currentTeacher.ID, capstoneGroup.SemesterID).First(&verifierTopic).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
 		}))
 	}
 
@@ -243,6 +257,20 @@ func (cgts *capstoneGroupTopicService) FeedbackCapstoneGroupTopic(ctx *gin.Conte
 	currentTeacher, err := cgts.getCurrentTeacher(ctx)
 	if err != nil {
 		return err
+	}
+
+	var capstoneGroup model.CapstoneGroup
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).First(&capstoneGroup).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	var verifierTopic model.VerifierTopic
+	if err := global.Db.Model(model.VerifierTopic{}).Where("teacher_id = ? AND semester_id = ?", currentTeacher.ID, capstoneGroup.SemesterID).First(&verifierTopic).Error; err != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
+		}))
 	}
 
 	var capstoneGroupTopic model.CapstoneGroupTopic
