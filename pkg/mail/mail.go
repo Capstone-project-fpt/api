@@ -30,6 +30,7 @@ type MailInviteMentorToCapstoneGroupTemplateData struct {
 	CapstoneGroupID   int
 	CapstoneGroupName string
 	Token             string
+	WebUrl            string
 }
 
 type MailNewAccountTemplateData struct {

@@ -98,5 +98,6 @@
   "VerifierTopicAlreadyExist": "Giáo viên thẩm định đề tại đã được tạo trước đó.",
   "AssignVerifierTopicSuccess": "Chỉ định giáo viên thẩm định đề tài thành công.",
   "VerifierTopicNotFound": "Không tìm thấy giáo viên thẩm định đề tài.",
-  "UnassignVerifierTopicSuccess": "Huỷ chỉ định giáo viên thẩm định đề tài thành công."
+  "UnassignVerifierTopicSuccess": "Huỷ chỉ định giáo viên thẩm định đề tài thành công.",
+  "CapstoneGroupAlreadyHaveMentor": "Nhóm bảo vệ đồ án đã có mentor."
 }
