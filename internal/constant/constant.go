@@ -11,7 +11,7 @@ const (
 	DefaultInviteMentorTokenLength      int64 = 8
 	MinTotalMemberInGroup                     = 4
 	MaxTotalMemberInGroup                     = 5
-	MaxTotalCapstoneGroupTeacherMentor        = 2
+	MaxTotalCapstoneGroupTeacherMentor        = 4
 )
 
 type RedisKeyType struct {
