@@ -102,6 +102,7 @@ type MessageI18n struct {
 	AssignVerifierTopicSuccess                           string
 	VerifierTopicNotFound                                string
 	UnassignVerifierTopicSuccess                         string
+	CapstoneGroupAlreadyHaveMentor                       string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -206,4 +207,5 @@ var MessageI18nId MessageI18n = MessageI18n{
 	AssignVerifierTopicSuccess:                           "AssignVerifierTopicSuccess",
 	VerifierTopicNotFound:                                "VerifierTopicNotFound",
 	UnassignVerifierTopicSuccess:                         "UnassignVerifierTopicSuccess",
+	CapstoneGroupAlreadyHaveMentor:                       "CapstoneGroupAlreadyHaveMentor",
 }

@@ -44,6 +44,12 @@ func (cgs *capstoneGroupService) InviteMentorToCapstoneGroup(ctx *gin.Context, i
 		}))
 	}
 
+	if capstoneGroup.MentorID != nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupAlreadyHaveMentor,
+		}))
+	}
+
 	var teacher model.Teacher
 	if err := global.Db.Model(model.Teacher{}).Preload("User").Where("id = ?", input.TeacherID).First(&teacher).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -163,6 +169,19 @@ func (cgs *capstoneGroupService) ResponseInviteMentorToCapstoneGroup(ctx *gin.Co
 			TemplateData: map[string]interface{}{
 				"Status": invitationMentor.Status,
 			},
+		}))
+	}
+
+	var totalCapstoneGroupTeacherMentor int64
+	if err := global.Db.Model(model.CapstoneGroup{}).
+		Where("mentor_id = ? AND semester_id = ?", currentTeacher.ID, capstoneGroup.SemesterID).
+		Count(&totalCapstoneGroupTeacherMentor).Error; err != nil {
+		return err
+	}
+
+	if totalCapstoneGroupTeacherMentor >= constant.MaxTotalCapstoneGroupTeacherMentor && input.Status == constant.InvitationMentorCapstoneGroup.Approve {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.MaxTotalCapstoneGroupTeacherMentor,
 		}))
 	}
 

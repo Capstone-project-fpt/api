@@ -24,6 +24,7 @@ func HandleTaskEmailInviteMentorToCapstoneGroup(ctx context.Context, task *asynq
 		MentorEmail:       payload.MentorEmail,
 		CapstoneGroupID:   payload.CapstoneGroupID,
 		CapstoneGroupName: payload.CapstoneGroupName,
+		WebUrl:            global.Config.Server.WebURL,
 		Token:             payload.Token,
 	}
 

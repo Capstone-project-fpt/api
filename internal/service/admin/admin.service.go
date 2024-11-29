@@ -122,6 +122,7 @@ func (as *adminService) createAccount(ctx *gin.Context, input InputCreateAccount
 		UserType:    input.UserType,
 		PhoneNumber: input.PhoneNumber,
 	}
+	
 	if err := tx.Create(&user).Error; err != nil {
 		tx.Rollback()
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
