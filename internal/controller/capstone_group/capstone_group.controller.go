@@ -192,6 +192,7 @@ func (cgc *CapstoneGroupController) ResponseInviteMentorToCapstoneGroup(ctx *gin
 // @Param limit query int true "Limit"
 // @Param page query int true "Page"
 // @Param semester_id query int false "SemesterID"
+// @Param status query string false "Status"
 // @Router /capstone-groups [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} capstone_group_dto.ListCapstoneGroupOutput

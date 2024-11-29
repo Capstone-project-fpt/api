@@ -524,6 +524,12 @@ const docTemplate = `{
                         "description": "SemesterID",
                         "name": "semester_id",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "query"
                     }
                 ],
                 "responses": {

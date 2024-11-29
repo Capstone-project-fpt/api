@@ -1576,6 +1576,10 @@ paths:
         in: query
         name: semester_id
         type: integer
+      - description: Status
+        in: query
+        name: status
+        type: string
       produces:
       - application/json
       responses:

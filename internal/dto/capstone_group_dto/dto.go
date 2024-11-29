@@ -98,10 +98,11 @@ type GetListCommentReportInput struct {
 }
 
 type GetListCapstoneGroupInput struct {
-	Limit      int `form:"limit" binding:"required" example:"10"`
-	Page       int `form:"page" binding:"required" example:"1"`
-	SemesterID int `form:"semester_id"`
-	Offset     int `swaggerignore:"true"`
+	Limit      int     `form:"limit" binding:"required" example:"10"`
+	Page       int     `form:"page" binding:"required" example:"1"`
+	SemesterID int     `form:"semester_id"`
+	Status     *string `form:"status"`
+	Offset     int     `swaggerignore:"true"`
 }
 
 type GetListInviteMentorToCapstoneGroupInput struct {
