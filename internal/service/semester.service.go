@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/api/database/model"
@@ -31,10 +32,18 @@ func NewSemesterService() ISemesterService {
 
 func (s *semesterService) CreateSemester(ctx *gin.Context, input *semester_dto.CreateSemesterInput) error {
 	var overlapSemester model.Semester
+	var exitSemesterName model.Semester
 
 	if input.StartTime.After(input.EndTime) {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterStartTimeNeedToBeBeforeSemesterEndTime,
+		})
+		return errors.New(message)
+	}
+
+	if err := global.Db.Model(model.Semester{}).Where("LOWER(name) = ?", strings.ToLower(input.Name)).First(&exitSemesterName).Error; err == nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.SemesterNameAlreadyExist,
 		})
 		return errors.New(message)
 	}
@@ -67,6 +76,8 @@ func (s *semesterService) CreateSemester(ctx *gin.Context, input *semester_dto.C
 
 func (s *semesterService) UpdateSemester(ctx *gin.Context, input *semester_dto.UpdateSemesterInput) error {
 	var semester model.Semester
+	var exitSemesterName model.Semester
+
 	if err := global.Db.Model(model.Semester{}).Where("id = ?", input.ID).First(&semester).Error; err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterNotFound,
@@ -77,6 +88,13 @@ func (s *semesterService) UpdateSemester(ctx *gin.Context, input *semester_dto.U
 	if input.StartTime.After(input.EndTime) {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.SemesterStartTimeNeedToBeBeforeSemesterEndTime,
+		})
+		return errors.New(message)
+	}
+
+	if err := global.Db.Model(model.Semester{}).Where("LOWER(name) = ? AND id != ?", strings.ToLower(input.Name), input.ID).First(&exitSemesterName).Error; err == nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.SemesterNameAlreadyExist,
 		})
 		return errors.New(message)
 	}

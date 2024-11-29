@@ -99,5 +99,6 @@
   "AssignVerifierTopicSuccess": "Chỉ định giáo viên thẩm định đề tài thành công.",
   "VerifierTopicNotFound": "Không tìm thấy giáo viên thẩm định đề tài.",
   "UnassignVerifierTopicSuccess": "Huỷ chỉ định giáo viên thẩm định đề tài thành công.",
-  "CapstoneGroupAlreadyHaveMentor": "Nhóm bảo vệ đồ án đã có mentor."
+  "CapstoneGroupAlreadyHaveMentor": "Nhóm bảo vệ đồ án đã có mentor.",
+  "SemesterNameAlreadyExist": "Tên học kỳ bị trùng lặp với học kỳ khác."
 }

@@ -99,5 +99,6 @@
   "AssignVerifierTopicSuccess": "Assign verifier topic success.",
   "VerifierTopicNotFound": "Verifier topic not found.",
   "UnassignVerifierTopicSuccess": "Unassign verifier topic success.",
-  "CapstoneGroupAlreadyHaveMentor": "Capstone group already have mentor."
+  "CapstoneGroupAlreadyHaveMentor": "Capstone group already have mentor.",
+  "SemesterNameAlreadyExist": "Semester name already exist."
 }
