@@ -148,7 +148,6 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 	}
 
 	studentCapstoneGroups := make([]model.StudentCapstoneGroup, 0, len(input.StudentIDs))
-	fmt.Println("capstone group id: ", data.ID)
 	for _, id := range input.StudentIDs {
 		studentCapstoneGroups = append(studentCapstoneGroups, model.StudentCapstoneGroup{
 			StudentID:       id,
@@ -371,6 +370,20 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 		}))
 	}
 
+	var capstoneGroupReportDocuments []model.ReportDocument
+	if err := global.Db.Model(model.ReportDocument{}).
+		Where("capstone_group_id = ?", input.ID).
+		Find(&capstoneGroupReportDocuments).Error; err != nil {
+		global.Db.Rollback()
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+		}))
+	}
+
+	reportDocumentIDs := funk.Map(capstoneGroupReportDocuments, func(capstoneGroupReportDocument model.ReportDocument) int64 {
+		return capstoneGroupReportDocument.ID
+	}).([]int64)
+
 	tx := global.Db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -408,6 +421,19 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
 				}))
 			}
+
+			if err := tx.Exec(`
+				DELETE FROM "report_document_student_scores"
+				WHERE "student_id" = ? AND "report_document_id" IN ?`,
+				studentID,
+				reportDocumentIDs,
+			).Error; err != nil {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+				}))
+			}
+
 			continue
 		}
 
@@ -421,6 +447,22 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 			tx.Rollback()
 			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				MessageID: constant.MessageI18nId.FailedToAddStudent,
+			}))
+		}
+
+		var studentScores []model.ReportDocumentStudentScore
+		for _, reportDocumentID := range reportDocumentIDs {
+			studentScores = append(studentScores, model.ReportDocumentStudentScore{
+				ReportDocumentID: reportDocumentID,
+				StudentID:        studentID,
+				Score:            nil,
+			})
+		}
+
+		if err := tx.Model(model.ReportDocumentStudentScore{}).Save(&studentScores).Error; err != nil {
+			tx.Rollback()
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.FailedToRemoveStudent,
 			}))
 		}
 	}

@@ -101,6 +101,12 @@ func (cgs *capstoneGroupService) MentorUpdateStudentScoreForReportDocument(ctx *
 		}))
 	}
 
+	if capstoneGroup.Status != constant.CapstoneGroupStatus.InProgress {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupInReviewingTopicProcess,
+		}))
+	}
+
 	var reportDocument model.ReportDocument
 	if err := global.Db.Model(model.ReportDocument{}).Where("id = ?", input.ReportDocumentID).First(&reportDocument).Error; err != nil {
 		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -158,11 +164,11 @@ func (cgs *capstoneGroupService) MentorUpdateStudentScoreForReportDocument(ctx *
 		}))
 	}
 
-	for _, stundetScore := range studentScores {
+	for _, studentScore := range studentScores {
 		for _, studentScoreData := range input.StudentScoreData {
-			if stundetScore.StudentID == studentScoreData.StudentID {
-				stundetScore.Score = &studentScoreData.Score
-				if err := global.Db.Save(&stundetScore).Error; err != nil {
+			if studentScore.StudentID == studentScoreData.StudentID {
+				studentScore.Score = &studentScoreData.Score
+				if err := global.Db.Save(&studentScore).Error; err != nil {
 					return err
 				}
 			}
