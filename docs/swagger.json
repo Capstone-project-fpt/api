@@ -1693,53 +1693,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "CreateCapstoneGroupReportDocument",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Capstone Group"
-                ],
-                "summary": "CreateCapstoneGroupReportDocument",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "capstone_group_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/capstone_group_dto.CreateCapstoneGroupReportDocumentInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseErr"
-                        }
-                    }
-                }
             }
         },
         "/capstone-groups/{capstone_group_id}/report-documents/scores": {
@@ -4165,37 +4118,6 @@
                     "items": {
                         "type": "integer"
                     }
-                }
-            }
-        },
-        "capstone_group_dto.CreateCapstoneGroupReportDocumentInput": {
-            "type": "object",
-            "required": [
-                "file_ids",
-                "name",
-                "type_report"
-            ],
-            "properties": {
-                "file_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
-                "type_report": {
-                    "type": "string",
-                    "enum": [
-                        "first_report",
-                        "second_report",
-                        "third_report",
-                        "fourth_report",
-                        "fifth_report",
-                        "sixth_report",
-                        "seventh_report"
-                    ]
                 }
             }
         },

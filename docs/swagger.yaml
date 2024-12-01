@@ -246,29 +246,6 @@ definitions:
     - semester_id
     - student_ids
     type: object
-  capstone_group_dto.CreateCapstoneGroupReportDocumentInput:
-    properties:
-      file_ids:
-        items:
-          type: string
-        type: array
-      name:
-        type: string
-      type_report:
-        enum:
-        - first_report
-        - second_report
-        - third_report
-        - fourth_report
-        - fifth_report
-        - sixth_report
-        - seventh_report
-        type: string
-    required:
-    - file_ids
-    - name
-    - type_report
-    type: object
   capstone_group_dto.CurrentListCapstoneGroupSwaggerOutput:
     properties:
       code:
@@ -2238,36 +2215,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetCapstoneGroupReportDocument
-      tags:
-      - Capstone Group
-    post:
-      description: CreateCapstoneGroupReportDocument
-      parameters:
-      - description: capstone_group_id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/capstone_group_dto.CreateCapstoneGroupReportDocumentInput'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.ResponseDataSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: CreateCapstoneGroupReportDocument
       tags:
       - Capstone Group
     put:
