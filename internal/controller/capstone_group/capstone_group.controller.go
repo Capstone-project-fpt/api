@@ -399,52 +399,6 @@ func (cgc *CapstoneGroupController) UpdateCapstoneGroupStudent(ctx *gin.Context)
 	}))
 }
 
-// @Summary CreateCapstoneGroupReportDocument
-// @Description CreateCapstoneGroupReportDocument
-// @Tags Capstone Group
-// @Produce json
-// @Param id path int true "capstone_group_id"
-// @Param data body capstone_group_dto.CreateCapstoneGroupReportDocumentInput true "data"
-// @Router /capstone-groups/{capstone_group_id}/report-documents [post]
-// @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} response.ResponseDataSuccess
-// @Security ApiKeyAuth
-func (cgc *CapstoneGroupController) CreateCapstoneGroupReportDocument(ctx *gin.Context) {
-	idParam := ctx.Param("capstone_group_id")
-	capstoneGroupID, err := strconv.Atoi(idParam)
-	if err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidParams,
-		}))
-		return
-	}
-
-	var input capstone_group_dto.CreateCapstoneGroupReportDocumentInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidFile,
-		})
-		response.ErrorResponse(ctx, http.StatusBadRequest, errors.New(message))
-		return
-	}
-
-	if err := global.Validator.Struct(input); err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	input.CapstoneGroupID = int64(capstoneGroupID)
-
-	if err := cgc.capstoneGroupService.CreateCapstoneGroupReportDocument(ctx, &input); err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	response.SuccessResponse(ctx, http.StatusOK, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-		MessageID: constant.MessageI18nId.CreateCapstoneGroupReportDocumentSuccess,
-	}))
-}
-
 // @Summary UpdateCapstoneGroupReportDocument
 // @Description UpdateCapstoneGroupReportDocument
 // @Tags Capstone Group

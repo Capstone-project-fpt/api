@@ -2,7 +2,8 @@ package capstone_group_dto
 
 type CreateCapstoneGroupInput struct {
 	NameGroup  string  `json:"name_group" binding:"required"`
-	StudentIds []int64 `json:"student_ids" binding:"required"`
+	StudentIDs []int64 `json:"student_ids" binding:"required"`
+	LeaderID   int64   `json:"leader_id" binding:"required"`
 	SemesterID int64   `json:"semester_id" binding:"required"`
 	MajorID    int64   `json:"major_id" binding:"required"`
 }
@@ -34,13 +35,6 @@ type FeedbackCapstoneGroupReviewInput struct {
 	CapstoneGroupReviewID int64  `json:"capstone_group_review_id" binding:"required"`
 	Feedback              string `json:"feedback"`
 	CapstoneGroupID       int64  `swaggerignore:"true"`
-}
-
-type CreateCapstoneGroupReportDocumentInput struct {
-	Name            string   `json:"name" binding:"required"`
-	CapstoneGroupID int64    `swaggerignore:"true"`
-	FileIDs         []string `json:"file_ids" binding:"required"`
-	TypeReport      string   `json:"type_report" binding:"required" validate:"required,oneof=first_report second_report third_report fourth_report fifth_report sixth_report seventh_report"`
 }
 
 type UpdateCapstoneGroupReportDocumentInput struct {

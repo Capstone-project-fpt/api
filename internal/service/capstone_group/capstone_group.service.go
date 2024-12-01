@@ -2,6 +2,7 @@ package capstone_group_service
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/api/database/model"
@@ -29,7 +30,6 @@ type ICapstoneGroupService interface {
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
 	UpdateCapstoneGroupStudent(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupStudentInput) error
-	CreateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupReportDocumentInput) error
 	UpdateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupReportDocumentInput) error
 	DeleteCapstoneGroupReportDocument(ctx *gin.Context, reportID int64, capstoneGroupID int64) error
 	GetCapstoneGroupReportDocument(ctx *gin.Context, id int64) (*capstone_group_dto.ReportDocumentOutput, error)
@@ -54,42 +54,33 @@ func NewCapstoneGroupService(emailInviteMentorToCapstoneGroupPublisher queue.IBa
 }
 
 func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupInput) (*capstone_group_dto.CapstoneGroupOutput, error) {
-	currentUser := context_util.GetUserContext(ctx)
-	if currentUser == nil {
+	if !funk.Contains(input.StudentIDs, input.LeaderID) {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
+			MessageID: constant.MessageI18nId.InvalidLeader,
 		}))
 	}
 
-	var currentStudent model.Student
-	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
-		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
-		}))
-	}
-
-	input.StudentIds = funk.FilterInt64(input.StudentIds, func(id int64) bool {
-		return id != currentStudent.ID
-	})
-
-	memberGroupsIDs := append(input.StudentIds, currentStudent.ID)
-	totalMembers := len(input.StudentIds) + 1
-
-	if totalMembers > constant.MaxTotalMemberInGroup || totalMembers < constant.MinTotalMemberInGroup {
+	if len(input.StudentIDs) > constant.MaxTotalMemberInGroup || len(input.StudentIDs) < constant.MinTotalMemberInGroup {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InvalidTotalMemberInGroup,
 		}))
 	}
 
 	var memberGroups []model.Student
-	if err := global.Db.Model(model.Student{}).Joins("User").Where("students.id IN ?", memberGroupsIDs).Find(&memberGroups).Error; err != nil {
+	if err := global.Db.Model(model.Student{}).Joins("User").Where("students.id IN ?", input.StudentIDs).Find(&memberGroups).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	if len(memberGroups) != len(input.StudentIDs) {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		}))
 	}
 
 	var memberExistInAnotherGroup []model.StudentCapstoneGroup
-	if err := global.Db.Model(model.StudentCapstoneGroup{}).Where("student_id IN ? AND semester_id = ?", memberGroupsIDs, input.SemesterID).Find(&memberExistInAnotherGroup).Error; err == nil {
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Where("student_id IN ? AND semester_id = ?", input.StudentIDs, input.SemesterID).Find(&memberExistInAnotherGroup).Error; err == nil {
 		if len(memberExistInAnotherGroup) > 0 {
 			memberIDExistInAnotherGroup := funk.Map(memberExistInAnotherGroup, func(member model.StudentCapstoneGroup) int64 {
 				return member.StudentID
@@ -114,12 +105,6 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		}
 	}
 
-	if len(memberGroups) != len(memberGroupsIDs) {
-		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
-		}))
-	}
-
 	var major model.Major
 	if err := global.Db.Model(model.Major{}).Where("id = ?", input.MajorID).First(&major).Error; err != nil {
 		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -138,24 +123,78 @@ func (cgs *capstoneGroupService) CreateCapstoneGroup(ctx *gin.Context, input *ca
 		NameGroup:  input.NameGroup,
 		MajorID:    input.MajorID,
 		SemesterID: input.SemesterID,
-		LeaderID:   currentStudent.ID,
+		LeaderID:   input.LeaderID,
 		Status:     constant.CapstoneGroupStatus.ReviewingTopic,
 	}
 
-	if err := global.Db.Model(model.CapstoneGroup{}).Create(&data).Error; err != nil {
+	tx := global.Db.Begin()
+	if tx.Error != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		fmt.Println("Failed to begin a transaction, Error: ", tx.Error)
+		return nil, errors.New(message)
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			panic(r)
+		}
+	}()
+
+	if err := tx.Model(model.CapstoneGroup{}).Create(&data).Error; err != nil {
+		tx.Rollback()
 		return nil, err
 	}
 
-	studentCapstoneGroups := make([]model.StudentCapstoneGroup, 0)
-	for _, id := range memberGroupsIDs {
+	studentCapstoneGroups := make([]model.StudentCapstoneGroup, 0, len(input.StudentIDs))
+	for _, id := range input.StudentIDs {
 		studentCapstoneGroups = append(studentCapstoneGroups, model.StudentCapstoneGroup{
 			StudentID:       id,
 			SemesterID:      input.SemesterID,
 			CapstoneGroupID: data.ID,
 		})
 	}
-	if err := global.Db.Model(model.StudentCapstoneGroup{}).Create(&studentCapstoneGroups).Error; err != nil {
+	if err := tx.Model(model.StudentCapstoneGroup{}).Save(&studentCapstoneGroups).Error; err != nil {
+		tx.Rollback()
 		return nil, err
+	}
+
+	for index, reportDocumentTypeMapping := range constant.ReportDocumentTypeMappings {
+		reportDocument := model.ReportDocument{
+			Name:               constant.NameReportDocumentMappings[index],
+			FileIDs:            []string{},
+			CapstoneGroupID:    data.ID,
+			TypeReport:         reportDocumentTypeMapping,
+			MentorReviewStatus: constant.MentorReviewStatusReport.Reviewing,
+		}
+
+		if err := tx.Model(model.ReportDocument{}).Create(&reportDocument).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		var studentScores []model.ReportDocumentStudentScore
+		for _, studentID := range input.StudentIDs {
+			studentScores = append(studentScores, model.ReportDocumentStudentScore{
+				StudentID:        studentID,
+				ReportDocumentID: reportDocument.ID,
+				Score:            nil,
+			})
+		}
+
+		if err := tx.Model(model.ReportDocumentStudentScore{}).Save(&studentScores).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InternalServerError,
+		})
+		return nil, errors.New(message)
 	}
 
 	var capstoneGroup model.CapstoneGroup
@@ -331,6 +370,20 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 		}))
 	}
 
+	var capstoneGroupReportDocuments []model.ReportDocument
+	if err := global.Db.Model(model.ReportDocument{}).
+		Where("capstone_group_id = ?", input.ID).
+		Find(&capstoneGroupReportDocuments).Error; err != nil {
+		global.Db.Rollback()
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+		}))
+	}
+
+	reportDocumentIDs := funk.Map(capstoneGroupReportDocuments, func(capstoneGroupReportDocument model.ReportDocument) int64 {
+		return capstoneGroupReportDocument.ID
+	}).([]int64)
+
 	tx := global.Db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -368,6 +421,19 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
 				}))
 			}
+
+			if err := tx.Exec(`
+				DELETE FROM "report_document_student_scores"
+				WHERE "student_id" = ? AND "report_document_id" IN ?`,
+				studentID,
+				reportDocumentIDs,
+			).Error; err != nil {
+				tx.Rollback()
+				return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+					MessageID: constant.MessageI18nId.FailedToRemoveStudent,
+				}))
+			}
+
 			continue
 		}
 
@@ -381,6 +447,22 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 			tx.Rollback()
 			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 				MessageID: constant.MessageI18nId.FailedToAddStudent,
+			}))
+		}
+
+		var studentScores []model.ReportDocumentStudentScore
+		for _, reportDocumentID := range reportDocumentIDs {
+			studentScores = append(studentScores, model.ReportDocumentStudentScore{
+				ReportDocumentID: reportDocumentID,
+				StudentID:        studentID,
+				Score:            nil,
+			})
+		}
+
+		if err := tx.Model(model.ReportDocumentStudentScore{}).Save(&studentScores).Error; err != nil {
+			tx.Rollback()
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.FailedToRemoveStudent,
 			}))
 		}
 	}

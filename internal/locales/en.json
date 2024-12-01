@@ -100,5 +100,6 @@
   "VerifierTopicNotFound": "Verifier topic not found.",
   "UnassignVerifierTopicSuccess": "Unassign verifier topic success.",
   "CapstoneGroupAlreadyHaveMentor": "Capstone group already have mentor.",
-  "SemesterNameAlreadyExist": "Semester name already exist."
+  "SemesterNameAlreadyExist": "Semester name already exist.",
+  "InvalidLeader": "Invalid leader."
 }
