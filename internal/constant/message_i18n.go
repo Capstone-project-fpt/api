@@ -104,6 +104,7 @@ type MessageI18n struct {
 	UnassignVerifierTopicSuccess                         string
 	CapstoneGroupAlreadyHaveMentor                       string
 	SemesterNameAlreadyExist                             string
+	InvalidLeader                                        string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -210,4 +211,5 @@ var MessageI18nId MessageI18n = MessageI18n{
 	UnassignVerifierTopicSuccess:                         "UnassignVerifierTopicSuccess",
 	CapstoneGroupAlreadyHaveMentor:                       "CapstoneGroupAlreadyHaveMentor",
 	SemesterNameAlreadyExist:                             "SemesterNameAlreadyExist",
+	InvalidLeader:                                        "InvalidLeader",
 }

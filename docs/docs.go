@@ -4143,12 +4143,16 @@ const docTemplate = `{
         "capstone_group_dto.CreateCapstoneGroupInput": {
             "type": "object",
             "required": [
+                "leader_id",
                 "major_id",
                 "name_group",
                 "semester_id",
                 "student_ids"
             ],
             "properties": {
+                "leader_id": {
+                    "type": "integer"
+                },
                 "major_id": {
                     "type": "integer"
                 },

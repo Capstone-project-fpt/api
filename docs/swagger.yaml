@@ -227,6 +227,8 @@ definitions:
     type: object
   capstone_group_dto.CreateCapstoneGroupInput:
     properties:
+      leader_id:
+        type: integer
       major_id:
         type: integer
       name_group:
@@ -238,6 +240,7 @@ definitions:
           type: integer
         type: array
     required:
+    - leader_id
     - major_id
     - name_group
     - semester_id

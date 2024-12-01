@@ -2,7 +2,8 @@ package capstone_group_dto
 
 type CreateCapstoneGroupInput struct {
 	NameGroup  string  `json:"name_group" binding:"required"`
-	StudentIds []int64 `json:"student_ids" binding:"required"`
+	StudentIDs []int64 `json:"student_ids" binding:"required"`
+	LeaderID   int64   `json:"leader_id" binding:"required"`
 	SemesterID int64   `json:"semester_id" binding:"required"`
 	MajorID    int64   `json:"major_id" binding:"required"`
 }

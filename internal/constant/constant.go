@@ -9,9 +9,10 @@ const (
 	DefaultResetPasswordTokenExpiration int64 = 3600 // 1 hour
 	DefaultInviteMentorTokenExpiration  int64 = 3600 // 1 hour
 	DefaultInviteMentorTokenLength      int64 = 8
-	MinTotalMemberInGroup                     = 4
-	MaxTotalMemberInGroup                     = 5
+	MinTotalMemberInGroup                     = 3
+	MaxTotalMemberInGroup                     = 6
 	MaxTotalCapstoneGroupTeacherMentor        = 4
+	TotalReportDocumentForCapstoneGroup       = 7
 )
 
 type RedisKeyType struct {
@@ -184,4 +185,24 @@ type mentorReviewStatusReportType struct {
 var MentorReviewStatusReport mentorReviewStatusReportType = mentorReviewStatusReportType{
 	Reviewing: "reviewing",
 	Done:      "done",
+}
+
+var NameReportDocumentMappings = map[int]string{
+	1: "Report1_Project Introduction",
+	2: "Report2_Project Management Plan",
+	3: "Report3_Software Requirement Specification",
+	4: "Report4_Software Design Document",
+	5: "Report5_Test Documentation",
+	6: "Report6_Software User Guides",
+	7: "Report7_Final Project Report",
+}
+
+var ReportDocumentTypeMappings = map[int]string{
+	1: ReportDocument.FIRST_REPORT,
+	2: ReportDocument.SECOND_REPORT,
+	3: ReportDocument.THIRD_REPORT,
+	4: ReportDocument.FOURTH_REPORT,
+	5: ReportDocument.FIFTH_REPORT,
+	6: ReportDocument.SIXTH_REPORT,
+	7: ReportDocument.SEVENTH_REPORT,
 }
