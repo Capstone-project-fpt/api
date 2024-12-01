@@ -12,66 +12,6 @@ import (
 	"github.com/thoas/go-funk"
 )
 
-func (cgs *capstoneGroupService) CreateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupReportDocumentInput) error {
-	err := cgs.validatePermissionCurrentStudentCapstoneGroup(ctx, input.CapstoneGroupID)
-	if err != nil {
-		return err
-	}
-
-	var capstoneGroup model.CapstoneGroup
-	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", input.CapstoneGroupID).First(&capstoneGroup).Error; err != nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
-		}))
-	}
-
-	if capstoneGroup.Status != constant.CapstoneGroupStatus.InProgress {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.CapstoneGroupInReviewingTopicProcess,
-		}))
-	}
-
-	var exitReportDocument model.ReportDocument
-	if err := global.Db.Model(model.ReportDocument{}).Where("capstone_group_id = ? AND type_report = ?", input.CapstoneGroupID, input.TypeReport).First(&exitReportDocument).Error; err == nil {
-		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.AlreadyExitDocumentReport,
-		}))
-	}
-
-	reportDocument := model.ReportDocument{
-		CapstoneGroupID:    input.CapstoneGroupID,
-		TypeReport:         input.TypeReport,
-		Name:               input.Name,
-		FileIDs:            input.FileIDs,
-		MentorReviewStatus: constant.MentorReviewStatusReport.Reviewing,
-	}
-
-	if err := global.Db.Model(model.ReportDocument{}).Create(&reportDocument).Error; err != nil {
-		return err
-	}
-
-	var studentCapstoneGroups []model.StudentCapstoneGroup
-	if err := global.Db.Model(model.StudentCapstoneGroup{}).Where("capstone_group_id = ?", input.CapstoneGroupID).Find(&studentCapstoneGroups).Error; err != nil {
-		return err
-	}
-
-	var studentReportDocumentScores []model.ReportDocumentStudentScore
-
-	for _, studentCapstoneGroup := range studentCapstoneGroups {
-		studentReportDocumentScores = append(studentReportDocumentScores, model.ReportDocumentStudentScore{
-			StudentID:        studentCapstoneGroup.StudentID,
-			ReportDocumentID: reportDocument.ID,
-			Score:            nil,
-		})
-	}
-
-	if err := global.Db.Model(model.ReportDocumentStudentScore{}).Create(&studentReportDocumentScores).Error; err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (cgs *capstoneGroupService) UpdateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupReportDocumentInput) error {
 	err := cgs.validatePermissionCurrentStudentCapstoneGroup(ctx, input.CapstoneGroupID)
 	if err != nil {

@@ -30,7 +30,6 @@ type ICapstoneGroupService interface {
 	GetListInvitationMentorCapstoneGroups(ctx *gin.Context, input *capstone_group_dto.GetListInviteMentorToCapstoneGroupInput) (*capstone_group_dto.ListInvitationMentorCapstoneGroupOutput, error)
 	GetListStudentHaveCapstoneGroup(ctx *gin.Context, semesterID int64) (*[]*user_dto.StudentOutput, error)
 	UpdateCapstoneGroupStudent(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupStudentInput) error
-	CreateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.CreateCapstoneGroupReportDocumentInput) error
 	UpdateCapstoneGroupReportDocument(ctx *gin.Context, input *capstone_group_dto.UpdateCapstoneGroupReportDocumentInput) error
 	DeleteCapstoneGroupReportDocument(ctx *gin.Context, reportID int64, capstoneGroupID int64) error
 	GetCapstoneGroupReportDocument(ctx *gin.Context, id int64) (*capstone_group_dto.ReportDocumentOutput, error)

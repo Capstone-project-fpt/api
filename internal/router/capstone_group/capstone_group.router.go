@@ -61,7 +61,6 @@ func (cgr *CapstoneGroupRouter) InitCapstoneGroupRouter(r *gin.RouterGroup) {
 
 	capstoneGroupReportDocumentRouter := capstoneGroupRouter.Group("/:capstone_group_id/report-documents")
 	{
-		capstoneGroupReportDocumentRouter.POST("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.CreateCapstoneGroupReportDocument)
 		capstoneGroupReportDocumentRouter.PUT("/", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.UpdateCapstoneGroupReportDocument)
 		capstoneGroupReportDocumentRouter.DELETE("/:report_document_id", middleware.UserTypeMiddleware(constant.UserType.Student), capstoneGroupController.DeleteCapstoneGroupReportDocument)
 		capstoneGroupReportDocumentRouter.GET("/", capstoneGroupController.GetCapstoneGroupReportDocuments)

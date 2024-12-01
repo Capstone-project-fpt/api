@@ -37,13 +37,6 @@ type FeedbackCapstoneGroupReviewInput struct {
 	CapstoneGroupID       int64  `swaggerignore:"true"`
 }
 
-type CreateCapstoneGroupReportDocumentInput struct {
-	Name            string   `json:"name" binding:"required"`
-	CapstoneGroupID int64    `swaggerignore:"true"`
-	FileIDs         []string `json:"file_ids" binding:"required"`
-	TypeReport      string   `json:"type_report" binding:"required" validate:"required,oneof=first_report second_report third_report fourth_report fifth_report sixth_report seventh_report"`
-}
-
 type UpdateCapstoneGroupReportDocumentInput struct {
 	ID              int64    `json:"id" binding:"required"`
 	Name            string   `json:"name" binding:"required"`
