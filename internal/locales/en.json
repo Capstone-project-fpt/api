@@ -101,5 +101,7 @@
   "UnassignVerifierTopicSuccess": "Unassign verifier topic success.",
   "CapstoneGroupAlreadyHaveMentor": "Capstone group already have mentor.",
   "SemesterNameAlreadyExist": "Semester name already exist.",
-  "InvalidLeader": "Invalid leader."
+  "InvalidLeader": "Invalid leader.",
+  "CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore": "Can not update member when capstone group had finalized score.",
+  "ExitStudentNotHaveScore": "Exit student not have score."
 }

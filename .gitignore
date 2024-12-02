@@ -1,4 +1,5 @@
 **/*/prod.yaml
 storages/logs/*.log
 config.yaml
+config-staging.yaml
 **/tmp/*

@@ -105,6 +105,8 @@ type MessageI18n struct {
 	CapstoneGroupAlreadyHaveMentor                       string
 	SemesterNameAlreadyExist                             string
 	InvalidLeader                                        string
+	CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore string
+	ExitStudentNotHaveScore                              string
 }
 
 var MessageI18nId MessageI18n = MessageI18n{
@@ -212,4 +214,6 @@ var MessageI18nId MessageI18n = MessageI18n{
 	CapstoneGroupAlreadyHaveMentor:                       "CapstoneGroupAlreadyHaveMentor",
 	SemesterNameAlreadyExist:                             "SemesterNameAlreadyExist",
 	InvalidLeader:                                        "InvalidLeader",
+	CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore: "CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore",
+	ExitStudentNotHaveScore:                              "ExitStudentNotHaveScore",
 }

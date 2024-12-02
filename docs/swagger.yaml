@@ -2042,6 +2042,31 @@ paths:
       summary: ReviewCapstoneGroupTopic
       tags:
       - Capstone Group
+  /capstone-groups/{capstone_group_id}/finalized-scores:
+    patch:
+      description: Finalized Score Student Capstone Group
+      parameters:
+      - description: capstone_group_id
+        in: path
+        name: capstone_group_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: FinalizedScoreStudentCapstoneGroup
+      tags:
+      - Capstone Group
   /capstone-groups/{capstone_group_id}/members:
     get:
       description: Get mentor and list member capstone group

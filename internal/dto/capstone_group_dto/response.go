@@ -261,3 +261,25 @@ type CurrentListCapstoneGroupSwaggerOutput struct {
 	Success bool                                 `json:"message"`
 	Data    []CapstoneGroupWithTotalMemberOutput `json:"data"`
 }
+
+type StudentCapstoneGroupFinalizedScoreOutput struct {
+	StudentID int64                   `json:"student_id"`
+	Student   *user_dto.StudentOutput `json:"student"`
+	Score     float64                 `json:"score"`
+	Status    string                  `json:"status"`
+}
+
+func ToStudentCapstoneGroupFinalizedScoreOutput(studentCapstoneGroup *model.StudentCapstoneGroup) StudentCapstoneGroupFinalizedScoreOutput {
+	return StudentCapstoneGroupFinalizedScoreOutput{
+		StudentID: studentCapstoneGroup.StudentID,
+		Student:   user_dto.ToStudentOutput(&studentCapstoneGroup.Student),
+		Score:     *studentCapstoneGroup.Score,
+		Status:    *studentCapstoneGroup.Status,
+	}
+}
+
+type ListStudentCapstoneGroupFinalizedScoreSwaggerOutput struct {
+	Code    int                                        `json:"code"`
+	Success bool                                       `json:"message"`
+	Data    []StudentCapstoneGroupFinalizedScoreOutput `json:"data"`
+}

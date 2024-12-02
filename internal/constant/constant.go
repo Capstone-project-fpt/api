@@ -126,11 +126,13 @@ var TopicStatusReview topicStatusReviewType = topicStatusReviewType{
 type capstoneGroupStatusType struct {
 	ReviewingTopic string
 	InProgress     string
+	FinalizedScore string
 }
 
 var CapstoneGroupStatus capstoneGroupStatusType = capstoneGroupStatusType{
 	ReviewingTopic: "reviewing_topic",
 	InProgress:     "in_progress",
+	FinalizedScore: "finalized_score",
 }
 
 type invitationMentorCapstoneGroupType struct {
@@ -205,4 +207,16 @@ var ReportDocumentTypeMappings = map[int]string{
 	5: ReportDocument.FIFTH_REPORT,
 	6: ReportDocument.SIXTH_REPORT,
 	7: ReportDocument.SEVENTH_REPORT,
+}
+
+type studentCapstoneGroupScoreStatusType struct {
+	Pass   string
+	Retake string
+	Fail   string
+}
+
+var StudentCapstoneGroupScoreStatus studentCapstoneGroupScoreStatusType = studentCapstoneGroupScoreStatusType{
+	Pass:   "pass",
+	Retake: "retake",
+	Fail:   "fail",
 }
