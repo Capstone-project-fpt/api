@@ -635,3 +635,31 @@ func (cgc *CapstoneGroupController) AdminUpdateStudentScoreForReportDocument(ctx
 		MessageID: constant.MessageI18nId.AdminUpdateStudentScoreForReportDocumentSuccess,
 	}))
 }
+
+// @Summary FinalizedScoreStudentCapstoneGroup
+// @Description Finalized Score Student Capstone Group
+// @Tags Capstone Group
+// @Produce json
+// @Param capstone_group_id path int true "capstone_group_id"
+// @Router /capstone-groups/{capstone_group_id}/finalized-scores [patch]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} response.ResponseDataSuccess
+// @Security ApiKeyAuth
+func (cgc *CapstoneGroupController) FinalizedScoreStudentCapstoneGroup(ctx *gin.Context) {
+	capstoneGroupIDParam := ctx.Param("capstone_group_id")
+	capstoneGroupID, err := strconv.Atoi(capstoneGroupIDParam)
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		}))
+		return
+	}
+
+	output, err := cgc.capstoneGroupService.FinalizedScoreStudentCapstoneGroup(ctx, int64(capstoneGroupID))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusNotFound, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, output)
+}

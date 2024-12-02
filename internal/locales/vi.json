@@ -101,5 +101,7 @@
   "UnassignVerifierTopicSuccess": "Huỷ chỉ định giáo viên thẩm định đề tài thành công.",
   "CapstoneGroupAlreadyHaveMentor": "Nhóm bảo vệ đồ án đã có mentor.",
   "SemesterNameAlreadyExist": "Tên học kỳ bị trùng lặp với học kỳ khác.",
-  "InvalidLeader": "Nhóm trưởng không hợp lệ."
+  "InvalidLeader": "Nhóm trưởng không hợp lệ.",
+  "CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore": "Không thể cập nhật sinh viên trong nhóm bảo vệ đồ án khi nhóm bảo vệ đồ án đã được cập nhật điểm.",
+  "ExitStudentNotHaveScore": "Có Sinh viên trong nhóm chưa có điểm."
 }

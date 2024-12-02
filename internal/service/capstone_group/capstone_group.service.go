@@ -41,6 +41,7 @@ type ICapstoneGroupService interface {
 	UpdateCommentReport(ctx *gin.Context, input *capstone_group_dto.UpdateCommentReportInput) error
 	DeleteCommentReport(ctx *gin.Context, input *capstone_group_dto.DeleteCommentReportInput) error
 	GetListReportComments(ctx *gin.Context, input *capstone_group_dto.GetListCommentReportInput) (*[]*capstone_group_dto.ReportCommentWithUserInfoOutput, error)
+	FinalizedScoreStudentCapstoneGroup(ctx *gin.Context, capstoneGroupID int64) (*[]capstone_group_dto.StudentCapstoneGroupFinalizedScoreOutput, error)
 }
 
 type capstoneGroupService struct {
@@ -370,6 +371,12 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 		}))
 	}
 
+	if capstoneGroup.Status == constant.CapstoneGroupStatus.FinalizedScore {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CanNotUpdateMemberWhenCapstoneGroupHadFinalizedScore,
+		}))
+	}
+
 	var capstoneGroupReportDocuments []model.ReportDocument
 	if err := global.Db.Model(model.ReportDocument{}).
 		Where("capstone_group_id = ?", input.ID).
@@ -474,31 +481,6 @@ func (cgs *capstoneGroupService) UpdateCapstoneGroupStudent(ctx *gin.Context, in
 	return nil
 }
 
-func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Student, error) {
-	currentUser := context_util.GetUserContext(ctx)
-	if currentUser == nil {
-		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
-		}))
-	}
-
-	var currentStudent model.Student
-	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
-		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
-		}))
-	}
-
-	currentStudent.User = model.User{
-		ID:       currentUser.ID,
-		Email:    currentUser.Email,
-		Name:     currentUser.Name,
-		UserType: currentUser.UserType,
-	}
-
-	return &currentStudent, nil
-}
-
 func (cgs *capstoneGroupService) GetCurrentListCapstoneGroup(ctx *gin.Context, input *capstone_group_dto.GetCurrentListCapstoneGroupInput) (*[]capstone_group_dto.CapstoneGroupWithTotalMemberOutput, error) {
 	currentStudent, currentTeacher, err := cgs.getCurrentStudentOrTeacher(ctx)
 
@@ -533,6 +515,112 @@ func (cgs *capstoneGroupService) GetCurrentListCapstoneGroup(ctx *gin.Context, i
 	return &output, nil
 }
 
+func (cgs *capstoneGroupService) FinalizedScoreStudentCapstoneGroup(ctx *gin.Context, capstoneGroupID int64) (*[]capstone_group_dto.StudentCapstoneGroupFinalizedScoreOutput, error) {
+	var output []capstone_group_dto.StudentCapstoneGroupFinalizedScoreOutput
+	var capstoneGroup model.CapstoneGroup
+
+	if err := global.Db.Model(model.CapstoneGroup{}).Where("id = ?", capstoneGroupID).First(&capstoneGroup).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.CapstoneGroupNotFound,
+		}))
+	}
+
+	var studentCapstoneGroups []model.StudentCapstoneGroup
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).
+		Joins("Student.User").
+		Where("capstone_group_id = ?", capstoneGroupID).
+		Find(&studentCapstoneGroups).Error;
+	err != nil {
+		return nil, err
+	}
+
+	var reportDocumentIDs []int64
+	if err := global.Db.Model(model.ReportDocument{}).Select("id").Where("capstone_group_id = ?", capstoneGroupID).Find(&reportDocumentIDs).Error; err != nil {
+		return nil, err
+	}
+
+	var exitStudentNotHaveScore []model.ReportDocumentStudentScore
+	if err := global.Db.Model(model.ReportDocumentStudentScore{}).
+		Select("student_id", "report_document_id").
+		Where("report_document_id IN (?) AND score IS NULL", reportDocumentIDs).
+		Find(&exitStudentNotHaveScore).Error; err != nil {
+		return nil, err
+	}
+
+	if len(exitStudentNotHaveScore) > 0 {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.ExitStudentNotHaveScore,
+		}))
+	}
+
+	type studentAverageScore struct {
+		StudentID int64
+		Average   float64
+	}
+
+	var studentAverageScores []studentAverageScore
+
+	if err := global.Db.Raw(
+		"SELECT student_id, ROUND(AVG(score), 2) AS average FROM report_document_student_scores WHERE report_document_id IN (?) GROUP BY student_id",
+		reportDocumentIDs,
+	).Scan(&studentAverageScores).Error; err != nil {
+		return nil, err
+	}
+
+	for i := range studentCapstoneGroups {
+		for _, studentAverageScore := range studentAverageScores {
+			if studentCapstoneGroups[i].StudentID == studentAverageScore.StudentID {
+				studentCapstoneGroups[i].Score = &studentAverageScore.Average
+				status := cgs.getStatusByScore(studentAverageScore.Average)
+				studentCapstoneGroups[i].Status = &status
+			}
+		}
+	}
+
+	if err := global.Db.Model(model.StudentCapstoneGroup{}).Save(&studentCapstoneGroups).Error; err != nil {
+		return nil, err
+	}
+
+	if err := global.Db.Model(&model.CapstoneGroup{}).
+		Where("id = ?", capstoneGroupID).
+		Updates(map[string]interface{}{
+			"status": constant.CapstoneGroupStatus.FinalizedScore,
+		}).Error; err != nil {
+		return nil, err
+	}
+
+	for _, studentCapstoneGroup := range studentCapstoneGroups {
+		output = append(output, capstone_group_dto.ToStudentCapstoneGroupFinalizedScoreOutput(&studentCapstoneGroup))
+	}
+
+	return &output, nil
+}
+
+func (cgs *capstoneGroupService) getCurrentStudent(ctx *gin.Context) (*model.Student, error) {
+	currentUser := context_util.GetUserContext(ctx)
+	if currentUser == nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	var currentStudent model.Student
+	if err := global.Db.Model(model.Student{}).Where("user_id = ?", currentUser.ID).First(&currentStudent).Error; err != nil {
+		return nil, errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.UserNotFound,
+		}))
+	}
+
+	currentStudent.User = model.User{
+		ID:       currentUser.ID,
+		Email:    currentUser.Email,
+		Name:     currentUser.Name,
+		UserType: currentUser.UserType,
+	}
+
+	return &currentStudent, nil
+}
+
 func (cgs *capstoneGroupService) getCurrentTeacher(ctx *gin.Context) (*model.Teacher, error) {
 	currentUser := context_util.GetUserContext(ctx)
 	if currentUser == nil {
@@ -556,4 +644,15 @@ func (cgs *capstoneGroupService) getCurrentTeacher(ctx *gin.Context) (*model.Tea
 	}
 
 	return &currentTeacher, nil
+}
+
+func (cgs *capstoneGroupService) getStatusByScore(score float64) string {
+	switch {
+	case score >= 5:
+		return constant.StudentCapstoneGroupScoreStatus.Pass
+	case score < 5 && score >= 3:
+		return constant.StudentCapstoneGroupScoreStatus.Retake
+	default:
+		return constant.StudentCapstoneGroupScoreStatus.Fail
+	}
 }

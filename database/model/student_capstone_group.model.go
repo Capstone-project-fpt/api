@@ -4,6 +4,8 @@ import "time"
 
 type StudentCapstoneGroup struct {
 	ID              int64         `gorm:"primaryKey;autoIncrement"`
+	Score           *float64      `gorm:"column:score"`
+	Status          *string       `gorm:"column:status;type:varchar(50)"`
 	StudentID       int64         `gorm:"column:student_id;not null"`
 	Student         Student       `gorm:"foreignKey:StudentID;references:ID"`
 	CapstoneGroupID int64         `gorm:"column:capstone_group_id;not null"`

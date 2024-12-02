@@ -1374,6 +1374,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/capstone-groups/{capstone_group_id}/finalized-scores": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Finalized Score Student Capstone Group",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Capstone Group"
+                ],
+                "summary": "FinalizedScoreStudentCapstoneGroup",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "capstone_group_id",
+                        "name": "capstone_group_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
         "/capstone-groups/{capstone_group_id}/members": {
             "get": {
                 "security": [
