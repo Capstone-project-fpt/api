@@ -17,4 +17,9 @@ func (ur *UserRouter) InitUserRouter(r *gin.RouterGroup) {
 		userRouter.GET("/", userController.GetListUsers)
 		userRouter.GET("/me", userController.GetMe)
 	}
+
+	verifierTopicRouter := r.Group("/verifiers-topic")
+	{
+		verifierTopicRouter.GET("/semesters/:semester_id", userController.GetListVerifiersTopic)
+	}
 }

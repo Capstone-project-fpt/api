@@ -381,33 +381,3 @@ func (ac *AdminController) UnassignVerifierTopic(ctx *gin.Context) {
 		MessageID: constant.MessageI18nId.UnassignVerifierTopicSuccess,
 	}))
 }
-
-// @Summary GetListVerifiersTopic
-// @Description Admin get list verifier topic
-// @Tags Admin
-// @Accept json
-// @Produce json
-// @Param semester_id path int true "Semester ID"
-// @Router /admin/verifiers-topic/semesters/{semester_id} [get]
-// @Failure 400 {object} response.ResponseErr
-// @Success 200 {object} admin_dto.ListVerifiersTopicSwaggerOutput
-// @Security ApiKeyAuth
-func (ac *AdminController) GetListVerifiersTopic(ctx *gin.Context) {
-	semesterIDParam := ctx.Param("semester_id")
-	semesterID, err := strconv.Atoi(semesterIDParam)
-	if err != nil {
-		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.InvalidParams,
-		})
-		response.ErrorResponse(ctx, http.StatusBadRequest, message)
-		return
-	}
-
-	output, err := ac.adminService.GetListVerifiersTopic(ctx, int64(semesterID))
-	if err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	response.SuccessResponse(ctx, http.StatusOK, output)
-}

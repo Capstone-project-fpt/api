@@ -10,7 +10,6 @@ import (
 	"github.com/api/internal/constant"
 	"github.com/api/internal/dto/admin_dto"
 	"github.com/api/internal/dto/import_dto"
-	"github.com/api/internal/dto/user_dto"
 	"github.com/api/internal/queue"
 	"github.com/api/internal/service"
 	password_util "github.com/api/pkg/utils/password"
@@ -28,7 +27,6 @@ type IAdminService interface {
 	UpdateAccount(ctx *gin.Context, input *admin_dto.UpdateAccountInput) (int, error)
 	AssignVerifierTopic(ctx *gin.Context, input *admin_dto.AdminAssignVerifierTopicInput) error
 	UnassignVerifierTopic(ctx *gin.Context, input *admin_dto.AdminUnassignVerifierTopicInput) error
-	GetListVerifiersTopic(ctx *gin.Context, semesterID int64) (*[]*user_dto.TeacherOutput, error)
 }
 
 type InputCreateAccount struct {

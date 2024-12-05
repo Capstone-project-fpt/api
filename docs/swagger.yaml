@@ -1509,33 +1509,6 @@ paths:
       summary: AssignVerifierTopic
       tags:
       - Admin
-  /admin/verifiers-topic/semesters/{semester_id}:
-    get:
-      consumes:
-      - application/json
-      description: Admin get list verifier topic
-      parameters:
-      - description: Semester ID
-        in: path
-        name: semester_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseErr'
-      security:
-      - ApiKeyAuth: []
-      summary: GetListVerifiersTopic
-      tags:
-      - Admin
   /capstone-groups:
     get:
       consumes:
@@ -3629,6 +3602,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: GetMe
+      tags:
+      - User
+  /verifiers-topic/semesters/{semester_id}:
+    get:
+      consumes:
+      - application/json
+      description: et list verifier topic
+      parameters:
+      - description: Semester ID
+        in: path
+        name: semester_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseErr'
+      security:
+      - ApiKeyAuth: []
+      summary: GetListVerifiersTopic
       tags:
       - User
 schemes:
