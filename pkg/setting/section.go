@@ -77,7 +77,9 @@ type AsynqSetting struct {
 }
 
 type AWSSetting struct {
-	Region string `mapstructure:"region"`
+	Region    string `mapstructure:"region"`
+	AccessKey string `mapstructure:"accessKey"`
+	SecretKey string `mapstructure:"secretKey"`
 }
 
 type S3Setting struct {

@@ -6,6 +6,7 @@ import (
 	"github.com/api/global"
 	"github.com/api/internal/worker"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/go-playground/validator/v10"
@@ -35,6 +36,11 @@ func Run() {
 
 	global.AwsSession, _ = session.NewSession(&aws.Config{
 		Region: &global.Config.AWS.Region,
+		Credentials: credentials.NewStaticCredentials(
+			global.Config.AWS.AccessKey,
+			global.Config.AWS.SecretKey,
+			"",
+		),
 	})
 
 	global.S3Client = s3.New(global.AwsSession)
