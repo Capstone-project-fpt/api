@@ -23,7 +23,7 @@ func (tr *TopicReferenceRouter) InitTopicReferenceRouter(r *gin.RouterGroup) {
 	}
 
 	teacherRouter := topicReferenceRouter.Group("/teachers")
-	teacherRouter.Use(middleware.UserTypeMiddleware(constant.UserType.Teacher))
+	teacherRouter.Use(middleware.UserTypeMiddleware(constant.UserType.Teacher, constant.UserType.Admin))
 	{
 		teacherRouter.POST(
 			"/",

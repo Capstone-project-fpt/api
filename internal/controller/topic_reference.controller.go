@@ -200,28 +200,9 @@ func (trc *TopicReferenceController) TeacherDeleteTopicReference(ctx *gin.Contex
 		return
 	}
 
-	userContext := context_util.GetUserContext(ctx)
-	if userContext == nil {
-		response.ErrorResponse(ctx, http.StatusNotFound, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.UserNotFound,
-		}))
-		return
-	}
-
-	var teacher model.Teacher
-	if err := global.Db.Model(model.Teacher{}).Select("id").Where("user_id = ?", userContext.ID).First(&teacher).Error; err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.PermissionDenied,
-		}))
-		return
-	}
-
 	err = trc.topicReferenceService.DeleteTopicReference(
 		ctx,
-		service.DeleteTopicReferenceInput{
-			ID:        int64(id),
-			TeacherID: teacher.ID,
-		},
+		int64(id),
 	)
 
 	if err != nil {
