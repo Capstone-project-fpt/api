@@ -2,4 +2,5 @@
 storages/logs/*.log
 config.yaml
 config-staging.yaml
+config-develop.yaml
 **/tmp/*
