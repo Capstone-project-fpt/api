@@ -77,6 +77,5 @@ func (ar *AdminRouter) InitAdminRouter(r *gin.RouterGroup) {
 	{
 		adminVerifierTopicRouter.POST("/", adminController.AssignVerifierTopic)
 		adminVerifierTopicRouter.DELETE("/", adminController.UnassignVerifierTopic)
-		adminVerifierTopicRouter.GET("/semesters/:semester_id", adminController.GetListVerifiersTopic)
 	}
 }

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/api/global"
 	"github.com/api/internal/constant"
@@ -15,12 +16,12 @@ import (
 )
 
 type UserController struct {
-	userService  service.IUserService
+	userService service.IUserService
 }
 
 func NewUserController(userService service.IUserService) *UserController {
 	return &UserController{
-		userService:  userService,
+		userService: userService,
 	}
 }
 
@@ -84,4 +85,34 @@ func (u *UserController) GetMe(ctx *gin.Context) {
 		return
 	}
 	response.SuccessResponse(ctx, http.StatusOK, outputGetUser)
+}
+
+// @Summary GetListVerifiersTopic
+// @Description et list verifier topic
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param semester_id path int true "Semester ID"
+// @Router /verifiers-topic/semesters/{semester_id} [get]
+// @Failure 400 {object} response.ResponseErr
+// @Success 200 {object} admin_dto.ListVerifiersTopicSwaggerOutput
+// @Security ApiKeyAuth
+func (u *UserController) GetListVerifiersTopic(ctx *gin.Context) {
+	semesterIDParam := ctx.Param("semester_id")
+	semesterID, err := strconv.Atoi(semesterIDParam)
+	if err != nil {
+		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.InvalidParams,
+		})
+		response.ErrorResponse(ctx, http.StatusBadRequest, message)
+		return
+	}
+
+	output, err := u.userService.GetListVerifiersTopic(ctx, int64(semesterID))
+	if err != nil {
+		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	response.SuccessResponse(ctx, http.StatusOK, output)
 }

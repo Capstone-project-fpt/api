@@ -10,6 +10,7 @@ import (
 	"github.com/api/internal/dto"
 	"github.com/api/internal/dto/topic_reference_dto"
 	"github.com/api/internal/types"
+	context_util "github.com/api/pkg/utils/context"
 	"github.com/gin-gonic/gin"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/thoas/go-funk"
@@ -149,13 +150,22 @@ func (tr *topicReferenceService) DeleteTopicReference(ctx *gin.Context, input De
 		Where("id = ?", input.ID).
 		First(&topicReference).
 		Error
+
 	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.TopicReferenceNotFound,
 		})
 		return errors.New(message)
 	}
-	if topicReference.TeacherID != input.TeacherID {
+
+	currentUser := context_util.GetUserContext(ctx)
+	if currentUser == nil {
+		return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: constant.MessageI18nId.PermissionDenied,
+		}))
+	}
+
+	if currentUser.UserType != constant.UserType.Admin && topicReference.TeacherID != input.TeacherID {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.PermissionDenied,
 		})
@@ -185,9 +195,9 @@ func (tr *topicReferenceService) AdminCreateTopicReference(ctx *gin.Context, inp
 
 func (tr *topicReferenceService) CreateTopicReference(ctx *gin.Context, input CreateTopicReferenceInput) error {
 	topicReference := model.TopicReferences{
-		Name:      input.Name,
-		Path:      input.Path,
-		TeacherID: input.TeacherID,
+		Name:         input.Name,
+		Path:         input.Path,
+		TeacherID:    input.TeacherID,
 		StatusReview: constant.TopicStatusReview.Approved, // TODO: Handle feature review topic upload by teacher and staff
 	}
 

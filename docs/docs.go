@@ -443,49 +443,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/verifiers-topic/semesters/{semester_id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Admin get list verifier topic",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "GetListVerifiersTopic",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Semester ID",
-                        "name": "semester_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseErr"
-                        }
-                    }
-                }
-            }
-        },
         "/capstone-groups": {
             "get": {
                 "security": [
@@ -3780,6 +3737,49 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/user_dto.GetUserSwaggerOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseErr"
+                        }
+                    }
+                }
+            }
+        },
+        "/verifiers-topic/semesters/{semester_id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "et list verifier topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetListVerifiersTopic",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Semester ID",
+                        "name": "semester_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/admin_dto.ListVerifiersTopicSwaggerOutput"
                         }
                     },
                     "400": {
