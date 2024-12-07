@@ -22,7 +22,7 @@ type ITopicReferenceService interface {
 	TeacherCreateTopicReference(ctx *gin.Context, input CreateTopicReferenceInput, userContext *types.UserContext) error
 	AdminCreateTopicReference(ctx *gin.Context, input CreateTopicReferenceInput) error
 	UpdateTopicReference(ctx *gin.Context, input UpdateTopicReferenceInput) error
-	DeleteTopicReference(ctx *gin.Context, input DeleteTopicReferenceInput) error
+	DeleteTopicReference(ctx *gin.Context, id int64) error
 }
 
 type topicReferenceService struct{}
@@ -42,11 +42,6 @@ type UpdateTopicReferenceInput struct {
 	Name      string
 	TeacherID int64
 	Path      string
-}
-
-type DeleteTopicReferenceInput struct {
-	ID        int64
-	TeacherID int64
 }
 
 func (tr *topicReferenceService) GetTopicReference(ctx *gin.Context, id int) (*topic_reference_dto.TopicReferenceOutput, error) {
@@ -144,10 +139,10 @@ func (tr *topicReferenceService) TeacherCreateTopicReference(ctx *gin.Context, i
 	return tr.CreateTopicReference(ctx, input)
 }
 
-func (tr *topicReferenceService) DeleteTopicReference(ctx *gin.Context, input DeleteTopicReferenceInput) error {
+func (tr *topicReferenceService) DeleteTopicReference(ctx *gin.Context, id int64) error {
 	var topicReference model.TopicReferences
 	err := global.Db.Model(model.TopicReferences{}).
-		Where("id = ?", input.ID).
+		Where("id = ?", id).
 		First(&topicReference).
 		Error
 
@@ -165,11 +160,19 @@ func (tr *topicReferenceService) DeleteTopicReference(ctx *gin.Context, input De
 		}))
 	}
 
-	if currentUser.UserType != constant.UserType.Admin && topicReference.TeacherID != input.TeacherID {
-		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
-			MessageID: constant.MessageI18nId.PermissionDenied,
-		})
-		return errors.New(message)
+	if currentUser.UserType != constant.UserType.Admin {
+		var currentTeacher model.Teacher
+		if err := global.Db.Model(model.Teacher{}).Where("user_id = ?", currentUser.ID).First(&currentTeacher).Error; err != nil {
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.PermissionDenied,
+			}))
+		}
+
+		if topicReference.TeacherID != currentTeacher.ID {
+			return errors.New(global.Localizer.MustLocalize(&i18n.LocalizeConfig{
+				MessageID: constant.MessageI18nId.PermissionDenied,
+			}))
+		}
 	}
 
 	global.Db.Delete(&topicReference)
