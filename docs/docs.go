@@ -2548,7 +2548,7 @@ const docTemplate = `{
             }
         },
         "/login/google": {
-            "post": {
+            "get": {
                 "description": "Login With Google",
                 "produces": [
                     "application/json"
