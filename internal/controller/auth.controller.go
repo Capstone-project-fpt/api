@@ -87,7 +87,7 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 // @Description Login With Google
 // @Tags Auth
 // @Produce json
-// @Router /login/google [post]
+// @Router /login/google [get]
 // @Failure 400 {object} response.ResponseErr
 // @Success 200 {object} response.ResponseDataSuccess
 func (ac *AuthController) LoginGoogleHandle(ctx *gin.Context) {
@@ -99,18 +99,9 @@ func (ac *AuthController) LoginGoogleHandle(ctx *gin.Context) {
 }
 
 func (ac *AuthController) LoginGoogleCallbackHandle(ctx *gin.Context) {
-	redirectUrl, err := ac.authService.LoginGoogleCallbackHandle(ctx)
-
-	if err != nil {
-		response.ErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
+	redirectUrl := ac.authService.LoginGoogleCallbackHandle(ctx)
 
 	ctx.Redirect(http.StatusFound, redirectUrl)
-
-	response.SuccessResponse(
-		ctx, http.StatusOK, "",
-	)
 }
 
 // @Summary ForgotPassword

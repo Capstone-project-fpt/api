@@ -28,7 +28,7 @@ type IAuthService interface {
 	Register(ctx *gin.Context, email, password string) (int, error)
 	Login(ctx *gin.Context, email string, password string) (string, string, int, error)
 	LoginGoogleHandle(ctx *gin.Context)
-	LoginGoogleCallbackHandle(ctx *gin.Context) (string, error)
+	LoginGoogleCallbackHandle(ctx *gin.Context) string
 	ForgotPassword(ctx *gin.Context, email string) error
 	ResetPassword(ctx *gin.Context, input *auth_dto.ResetPasswordInput) (int, error)
 	ChangePassword(ctx *gin.Context, input *auth_dto.ChangePasswordInput) (int, error)

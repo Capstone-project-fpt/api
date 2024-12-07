@@ -2844,7 +2844,7 @@ paths:
       tags:
       - Auth
   /login/google:
-    post:
+    get:
       description: Login With Google
       produces:
       - application/json

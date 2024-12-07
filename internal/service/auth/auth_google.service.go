@@ -1,7 +1,6 @@
 package auth_service
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/api/database/model"
@@ -20,25 +19,31 @@ func (as *authService) LoginGoogleHandle(ctx *gin.Context) {
 	gothic.BeginAuthHandler(ctx.Writer, ctx.Request)
 }
 
-func (as *authService) LoginGoogleCallbackHandle(ctx *gin.Context) (string, error) {
+func (as *authService) LoginGoogleCallbackHandle(ctx *gin.Context) string {
 	q := ctx.Request.URL.Query()
 	q.Add("provider", ctx.Param("provider"))
 	ctx.Request.URL.RawQuery = q.Encode()
 	userGoth, err := gothic.CompleteUserAuth(ctx.Writer, ctx.Request)
+
+	url := fmt.Sprintf("%v/auth/sign-in", global.Config.Server.WebURL)
+
 	if err != nil {
 		fmt.Fprintln(ctx.Writer, err)
-		return "", err
+		url = fmt.Sprint(url, "?error=", err)
+
+		return url
 	}
 
 	var user model.User
-	err = global.Db.Model(model.User{}).Select("id", "email", "password", "user_type", "name").Find(&user, "email = ?", userGoth.Email).Error
+	err = global.Db.Model(model.User{}).Select("id", "email", "password", "user_type", "name").First(&user, "email = ?", userGoth.Email).Error
 
 	if err != nil {
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.UserNotFound,
 		})
 
-		return "", errors.New(message)
+		url = fmt.Sprint(url, "?error=", message)
+		return url
 	}
 
 	userContext := types.NewUserContext(&user)
@@ -48,11 +53,12 @@ func (as *authService) LoginGoogleCallbackHandle(ctx *gin.Context) (string, erro
 		message := global.Localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: constant.MessageI18nId.InternalServerError,
 		})
+		url = fmt.Sprint(url, "?error=", message)
 
-		return "", errors.New(message)
+		return url
 	}
 
-	redirectUrl := fmt.Sprintf("%v?access_token=%v&refresh_token=%v", global.Config.Server.WebURL, accessToken, refreshToken)
+	url = fmt.Sprintf("%v?access_token=%v&refresh_token=%v", url, accessToken, refreshToken)
 
-	return redirectUrl, nil
+	return url
 }
