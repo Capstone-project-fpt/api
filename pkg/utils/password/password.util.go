@@ -16,5 +16,5 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func GenerateRandomPassword(length int64) string {
-	return string_util.GenerateRandomString(int(length))
+	return string_util.GeneratePassword(int(length))
 }
